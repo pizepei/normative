@@ -10,7 +10,9 @@
     ],
     "require": {
         "php": ">=7.0.0",
-        "pizepei/config-ng": "dev-master"
+        "pizepei/config-ng": "dev-master",
+        "pizepei/model": "dev-master"
+
     },
 
     "autoload": {

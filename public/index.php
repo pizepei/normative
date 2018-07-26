@@ -6,3 +6,4 @@
  * @Last Modified time: 2018-07-26 14:35:10
  */
 require('../vendor/autoload.php');
+echo'开始';
