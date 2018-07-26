@@ -1,0 +1,21 @@
+{
+    "name": "pizepei/oauth-module",
+    "description": "oauth-module",
+    "keywords": ["oauth2.0"],
+    "authors": [
+        {
+            "name": "pizepei",
+            "email": "pizepei@pizepei.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+        "pizepei/config-ng": "dev-master",
+    },
+
+    "autoload": {
+        "psr-4": {
+            "app\\": "app",
+        }
+    }
+}
