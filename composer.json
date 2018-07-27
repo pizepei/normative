@@ -1,7 +1,8 @@
 {
     "name": "pizepei/oauth-module",
     "description": "oauth-module",
-    "keywords": ["oauth2.0"],
+    "keywords": ["oauth2.0","exquisite","WeChat"],
+    "homepage": "https://org.heil.top/",
     "authors": [
         {
             "name": "pizepei",
