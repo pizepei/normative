@@ -13,7 +13,9 @@
         "php": ">=7.0.0",
         "pizepei/config-ng": "dev-master",
         "pizepei/model": "dev-master",
-        "pizepei/func": "dev-master"
+        "pizepei/func": "dev-master",
+        "workerman/gateway-worker": "^3.0"
+
     },
 
     "autoload": {
