@@ -14,8 +14,8 @@
         "pizepei/config-ng": "dev-master",
         "pizepei/model": "dev-master",
         "pizepei/func": "dev-master",
-        "workerman/gateway-worker": "^3.0"
-
+        "workerman/gateway-worker": "^3.0",
+        "workerman/gatewayclient":"dev-master"
     },
 
     "autoload": {
