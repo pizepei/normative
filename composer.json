@@ -18,7 +18,7 @@
 
     "autoload": {
         "psr-4": {
-            "app\\": "app/",
+            "app\\": "app/"
         },
         "psr-0": {
             "": "extend/"
