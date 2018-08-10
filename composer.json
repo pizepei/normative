@@ -15,7 +15,8 @@
         "pizepei/model": "dev-master",
         "pizepei/func": "dev-master",
         "workerman/gateway-worker": "^3.0",
-        "workerman/gatewayclient":"dev-master"
+        "workerman/gatewayclient":"dev-master",
+        "pizepei/staging":"dev-master"
     },
 
     "autoload": {
