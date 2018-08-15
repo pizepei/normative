@@ -38,8 +38,12 @@ class Index extends Controller
     public function test()
     {
 
+
+//        $data = file_get_contents('https://oauth.heil.top/db?a=dddd');
+//var_dump($data);
+//        var_dump(json_decode($data,true));
         $ToLocation = new ToLocation();
-        return $ToLocation->getlocation('183.11.30.104');
+        return ['data'=>$ToLocation->getlocation('183.11.30.104')];
 
 //        $data = new UpdateQqwry;
 
@@ -86,6 +90,14 @@ class Index extends Controller
      * 数据库测试
      */
     public function db(){
+
+
+//        return terminalInfo::getArowserPro();
+
+//        return preg_split('/(?<!^)(?!$)/u', '皮泽培12' );
+
+
+//        echo "<title>测试</title>";
         /**
          * 实例化
          */
@@ -101,25 +113,39 @@ class Index extends Controller
         /**
          * 插入或者修改
          * 自动检测是否有主键 有为更新  没有为插入
+         *
+         * 注意：批量插入时返回的是成功插入的第一条 id
+         * 批量插入、更新无法判断成功多少条(业务)，只能判断sql插入是否成功
          */
         $data = [
-            ['ip'=>3232,'test'=>45545454],
-            ['ip'=>343434,'test'=>888888888],
+            ['ip'=>1000000000,'test'=>45545454],
+            ['ip'=>'pi','test'=>888888888],
             ['ip'=>3434343,'test'=>455445],
         ];
         /**
          * 批量更新
          */
-
+//        $data = [
+//        ['id'=>20381,'ip'=>000000,'test'=>'村上春树'],
+//        ['id'=>20380,'ip'=>000000,'test'=>'村上春树'],
+//        ];
         /**
-         *
-        $data = [
-        ['id'=>20381,'ip'=>000000,'test'=>'村上春树'],
-        ['id'=>20380,'ip'=>000000,'test'=>'村上春树'],
-        ];
-        var_dump($mode->insert($data));
+         * 开启事务
          */
+        $mode->beginTransaction();
 
+//        var_dump($mode->inTransaction());
+//        var_dump($mode->insert($data));
+        /**
+         * 提交事务
+         */
+//        var_dump( $mode->commit() );
+        /**
+         * 回滚事务
+         */
+//        var_dump( $mode->rollBack());
+
+//        var_dump($mode->sqlLog);
         /**
          * 更新一条
          */
@@ -132,75 +158,32 @@ class Index extends Controller
 //        $where['ip'] = ['EQ','19.55.55.55'];
 //        $where['ip|test'] = ['LIKE','%3'];
 //        $where['ip|test'] = '3434343';
-        $where['ip'] = '3434343';
+        //$where['ip'] = '3434343';
+        /**
+         * ['字段或者函数'=>'别名']
+         */
+        //var_dump($mode->field(['ip'=>'ip地址','id'=>'主键','count(id)'=>'所有数据数量'])->where($where)->fetchAll());
 
-        var_dump($mode->field(['ip'=>'ip地址','id'=>'主键'])->where($where)->fetchAll());
+        // $mode->field(['ip','id'])->where($where)->forceIndex('id')->fetch();
+        //var_dump($mode->sqlLog);
+        /**
+         * 根据主键获取
+         * cache 缓存方法
+         */
+//        var_dump($mode->get(20637));
 
-
-
-////        $where['status|appid'] = 0;
-//        $eco =  $mode->field(['ip','id'])->where($where)->forceIndex('id')->fetchAll();
-//        $eco =  $mode->field(['ip','id'])->where($where)->forceIndex('id')->fetch();
-//        return ['data'=>$eco];
-////echo '您好';
-////var_dump(pizepei\config\Dbtabase::DBTABASE);
-////Func::M('file')::createDir('bbc/dd/');
-////var_dump(pizepei\model\cache\Cache::set('public',pizepei\config\Dbtabase::DBTABASE,15,'db'));
-//
-//var_dump(pizepei\model\cache\Cache::get('public','db'));
-//
-////pizepei\model\cache\Cache::set('PPX',pizepei\config\Dbtabase::DBTABASE);
-//
-//Db::table('config')->showCreateTableCache();
-
-////var_dump(Db::table('user')->get(4));
-//
-////$where['appid'] = ['LIKE','%5'];
-//
-//$where['ip'] = ['EQ','19.55.55.55'];
-//
-////$where['status|appid'] = 0;
-//$mode = IpWhite::table('user');
-//$eco =  $mode->field(['id','ip'=>'appID'])->where($where)->forceIndex('id')->fetchAll();
-//var_dump($eco);
-//echo $mode->sql;
-//echo '<br>';
-//
-//var_dump($mode->sqllog);
-//var_dump($mode->bindValuelog);
-//echo '<hr>';
-//$where = null;
-//$where['id'] = 2;
-//$eco =  $mode->field(['id'])->where($where)->forceIndex('id')->fetchAll();
-//var_dump($eco);
-//
-//echo $mode->sql;
-//var_dump($mode->sqllog);
-//var_dump($mode->bindValuelog);
-//echo '<hr>';
-
-//        echo '</pre>';
-
+//        var_dump($mode->cache(['src','datastets'],20)->get(20637));
     }
-
     /**
      *缓存
      */
     public function Cache()
     {
-
         echo filemtime('qqwry.dat');
-
-
-
         //var_dump(pizepei\model\cache\Cache::get('public','db'));
 //        Cache::get('public','db');
 
     }
-
-
-
-
 
 
     function read_qqip($qq_datafile)
