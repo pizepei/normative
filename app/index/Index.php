@@ -90,18 +90,41 @@ class Index extends Controller
      * 数据库测试
      */
     public function db(){
+        /**
+         * 存储经纬度信息
+         */
+        $terminalInfo = terminalInfo::getArowserPro();
+        $IpInfo = $terminalInfo['IpInfo'];
+        $data = array_merge($IpInfo,$terminalInfo);
+        if (isset($data['point'])){
+            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        }
+        if (isset($data['Build'])){
+            $data['Build'] =json_encode($data['Build']);
+        }
+        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
+        $data['create_time'] = date('Y-m-d H:i:s');
 
+        $mode = Db::table('terminal_info');
 
-//        return terminalInfo::getArowserPro();
-
-//        return preg_split('/(?<!^)(?!$)/u', '皮泽培12' );
-
-
-//        echo "<title>测试</title>";
+        return [
+                'INSERT'=>$mode->insert($data),
+                '省'=>$IpInfo['province'],
+                '市|区'=>$IpInfo['city'],
+                '运营商'=>$IpInfo['isp'],
+                '运营商网络'=>$IpInfo['NetworkType'],
+                '经纬度X'=>$IpInfo['point']['x'],
+                '经纬度Y'=>$IpInfo['point']['y'],
+                '浏览器'=>$data['Ipanel'],
+                '语言'=>$data['language'],
+                '系统'=>$data['Os'],
+                '浏览器网络'=>$data['NetType'],
+                '当前IP地址'=>$data['ip'],
+        ];
         /**
          * 实例化
          */
-        $mode = Db::table('ip_white');
+//        $mode = Db::table('ip_white');
 
         /**
          * 批量删除
@@ -132,14 +155,14 @@ class Index extends Controller
         /**
          * 开启事务
          */
-        $mode->beginTransaction();
+//        $mode->beginTransaction();
 
 //        var_dump($mode->inTransaction());
 //        var_dump($mode->insert($data));
         /**
          * 提交事务
          */
-//        var_dump( $mode->commit() );
+//         $mode->commit();
         /**
          * 回滚事务
          */

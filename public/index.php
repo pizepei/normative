@@ -20,6 +20,9 @@ $init_microtime = microtime(true);
  */
 define('__APP__','app');
 
+header("X-Powered-By: ASP.NET");
+header("Server: waf");
+
 require('../vendor/autoload.php');
 
 $Start = new pizepei\staging\Start;
