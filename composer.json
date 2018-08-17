@@ -16,12 +16,15 @@
         "pizepei/func": "dev-master",
         "workerman/gateway-worker": "^3.0",
         "workerman/gatewayclient":"dev-master",
-        "pizepei/staging":"dev-master"
+        "pizepei/staging":"dev-master",
+        "pizepei/terminal-info":"dev-master"
+
     },
 
     "autoload": {
         "psr-4": {
-            "app\\": "app/"
+            "app\\": "app/",
+            "model\\": "model/"
         },
         "psr-0": {
             "": "extend/"

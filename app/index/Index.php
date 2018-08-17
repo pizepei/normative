@@ -35,6 +35,45 @@ class Index extends Controller
         echo '我是首页';
     }
 
+    /**
+     * 获取信息
+     */
+    public function terminalInfo()
+    {
+        /**
+         * 存储经纬度信息
+         */
+        $terminalInfo = terminalInfo::getArowserPro();
+        $IpInfo = $terminalInfo['IpInfo'];
+        $data = array_merge($IpInfo,$terminalInfo);
+        if (isset($data['point'])){
+            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        }
+        $Build = '';
+        if (isset($data['Build'])){
+            $Build = implode('|',$data['Build']);
+            $data['Build'] =json_encode($data['Build']);
+        }
+        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
+        $data['create_time'] = date('Y-m-d H:i:s');
+        $mode = Db::table('terminal_info');
+        return [
+            'INSERT'=>$mode->insert($data,false),
+            '省'=>$IpInfo['province'],
+            '市|区'=>$IpInfo['city'],
+            '运营商'=>$IpInfo['isp'],
+            '运营商网络'=>$IpInfo['NetworkType'],
+            '经纬度X'=>$IpInfo['point']['x'],
+            '经纬度Y'=>$IpInfo['point']['y'],
+            '浏览器'=>$data['Ipanel'],
+            '语言'=>$data['language'],
+            '系统'=>$data['Os'],
+            '浏览器网络'=>$data['NetType'],
+            '当前IP地址'=>$data['ip'],
+            'terminal'=>$Build,
+        ];
+    }
+
     public function test()
     {
 
@@ -62,15 +101,7 @@ class Index extends Controller
 //        exit;
 //        var_dump(TerminalInfo::get_ip());
 
-
-
-
-
 //       echo  dirname(__FILE__).DIRECTORY_SEPARATOR;
-
-
-
-
 
         /**
          * 路由类
@@ -90,41 +121,12 @@ class Index extends Controller
      * 数据库测试
      */
     public function db(){
-        /**
-         * 存储经纬度信息
-         */
-        $terminalInfo = terminalInfo::getArowserPro();
-        $IpInfo = $terminalInfo['IpInfo'];
-        $data = array_merge($IpInfo,$terminalInfo);
-        if (isset($data['point'])){
-            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
-        }
-        if (isset($data['Build'])){
-            $data['Build'] =json_encode($data['Build']);
-        }
-        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
-        $data['create_time'] = date('Y-m-d H:i:s');
 
-        $mode = Db::table('terminal_info');
 
-        return [
-                'INSERT'=>$mode->insert($data),
-                '省'=>$IpInfo['province'],
-                '市|区'=>$IpInfo['city'],
-                '运营商'=>$IpInfo['isp'],
-                '运营商网络'=>$IpInfo['NetworkType'],
-                '经纬度X'=>$IpInfo['point']['x'],
-                '经纬度Y'=>$IpInfo['point']['y'],
-                '浏览器'=>$data['Ipanel'],
-                '语言'=>$data['language'],
-                '系统'=>$data['Os'],
-                '浏览器网络'=>$data['NetType'],
-                '当前IP地址'=>$data['ip'],
-        ];
         /**
          * 实例化
          */
-//        $mode = Db::table('ip_white');
+        $mode = Db::table('ip_white');
 
         /**
          * 批量删除
@@ -140,11 +142,11 @@ class Index extends Controller
          * 注意：批量插入时返回的是成功插入的第一条 id
          * 批量插入、更新无法判断成功多少条(业务)，只能判断sql插入是否成功
          */
-        $data = [
-            ['ip'=>1000000000,'test'=>45545454],
-            ['ip'=>'pi','test'=>888888888],
-            ['ip'=>3434343,'test'=>455445],
-        ];
+//        $data = [
+//            ['ip'=>1000000000,'test'=>45545454],
+//            ['ip'=>'pi','test'=>888888888],
+//            ['ip'=>3434343,'test'=>455445],
+//        ];
         /**
          * 批量更新
          */
