@@ -1,10 +1,16 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: 84873
+ * User: pizepei
  * Date: 2018/8/6
  * Time: 15:25
+ * @baseAuth 基础权限继承（加命名空间的类名称）
+ * @title 人脸识别模块
+ * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
+ * @basePath /index/dome
+ * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
+
 namespace app\index;
 use pizepei\staging\Request;
 use pizepei\staging\Controller;
@@ -16,8 +22,225 @@ use pizepei\terminalInfo\UpdateQqwry;
 use pizepei\model\db\Db;
 class Index extends Controller
 {
+    /**
+     * 获取人脸详情
+     * @param  $Request
+     *      path [object] 路径参数
+     *           id [int:2 ddd] path_id
+     *      rule [object] 常规路径
+     *          id [int] rule_id
+     * @return array [object] 数据
+     *      id [uuid] id搜索
+     *      objectType [int]  对象类型 0 陌生人 1 员工 2会员 3 其他
+     *      objectId [string] 对象id 默认为0     员工为StaffModel的id    会员为CustomerModel id
+     *      staffData [object] 对象信息 （员工信息）
+     *              id [string] id
+     *              accountId [string] 账号id
+     *              name [string] 名字
+     *      memberData [object] 对象信息 （会员信息）
+     *          id [uuid] 会员信息
+     *          sn [string] 会员卡
+     *          mobile [string] 手机号码d
+     *          referee [object] 推荐人  3
+     *              id [string] id     6
+     *              name [string] 名字
+     *          ascription [object] 店铺关联
+     *              id [string] 店铺id
+     *              erpStoreId [string] erp id
+     *      remark [string] 备注（类型其他时）
+     *      mobile [string]  号码
+     *      config [raw]
+     *      data [objectList] 数据列表
+     *          id [uuid]  id
+     *          uid [int]  主要人脸id fcae_relevance表id
+     *          status [string] 状态
+     *          createAt [datetime]
+     *          updateAt [datetime]
+     *
+     * @authTiny [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup user
+     * @router get  /router/:user[int]/:id[int]  auth:public
+     */
+    public function router($Request)
+    {
 
-    public function index()
+        /**
+         * 权限区分
+            模块（控制器）
+            方法组 （如用户的增加、修改、删除 是一个组）
+            单一方法
+         *
+         * 完整的是 -- 控制器 ---》 功能组--》 路由
+         */
+
+
+        $int = 'int';
+        $str = '12是多少2312312131.2sahd22';
+        var_dump($str);
+        /**
+         * boolean，float，integer，array，null，object和string
+         */
+        $type = settype($str,$int);
+        var_dump($type);
+
+        var_dump($str);
+
+
+//        echo phpinfo();exit;
+        /**
+         * /router/aad
+         * /router
+         *
+         *
+         * in_array()绝对匹配
+         * 如果没有
+         *  strpos()匹配
+         *  匹配到 ltrim($str,"Hello")切割
+         *
+         */
+        var_dump(strpos("/router/user/","/router/"));
+
+        var_dump(strpos("/router/user/","/router/"));
+
+        var_dump(ltrim("/router/routers/ssss","/router"));
+
+        $Route = Route::init();
+
+
+        return $Request->path();
+        exit;
+        $data = '    @router';
+        preg_match('/@router/s',$data,$result);
+        var_dump($result);
+        $data = 'a@    ddddddd@ca
+        [55555]@c';
+        preg_match('/a@[ ]{1,6}(.*?)@ca[\n]{1,2}\[(.*?)\]@c/s',$data,$result);
+        var_dump($result);
+        /**
+         * 注解快
+         */
+        $data =  file_get_contents(__FILE__);
+        preg_match_all('/\/\*\*\r(.*?){/s',$data,$result);
+//        var_dump($result[1]);
+//        $dddddd= [];
+        foreach ($result[1] as $k=>$v)
+        {
+            preg_match('/@router/s',$v,$resultData);
+            if(!empty($resultData)){
+                $dddddd[] =$v;
+            }
+        }
+        /**
+         * 获取方法
+         */
+        preg_match('/public[\s]{0,3}function[\s]{0,3}(.*?)[\s]{1,3}/s',$dddddd[0],$result);
+        var_dump($result[1]);
+        $method = $result[1];
+//        var_dump($dddddd);
+        preg_match('/@router(.*?)\r/s',$dddddd[0],$routerData);
+        var_dump($routerData);
+
+        preg_match_all('/[^ ]{1,10}[A-Z-a-z:]{1,30}/s',$routerData[1],$routerData);
+        var_dump($routerData);
+
+//        var_dump(explode(' ',$routerData[1]));
+
+
+
+        preg_match('/@(.*?)@/s',$dddddd[0],$result);
+    var_dump(explode('@',$dddddd[0]));
+        var_dump($result);
+
+        exit;
+
+        $array = [];
+        //echo __FILE__;
+        $data =  file_get_contents(__FILE__);
+        /**
+         * 获取命名空间
+         */
+        //$namespace;
+        preg_match('/\/\*\*\r(.*?)\*\//s',$data,$result);
+        preg_match('/@title (.*?)\r/s',$result[1],$title);
+        preg_match('/namespace (.*?);/s',$data,$namespace);
+        preg_match('/class (.*?) /s',$data,$class);
+        $array['namespace'] = [$namespace[1]=>['title'=>$title[1],'class'=>$class[1]]];
+        /**
+         * 注解快
+         */
+        preg_match_all('/\/\*\*\r(.*?){/s',$data,$result);
+        /**
+         * 分析提取注解快
+         */
+        foreach ($result[1] as $k=>$v)
+        {
+            preg_match('/@router(.*?)\r/s',$v,$routerData);
+            preg_match('/public[\s]{0,3}function[\s]{0,3}(.*?)[\s]{1,3}/s',$v,$functionData);
+            if(!empty($resultData) && !empty($functionData)){
+                /**
+                 * 获取详细方法
+                 */
+                preg_match_all('/[^ ]{1,10}[A-Z-a-z:]{1,30}/s',$routerData[1],$routerData);
+                var_dump($routerData);
+
+                /**
+                 * 检测路由
+                 * 1 请求方法
+                 * 2 路由路径
+                 * 3 返回类型
+                 */
+
+
+                $method = $functionData[1];
+                $annotationData[$functionData[1]] =$v;
+            }
+        }
+
+
+        //var_dump($array['namespace']['customer\action\manage']);
+        //$array['namespace']['customer\action\manage'] = ['title'=>$title[1]];
+        var_dump($array);
+//        var_dump($data);
+//        exit;
+        //preg_match_all('/\/\*\*\r(.*?)\)\r/s',$data,$method);
+        preg_match_all('/\/\*\*\r(.*?)\{/s',$data,$method);
+
+
+        var_dump($method[1]);
+        exit;
+
+        //var_dump($result);
+
+
+        preg_match_all('/\/\*\*\r(.*?)\*\//s',$data,$result);
+        //preg_match_all('/\/\*\*\r(.*)/',$data,$result);
+        //var_dump($result[1][6]);
+        preg_match('/\@return(.*?) @/s',$result[1][6],$result);
+        var_dump($result[1]);
+        preg_match_all('/ (.*?)\r/s',$result[1],$result);
+        var_dump($result[1][2]);
+        preg_match('/[\w]{1,20}/s',$result[1][2],$result);
+        var_dump($result);
+        //preg_match('/ [a-z] /s',$result[1],$result);
+        //var_dump($result);
+        //exit;
+
+
+    }
+    /**
+     * 合并人脸信息
+     * 特别注意（前端提示给用户）：
+     * 操作不可逆！！
+     * 如果合并的从人脸有关联信息会被清空关联并且写入主人脸的关联信息（如果主人脸无关联信息人脸也会变成无）
+     * 请求时间有点长前端注意同时
+     * @param $Request
+     *      direct_id [string] 主id
+     *      from_id [string] 从id（集合json   [id，id，id]）
+     * @return array [objectList] 数据
+     *      id [string] id
+     * @router get /index.html auth:public
+     */
+    public function index($Request ='')
     {
         $Request = Request::init();
 //        var_dump($Request->input());
@@ -27,7 +250,7 @@ class Index extends Controller
         /**
          * url
          */
-        $Request->setUrl('/test',['a'=>'b','b'=>'c']);
+//        $Request->setUrl('/test',['a'=>'b','b'=>'c']);
         /**
          * 重定向
          */
@@ -36,10 +259,17 @@ class Index extends Controller
     }
 
     /**
-     * 获取信息
+     * @param $Request
+     *      direct_id [string] 主id
+     *      from_id [string] 从id（集合json   [id，id，id]）
+     * @return array [objectList] 数据
+     *      id [string] id
+     * @router get router/:uid[int]  auth:public
      */
-    public function terminalInfo()
+    public function terminalInfo($Request)
     {
+        var_dump($Request);
+
         /**
          * 存储经纬度信息
          */
@@ -63,8 +293,8 @@ class Index extends Controller
             '市|区'=>$IpInfo['city'],
             '运营商'=>$IpInfo['isp'],
             '运营商网络'=>$IpInfo['NetworkType'],
-            '经纬度X'=>$IpInfo['point']['x'],
-            '经纬度Y'=>$IpInfo['point']['y'],
+            '经纬度X'=>isset($IpInfo['point']['x'])?$IpInfo['point']['x']:'000',
+            '经纬度Y'=>isset($IpInfo['point']['y'])?$IpInfo['point']['y']:'000',
             '浏览器'=>$data['Ipanel'],
             '语言'=>$data['language'],
             '系统'=>$data['Os'],
@@ -73,16 +303,35 @@ class Index extends Controller
             'terminal'=>$Build,
         ];
     }
-
-    public function test()
+    /**
+     * @param $Request
+     *      direct_id [string] 主id
+     *      from_id [string] 从id（集合json   [id，id，id]）
+     * @return array [objectList] 数据
+     *      id [string] id
+     * @router get /test.html auth:public
+     */
+    public function test($Request='')
     {
 
+        var_dump($Request);
+        //echo dechex('10090239');
 
-//        $data = file_get_contents('https://oauth.heil.top/db?a=dddd');
+//        $test = new Test();
+//        $test2 = $test;
+//        var_dump($test->data);
+//        $test->data = ['test'=>'然后22'];
+//        var_dump($test->data);
+
+
+
+//        var_dump($test2->data);
+
+        //        $data = file_get_contents('https://oauth.heil.top/db?a=dddd');
 //var_dump($data);
 //        var_dump(json_decode($data,true));
         $ToLocation = new ToLocation();
-        return ['data'=>$ToLocation->getlocation('183.11.30.104')];
+        return ['test'];
 
 //        $data = new UpdateQqwry;
 
@@ -343,13 +592,44 @@ class Index extends Controller
 
 
 
+    public function test1()
+    {
+        $Request = Request::init();
+        /**
+         * 重定向
+         */
+        $Request->Redirect($Request->setUrl('/test2',['a'=>'b','b'=>'c']));
 
+    }
 
+    public function test2()
+    {
+        $Request = Request::init();
+        /**
+         * 重定向
+         */
+        $Request->Redirect($Request->setUrl('/test3',['a'=>'b','b'=>'c']));
 
+    }
+    public function test3()
+    {
+        $Request = Request::init();
+        /**
+         * 重定向
+         */
+        $Request->Redirect($Request->setUrl('/test4',['a'=>'b','b'=>'c']));
 
+    }
 
-
-
+    public function test4()
+    {
+        $Request = Request::init();
+        /**
+         * 重定向
+         */
+        echo 'sssssssssss5555555555555555555';
+//        $Request->Redirect($Request->setUrl('/test5',['a'=>'b','b'=>'c']));
+    }
 
 
 

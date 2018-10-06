@@ -14,8 +14,17 @@
  */
 return [
             '/' =>['index\Index','index','all','','','环境'],
-            '/test' =>['index\Index','test','all','测试'],
+
+            '/test' =>['index\Index','test','all','test',false,'测试'],
+
+            '/test1' =>['index\Index','test1','all','test',false,'测试'],
+            '/test2' =>['index\Index','test2','all','test',false,'测试'],
+            '/test3' =>['index\Index','test3','all','test',false,'测试'],
+            '/test4' =>['index\Index','test4','all','test',false,'测试'],
+            '/test5' =>['index\Index','test5','all','test',false,'测试'],
+            '/router/user/777' =>['index\Index','router','all','test',false,'测试'],
+
             '/Cache' =>['index\Index','Cache','all','缓存'],
-            '/db' =>['index\Index','terminalInfo','all','',false,'数据库db使用'],
+            '/db' =>       ['index\Index','terminalInfo','all','test',false,'数据库db使用'],
             '/terminal' =>['index\Index','terminalInfo','get','test',false,'获取客户端信息'],
 ];
