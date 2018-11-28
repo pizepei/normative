@@ -24,7 +24,8 @@
     "autoload": {
         "psr-4": {
             "app\\": "app/",
-            "model\\": "model/"
+            "model\\": "model/",
+            "service\\": "service/"
         },
         "psr-0": {
             "": "extend/"
