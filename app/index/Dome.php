@@ -77,6 +77,7 @@ class Dome
     {
         //\pizepei\model\db\Test::table();
         Test::table();
+
         //var_dump(Test::table());
 
     }
