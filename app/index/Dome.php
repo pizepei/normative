@@ -14,7 +14,9 @@
 namespace app\index;
 
 
+use pizepei\config\JsonWebTokenConfig;
 use pizepei\model\cache\Cache;
+use pizepei\service\webSocket\JsonWebToken;
 use pizepei\staging\Route;
 use model\Test;
 class Dome
@@ -81,5 +83,20 @@ class Dome
         //var_dump(Test::table());
 
     }
+
+    /**
+     * @title db 操作->add
+     * @explain 框架模型操作-.增加数据操作
+     * @router get gwt
+     */
+    public function jwt()
+    {
+        //Test::table();
+        //return ['jwt'];
+        $JsonWebToken = new JsonWebToken([],JsonWebTokenConfig::secret);
+    }
+
+
+
 
 }
