@@ -85,8 +85,17 @@ class Dome
     }
 
     /**
-     * @title db 操作->add
-     * @explain 框架模型操作-.增加数据操作
+     * @Author: pizepei
+     * @Created: 2018/12/2 22:44
+     *
+     * @return array
+     * @throws \Exception
+     *
+     * @title  方法标题（一般是方法的简称）
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
      * @router get jwt
      */
     public function jwt()
@@ -95,6 +104,7 @@ class Dome
         //return ['jwt'];
         //JsonWebToken::Payload
         $JsonWebToken = new JsonWebToken([],'common');
+        return $JsonWebToken->setJWT();
     }
 
 
