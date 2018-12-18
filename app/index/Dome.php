@@ -29,7 +29,7 @@ class Dome
      *      user [int] 用户id
      * @title  / 路由的应用
      * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
-     * @router get /:user[string]/index
+     * @router get /:user[string]/index.txt
      */
     public function index($Request)
     {
