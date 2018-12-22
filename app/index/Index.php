@@ -238,7 +238,7 @@ class Index extends Controller
      *      from_id [string] 从id（集合json   [id，id，id]）
      * @return array [objectList] 数据
      *      id [string] id
-     * @router get /index.html auth:public
+     * @router get /index auth:public
      */
     public function index($Request ='')
     {

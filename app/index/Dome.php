@@ -23,15 +23,30 @@ class Dome
 {
 
     /**
+     * @return array [object]
+     * @title  / 路由的应用
+     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
+     * @router get /index.html
+     */
+    public function index()
+    {
+        return ['Hello World！'];
+    }
+
+
+
+
+    /**
      * @param  $Request
-     *      user [int] id
+     *      path [object] 路径参数
+     *           user [int] path_id
      * @return array [object]
      *      user [int] 用户id
      * @title  / 路由的应用
      * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
-     * @router get /:user[string]/index.txt
+     * @router get /dd:user[int]/index.txt
      */
-    public function index($Request)
+    public function path($Request)
     {
         $id = $Request->path('user');
         return $id;
