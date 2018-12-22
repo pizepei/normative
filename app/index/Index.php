@@ -240,13 +240,11 @@ class Index extends Controller
      *      id [string] id
      * @router get /index auth:public
      */
-    public function index($Request ='')
+    public function index($Request)
     {
-        $Request = Request::init();
 //        var_dump($Request->input());
 //        echo $Request->input(['post','dex','int']);
 
-        $Request = Request::init();
         /**
          * url
          */
