@@ -30,6 +30,10 @@ class Dome
      */
     public function index()
     {
+        \model\Dome::table();
+        //\model\Dome::table();
+
+
         return ['Hello World！'];
     }
 
