@@ -16,6 +16,7 @@ namespace app\index;
 
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\model\cache\Cache;
+use pizepei\model\db\Db;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\staging\Route;
 use model\Test;
@@ -30,6 +31,9 @@ class Dome
      */
     public function index()
     {
+
+        //Db::table('userr',false);
+
         \model\Dome::table();
         //\model\Dome::table();
 

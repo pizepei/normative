@@ -23,36 +23,36 @@ class Dome extends Db
     protected $structure = [
         'id'=>[
             'TYPE'=>'int',//数据类型（默认不为空）NOT NULL
-            'DEFAULT'=>'',//默认值
+            'DEFAULT'=>false,//默认值
             'COMMENT'=>'主键id',//字段说明
             'AUTO_INCREMENT'=>true,//自增  默认不
         ],
-        'version'=>[
-            'TYPE'=>'int',
+        'name'=>[
+            'TYPE'=>'varchar(255)',
             'DEFAULT'=>0,//默认值
-            'COMMENT'=>'列数据版本号',//字段说明
+            'COMMENT'=>'名字',//字段说明
         ],
-        'update_time'=>[
-            'TYPE'=>'timestamp NOT NULL  ON UPDATE CURRENT_TIMESTAMP',
-            'DEFAULT'=>'CURRENT_TIMESTAMP',//默认值
-            'COMMENT'=>'更新时间',//字段说明
-        ],
-        'creation_time'=>[
-            'TYPE'=>'timestamp NOT NULL  ON UPDATE CURRENT_TIMESTAMP',
-            'DEFAULT'=>'CURRENT_TIMESTAMP',//默认值
-            'COMMENT'=>'创建时间',//字段说明
-        ],
+
         'PRIMARY'=>'id',//主键
-        'INDEX'=>['TYPE'=>'','NAME'=>'','FIELD'=>'','COMMENT'=>''],//索引 KEY `ip` (`ip`) COMMENT 'sss '
+        /**
+         * UNIQUE 唯一
+         * SPATIAL 空间
+         * NORMAL 普通 key
+         * FULLTEXT 文本
+         */
+        'INDEX'=>[
+            //  NORMAL KEY `create_time` (`create_time`) USING BTREE COMMENT '参数'
+            //['TYPE'=>'key','FIELD'=>'creation_time','NAME'=>'creation_time','USING'=>'BTREE','COMMENT'=>'创建时间'],
+        ],//索引 KEY `ip` (`ip`) COMMENT 'sss '
     ];
     /**
      * @var string 表备注（不可包含@版本号关键字）
      */
-    protected $table_comment = '一个新的表';
+    protected $table_comment = '一个新的表Dome';
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 0;
+    protected $table_version = 3;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
