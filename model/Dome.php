@@ -32,7 +32,11 @@ class Dome extends Db
             'DEFAULT'=>0,//默认值
             'COMMENT'=>'名字',//字段说明
         ],
-
+        'nickname'=>[
+            'TYPE'=>'varchar(255)',
+            'DEFAULT'=>0,//默认值
+            'COMMENT'=>'昵称',//字段说明
+        ],
         'PRIMARY'=>'id',//主键
         /**
          * UNIQUE 唯一
@@ -52,33 +56,28 @@ class Dome extends Db
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 3;
+    protected $table_version = 6;
     /**
-     * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
+     * @var array 表结构变更日志
+     * 版本号=>['表操作的字段','操作类型ADD、DROP、MODIFY、CHANGE','操作内容（为安全起见不包括alter table user）','修改说明','修改人']
+     * 注意：
      */
     protected $table_structure_log = [
-        1=>[],
-        /**
-         * 修改的内容必须是完整的否则好缺失部分原来的结构
-         * ALTER TABLE `oauth_module`.`user_app` MODIFY COLUMN `nickname` timestamp(0) NULL DEFAULT NULL COMMENT '昵称' AFTER `mobile`;
-         * ALTER TABLE `数据库`.`表` MODIFY COLUMN `需要修改的字段` 修改后的内容 AFTER `字段在哪个字段后面`;
-         */
+        3=>[
+            ['new1','ADD',"new3 VARCHAR(20) DEFAULT NULL COMMENT '测试效果'",'修改说明：增加user表的new1字段','pizepei'],
+            //['new1','CHANGE',' new1 new4 int;','修改说明：修改一个字段的名称，此时一定要重新指定该字段的类型','pizepei'],
+        ],
+        4=>[
+            ['new1','DROP','new1','修改说明：删除一个字段','pizepei'],
+            ['new3','DROP','new3','修改说明：删除一个字段','pizepei'],
+            ['new4','DROP','new4','修改说明：删除一个字段','pizepei'],
+        ],
+        5=>[
+                ['nickname','ADD',"nickname varchar(255) DEFAULT '皮皮虾' COMMENT '昵称'",'增加nickname昵称字段','pizepei'],
+            ],
+        6=>[
+            ['nickname','MODIFY',"nickname varchar(255) DEFAULT '皮皮虾' COMMENT '昵称'",'修改字段的类型','pizepei'],
+        ],
     ];
-
-
-    /**
-     * 链接数据库
-     * 判断表是否存在方法
-     *      存在
-     *
-     *      不存在
-     *
-     * 判断表结构是否一致方法
-     *
-     * 创建表方法
-     *
-     *修改表结构方法
-     *
-     */
 
 }
