@@ -262,11 +262,11 @@ class Index extends Controller
      *      from_id [string] 从id（集合json   [id，id，id]）
      * @return array [objectList] 数据
      *      id [string] id
-     * @router get router/:uid[int]  auth:public
+     * @router get router/:uid[int]
      */
     public function terminalInfo($Request)
     {
-        var_dump($Request);
+        //var_dump($Request);
 
         /**
          * 存储经纬度信息
@@ -284,7 +284,14 @@ class Index extends Controller
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $data['create_time'] = date('Y-m-d H:i:s');
-        $mode = Db::table('terminal_info');
+        //$mode = Db::table('terminal_info');
+        $TerminalInfo = \model\TerminalInfo::table($data);
+        //$TerminalInfo = \model\db\TerminalInfo::table();
+        $data['IpInfo'] = json_encode($data['IpInfo']);
+        return $TerminalInfo->insert($data);
+        //return $data;
+
+
         return [
             'INSERT'=>$mode->insert($data,false),
             '省'=>$IpInfo['province'],
