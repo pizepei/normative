@@ -42,7 +42,7 @@ class TerminalInfo extends Model
             'TYPE'=>'varchar(35)', 'DEFAULT'=>'', 'COMMENT'=>'从浏览器获取操作系统',
         ],
         'IpInfo'=>[
-            'TYPE'=>'varchar(300)', 'DEFAULT'=>'', 'COMMENT'=>'ip信息',
+            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'ip信息',
         ],
         'NetType'=>['TYPE'=>'varchar(35)', 'DEFAULT'=>'', 'COMMENT'=>'=从ip获取的移动设备网络',],
         'ip'=>['TYPE'=>'varchar(15)', 'DEFAULT'=>'', 'COMMENT'=>'=ip地址',

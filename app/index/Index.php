@@ -228,11 +228,6 @@ class Index extends Controller
 
     }
     /**
-     * 合并人脸信息
-     * 特别注意（前端提示给用户）：
-     * 操作不可逆！！
-     * 如果合并的从人脸有关联信息会被清空关联并且写入主人脸的关联信息（如果主人脸无关联信息人脸也会变成无）
-     * 请求时间有点长前端注意同时
      * @param $Request
      *      direct_id [string] 主id
      *      from_id [string] 从id（集合json   [id，id，id]）
@@ -287,7 +282,7 @@ class Index extends Controller
         //$mode = Db::table('terminal_info');
         $TerminalInfo = \model\TerminalInfo::table($data);
         //$TerminalInfo = \model\db\TerminalInfo::table();
-        $data['IpInfo'] = json_encode($data['IpInfo']);
+        //$data['IpInfo'] = json_encode($data['IpInfo']);
         return $TerminalInfo->insert($data);
         //return $data;
 
