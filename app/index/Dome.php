@@ -20,6 +20,8 @@ use pizepei\model\db\Db;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\staging\Route;
 use model\Test;
+use pizepei\terminalInfo\TerminalInfo;
+
 class Dome
 {
 
@@ -31,12 +33,18 @@ class Dome
      */
     public function index()
     {
-
-        //Db::table('userr',false);
-        var_dump(\model\Dome::table()->fetchAll());
-        //\model\Dome::table();
-
-        return ['Hello World！'];
+        $terminalInfo = TerminalInfo::getArowserPro();
+        /**
+         * 存储经纬度信息
+         */
+        $IpInfo = $terminalInfo['IpInfo'];
+        $data = array_merge($IpInfo,$terminalInfo);
+        if (isset($data['point'])){
+            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        }
+        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
+        $TerminalInfo = \model\TerminalInfo::table();
+        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert($data,false)];
     }
 
 

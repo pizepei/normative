@@ -44,8 +44,19 @@ class TerminalInfo extends Model
         'IpInfo'=>[
             'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'ip信息',
         ],
+        'Build'=>[
+            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'移动设备信息',
+        ],
         'NetType'=>['TYPE'=>'varchar(35)', 'DEFAULT'=>'', 'COMMENT'=>'=从ip获取的移动设备网络',],
-        'ip'=>['TYPE'=>'varchar(15)', 'DEFAULT'=>'', 'COMMENT'=>'=ip地址',
+
+        'ip'=>[
+            'TYPE'=>'varchar(15)', 'DEFAULT'=>'', 'COMMENT'=>'ip地址',
+        ],
+        'point'=>[
+            'TYPE'=>'geometry', 'DEFAULT'=>'', 'COMMENT'=>'经纬度',
+        ],
+        'user_agent'=>[
+            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'user_agent全部信息',
         ],
 
         'PRIMARY'=>'id',//主键
@@ -57,12 +68,21 @@ class TerminalInfo extends Model
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 0;
+    protected $table_version = 3;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
     protected $table_structure_log = [
-        1=>[],
+        1=>[
+            ['Build','ADD',"Build json  DEFAULT NULL COMMENT '移动设备信息'",'增加移动设备信息记录','pizepei'],
+            ['point','ADD',"point geometry  DEFAULT NULL COMMENT '经纬度'",'经纬度','pizepei'],
+        ],
+        2=>[
+            ['user_agent','ADD',"user_agent json  DEFAULT '' COMMENT 'user_agent全部信息'",'user_agent全部信息','pizepei'],
+        ],
+        3=>[
+            ['user_agent','MODIFY',"user_agent varchar(255) DEFAULT 'user_agent全部信息' COMMENT '昵称'",'修改字段的类型从json变成varchar','pizepei'],
+        ]
         /**
          * 修改的内容必须是完整的否则好缺失部分原来的结构
          * ALTER TABLE `oauth_module`.`user_app` MODIFY COLUMN `nickname` timestamp(0) NULL DEFAULT NULL COMMENT '昵称' AFTER `mobile`;
