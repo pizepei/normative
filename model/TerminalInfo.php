@@ -10,9 +10,6 @@ use pizepei\model\db\Model;
 class TerminalInfo extends Model
 {
     /**
-     * ""user_agent":"PostmanRuntime\/7.4.0","create_time":"2019-01-03 21:39:40","SYSTEMSTATUS":{"controller":"app\\index\\Index","function_method":"terminalInfo","request_method":"GET","request_url":"\/index\/dome\/router\/8787","route":"\/index\/dome\/router\/:uid[int]","sql":"","clientInfo":"121.34.55.43","系统开始时的内存(K)":387.5390625,"系统结束时的内存(KB)":1.25133,"系统内存峰值(KB)":1.28371,"执行耗时(S)":0.0237}}
-     */
-    /**
      * 表结构
      * @var array
      */
@@ -56,10 +53,16 @@ class TerminalInfo extends Model
             'TYPE'=>'geometry', 'DEFAULT'=>'', 'COMMENT'=>'经纬度',
         ],
         'user_agent'=>[
-            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'user_agent全部信息',
+            'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'user_agent全部信息',
         ],
 
+
         'PRIMARY'=>'id',//主键
+        'INDEX'=>[
+            //  NORMAL KEY `create_time` (`create_time`) USING BTREE COMMENT '参数'
+            ['TYPE'=>'key','FIELD'=>'ip','NAME'=>'ip','USING'=>'BTREE','COMMENT'=>'ip地址'],
+        ],//索引 KEY `ip` (`ip`) COMMENT 'sss '
+
     ];
     /**
      * @var string 表备注（不可包含@版本号关键字）
@@ -68,13 +71,13 @@ class TerminalInfo extends Model
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 3;
+    protected $table_version = 6;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
     protected $table_structure_log = [
         1=>[
-            ['Build','ADD',"Build json  DEFAULT NULL COMMENT '移动设备信息'",'增加移动设备信息记录','pizepei'],
+            ['Build','ADD',"Build json  DEFAULT NULL COMMENT '移动设备信息'",'增加移动设备信息记录','pizepei','修改时间'],
             ['point','ADD',"point geometry  DEFAULT NULL COMMENT '经纬度'",'经纬度','pizepei'],
         ],
         2=>[
@@ -82,12 +85,14 @@ class TerminalInfo extends Model
         ],
         3=>[
             ['user_agent','MODIFY',"user_agent varchar(255) DEFAULT 'user_agent全部信息' COMMENT '昵称'",'修改字段的类型从json变成varchar','pizepei'],
-        ]
-        /**
-         * 修改的内容必须是完整的否则好缺失部分原来的结构
-         * ALTER TABLE `oauth_module`.`user_app` MODIFY COLUMN `nickname` timestamp(0) NULL DEFAULT NULL COMMENT '昵称' AFTER `mobile`;
-         * ALTER TABLE `数据库`.`表` MODIFY COLUMN `需要修改的字段` 修改后的内容 AFTER `字段在哪个字段后面`;
-         */
+        ],
+        4=>[
+            ['ip','ADD-INDEX',"`ip`(`ip`) USING BTREE COMMENT '创建时间'",'添加ip为索引','pizepei'],
+        ],
+        6=>[
+            ['user_agent','MODIFY',"user_agent varchar(255) DEFAULT 'user_agent全部信息' COMMENT '昵称'",'修改字段的类型从json变成varchar','pizepei'],
+        ],
+
     ];
 
 
