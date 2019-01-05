@@ -34,7 +34,7 @@ class Dome
 
         //Db::table('userr',false);
 
-        \model\Dome::table();
+        \model\Dome::table()->fetchAll();
         //\model\Dome::table();
 
 
