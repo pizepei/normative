@@ -80,4 +80,12 @@ class Dome extends Db
         ],
     ];
 
+    //protected $initData = ['name'=>'皮卡丘','nickname'=>'皮卡皮卡丘皮卡'];
+    protected $initData = [
+        ['name'=>'皮卡丘','nickname'=>'皮卡皮卡丘皮卡'],
+        ['name'=>'皮卡丘2','nickname'=>'皮卡皮卡丘皮卡'],
+        ['name'=>'皮卡丘3','nickname'=>'皮卡皮卡丘皮卡'],
+        ['name'=>'皮卡丘4','nickname'=>'皮卡皮卡丘皮卡'],
+
+    ];
 }
