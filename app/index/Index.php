@@ -228,11 +228,6 @@ class Index extends Controller
 
     }
     /**
-     * 合并人脸信息
-     * 特别注意（前端提示给用户）：
-     * 操作不可逆！！
-     * 如果合并的从人脸有关联信息会被清空关联并且写入主人脸的关联信息（如果主人脸无关联信息人脸也会变成无）
-     * 请求时间有点长前端注意同时
      * @param $Request
      *      direct_id [string] 主id
      *      from_id [string] 从id（集合json   [id，id，id]）
@@ -262,11 +257,11 @@ class Index extends Controller
      *      from_id [string] 从id（集合json   [id，id，id]）
      * @return array [objectList] 数据
      *      id [string] id
-     * @router get router/:uid[int]  auth:public
+     * @router get router/:uid[int]
      */
     public function terminalInfo($Request)
     {
-        var_dump($Request);
+        //var_dump($Request);
 
         /**
          * 存储经纬度信息
@@ -284,7 +279,14 @@ class Index extends Controller
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $data['create_time'] = date('Y-m-d H:i:s');
-        $mode = Db::table('terminal_info');
+        //$mode = Db::table('terminal_info');
+        $TerminalInfo = \model\TerminalInfo::table($data);
+        //$TerminalInfo = \model\db\TerminalInfo::table();
+        //$data['IpInfo'] = json_encode($data['IpInfo']);
+        return $TerminalInfo->insert($data);
+        //return $data;
+
+
         return [
             'INSERT'=>$mode->insert($data,false),
             '省'=>$IpInfo['province'],
