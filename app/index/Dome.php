@@ -33,10 +33,8 @@ class Dome
     {
 
         //Db::table('userr',false);
-
-        \model\Dome::table()->fetchAll();
+        var_dump(\model\Dome::table()->fetchAll());
         //\model\Dome::table();
-
 
         return ['Hello World！'];
     }
