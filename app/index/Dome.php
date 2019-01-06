@@ -33,6 +33,19 @@ class Dome
      */
     public function index()
     {
+        //var_dump(require(__INIT__['index-view']));
+        //var_dump(file_get_contents(__INIT__['index-view']));
+        //echo file_get_contents(__INIT__['index-view']);
+        require(__INIT__['index-view']);
+    }
+    /**
+     * @return array [object]
+     * @title  / 路由的应用
+     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
+     * @router get /client
+     */
+    public function client()
+    {
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
@@ -46,8 +59,6 @@ class Dome
         $TerminalInfo = \model\TerminalInfo::table();
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert($data,false)];
     }
-
-
 
 
     /**
