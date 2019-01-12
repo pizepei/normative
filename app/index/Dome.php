@@ -15,6 +15,7 @@ namespace app\index;
 
 
 use pizepei\config\JsonWebTokenConfig;
+use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
 use pizepei\service\jwt\JsonWebToken;
@@ -57,6 +58,7 @@ class Dome
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $TerminalInfo = \model\TerminalInfo::table();
+        var_dump($data);
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert($data,false)];
     }
 
@@ -147,7 +149,61 @@ class Dome
         return $JsonWebToken->setJWT();
     }
 
+    /**
+     * @Author: pizepei
+     * @Created: 2019/01/2 22:44
+     *
+     * @return array
+     * @throws \Exception
+     *
+     * @title  获取uuid
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router get uuid
+     */
+    public function uuid()
+    {
+        return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid()];
+    }
 
+    /**
+     * @Author: pizepei
+     * @Created: 2019/01/2 22:44
+     *
+     * @return array
+     * @throws \Exception
+     *
+     * @title  获取随机数字
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router get int-rand
+     */
+    public function int_rand()
+    {
+        return Func::M('str')::int_rand(10);
 
+    }
+    /**
+     * @Author: pizepei
+     * @Created: 2019/01/2 22:44
+     *
+     * @return array
+     * @throws \Exception
+     *
+     * @title  获取随机字符串
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router get str-rand
+     */
+    public function str_rand()
+    {
+        return Func::M('str')::str_rand(10);
+    }
 
 }
