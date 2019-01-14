@@ -14,6 +14,7 @@
 namespace app\index;
 
 
+use model\Uuid;
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
@@ -165,6 +166,9 @@ class Dome
      */
     public function uuid()
     {
+        $Uuid = Uuid::table();
+
+        var_dump($Uuid->insert(['Build'=>['dddd','dddss']]));
         return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid()];
     }
 
