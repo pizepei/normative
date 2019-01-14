@@ -42,11 +42,13 @@ class Uuid extends Db
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 0;
+    protected $table_version = 1;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
     protected $table_structure_log = [
-
+        1=>[
+            ['uuid','ADD',"uuid char(36)  DEFAULT NULL COMMENT 'uuid'",'uuid','pizepei'],
+        ]
     ];
 }

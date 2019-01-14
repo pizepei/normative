@@ -166,15 +166,23 @@ class Dome
      */
     public function uuid()
     {
+
+        //Db::table();
+
         $Uuid = Uuid::table();
-        var_dump($Uuid->insert(
+        $Uuid->insert(
             [
-            ['Build'=>['dddd','dddss']],
-            ['Build'=>['dddd','dddss']],
-            ['Build'=>['dddd','dddss']]
+                ['Build'=>['33333','dddss']],
+                ['Build'=>['dddd','44444']],
             ]
-        ));
-        return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid()];
+        );
+        $Uuid->get('b9dd397d-05fc-a87c-3290-4b7760f19542');
+        return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid(),'insert'=>$Uuid->insert(
+            [
+                ['Build'=>['dddd2','dddss']],
+                ['Build'=>['dddd','dddss2']],
+            ]
+        )];
     }
 
     /**
