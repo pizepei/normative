@@ -23,7 +23,8 @@
         "psr-4": {
             "app\\": "app/",
             "model\\": "model/",
-            "service\\": "service/"
+            "service\\": "service/",
+            "authority\\": "authority/"
         },
         "psr-0": {
             "": "extend/"
