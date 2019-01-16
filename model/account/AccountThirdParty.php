@@ -41,7 +41,7 @@ class AccountThirdParty extends Db
          */
         'INDEX'=>[
             //  NORMAL KEY `create_time` (`create_time`) USING BTREE COMMENT '参数'
-            ['TYPE'=>'UNIQUE','FIELD'=>'openid','NAME'=>'openid,type','USING'=>'BTREE','COMMENT'=>'openid唯一索引'],
+            ['TYPE'=>'UNIQUE','FIELD'=>'openid,type','NAME'=>'openid,type','USING'=>'BTREE','COMMENT'=>'openid唯一索引'],
         ],//索引 KEY `ip` (`ip`) COMMENT 'sss '
 
         'PRIMARY'=>'id',//主键
