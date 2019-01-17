@@ -28,7 +28,7 @@ class Account extends Controller
      */
     public function index()
     {
-        AccountThirdParty::table();
+        return AccountThirdParty::table()->add([['status'=>3,'type'=>'WeChat']]);
 
         return AccountModel::table()->fetchAll();
     }

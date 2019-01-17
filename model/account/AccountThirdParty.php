@@ -22,10 +22,10 @@ class AccountThirdParty extends Db
             'TYPE'=>'uuid','COMMENT'=>'主键uuid','DEFAULT'=>false,
         ],
         'account'=>[
-            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'account表id',
+            'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'account表id',
         ],
         'openid'=>[
-            'TYPE'=>'varchar(50)', 'DEFAULT'=>'', 'COMMENT'=>'真实姓名',
+            'TYPE'=>'varchar(50)', 'DEFAULT'=>'', 'COMMENT'=>'对应平台的openid',
         ],
         'type'=>[
             'TYPE'=>"ENUM('WeChat','QQ','weibo','no')", 'DEFAULT'=>'no', 'COMMENT'=>'WeChat微信、QQ腾讯qq、weibo新浪微博 no 没有',
