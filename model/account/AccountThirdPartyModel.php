@@ -9,9 +9,10 @@
 namespace model\account;
 
 
-use pizepei\model\db\Db;
 
-class AccountThirdParty extends Db
+use pizepei\model\db\Model;
+
+class AccountThirdPartyModel extends Model
 {
     /**
      * 表结构

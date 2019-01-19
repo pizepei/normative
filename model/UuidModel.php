@@ -9,9 +9,9 @@
 namespace model;
 
 
-use pizepei\model\db\Db;
+use pizepei\model\db\Model;
 
-class Uuid extends Db
+class UuidModel extends Model
 {
     /**
      * 表结构
@@ -22,10 +22,10 @@ class Uuid extends Db
             'TYPE'=>'uuid','COMMENT'=>'主键uuid','DEFAULT'=>false,
         ],
         'Build'=>[
-            'TYPE'=>'json', 'DEFAULT'=>'', 'COMMENT'=>'移动设备信息',
+            'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'移动设备信息',
         ],
         'point'=>[
-            'TYPE'=>'geometry', 'DEFAULT'=>'', 'COMMENT'=>'经纬度',
+            'TYPE'=>'geometry', 'DEFAULT'=>false, 'COMMENT'=>'经纬度',
         ],
         'user_agent'=>[
             'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'user_agent全部信息',

@@ -12,9 +12,9 @@
 
 namespace model;
 
-use pizepei\model\db\Db;
+use pizepei\model\db\Model;
 
-class Dome extends Db
+class DomeModel extends Model
 {
     /**
      * 表结构
