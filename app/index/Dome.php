@@ -60,7 +60,7 @@ class Dome
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $TerminalInfo = \model\TerminalInfo::table();
         var_dump($data);
-        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert($data,false)];
+        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false)];
     }
 
 
@@ -176,13 +176,16 @@ class Dome
                 ['Build'=>['dddd','44444']],
             ]
         );
-        $Uuid->get('b9dd397d-05fc-a87c-3290-4b7760f19542');
-        return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid(),'insert'=>$Uuid->insert(
-            [
-                ['Build'=>['dddd2','dddss']],
-                ['Build'=>['dddd','dddss2']],
-            ]
-        )];
+        //$Uuid->get('b9dd397d-05fc-a87c-3290-4b7760f19542');
+
+
+
+        //return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid(),'insert'=>$Uuid->insert(
+        //    [
+        //        ['Build'=>['dddd2','dddss']],
+        //        ['Build'=>['dddd','dddss2']],
+        //    ]
+        //)];
     }
 
     /**
