@@ -15,6 +15,7 @@ namespace app\index;
 
 use model\account\AccountModel;
 use model\account\AccountThirdParty;
+use pizepei\model\db\Db;
 use pizepei\staging\Controller;
 
 class Account extends Controller
@@ -28,7 +29,10 @@ class Account extends Controller
      */
     public function index()
     {
-        return AccountThirdParty::table()->add([['status'=>3,'type'=>'WeChat']]);
+        //Db::table()->insert();
+
+        return AccountThirdParty::table()->add(['status'=>3,'type'=>'WeChat','openid'=>'77779676','account'=>[Db::getUuid()]]);
+
 
         return AccountModel::table()->fetchAll();
     }
