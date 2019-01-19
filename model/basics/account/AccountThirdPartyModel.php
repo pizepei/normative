@@ -6,7 +6,7 @@
  * Time: 17:29
  */
 
-namespace model\account;
+namespace basics\model\account;
 
 
 
