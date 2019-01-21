@@ -14,6 +14,7 @@
 namespace app\index;
 
 
+use model\TerminalInfoModel;
 use model\Uuid;
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
@@ -48,6 +49,7 @@ class Dome
      */
     public function client()
     {
+
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
@@ -58,8 +60,8 @@ class Dome
             $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
-        $TerminalInfo = \model\TerminalInfo::table();
-        var_dump($data);
+        $TerminalInfo = TerminalInfoModel::table();
+        //var_dump($data);
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false)];
     }
 
