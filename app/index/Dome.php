@@ -21,6 +21,7 @@ use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
 use pizepei\service\jwt\JsonWebToken;
+use pizepei\service\sms\Sms;
 use pizepei\staging\Route;
 use model\Test;
 use pizepei\terminalInfo\TerminalInfo;
@@ -228,4 +229,19 @@ class Dome
         return Func::M('str')::str_rand(10);
     }
 
+    /**
+     * @Author: pizepei
+     * @Created: 2019/1/21 23:08
+     *
+     * @throws \Exception
+     * @return array [object]
+     * @title  账号获取列表
+     * @explain
+     * @router get sms
+     */
+    public function sms()
+    {
+        $Sms = new Sms(['aisle'=>'Aliyun']);
+        return $Sms->SendCode(13266579753);
+    }
 }
