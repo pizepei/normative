@@ -15,15 +15,14 @@ namespace app\index;
 
 
 use model\TerminalInfoModel;
-use model\Uuid;
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
+use pizepei\staging\Request;
 use pizepei\staging\Route;
-use model\Test;
 use pizepei\terminalInfo\TerminalInfo;
 
 class Dome
@@ -42,28 +41,32 @@ class Dome
         //echo file_get_contents(__INIT__['index-view']);
         require(__INIT__['index-view']);
     }
-    /**
-     * @return array [object]
-     * @title  / 路由的应用
-     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
-     * @router get /client
-     */
-    public function client()
-    {
 
+    /**
+     * @param \pizepei\staging\Request $Request
+     *      get [object] 路径参数
+     *           id [string] path_id
+     *           name [string] path_id
+     * @return array [object]
+     * @title  路由的应用
+     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
+     * @router cli /client/:id[string]/:name[string]
+     * @throws \Exception
+     */
+    public function client( Request $Request)
+    {
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
          */
         $IpInfo = $terminalInfo['IpInfo'];
-        $data = array_merge($IpInfo,$terminalInfo);
+        $data = @array_merge($IpInfo,$terminalInfo);
         if (isset($data['point'])){
             $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $TerminalInfo = TerminalInfoModel::table();
-        //var_dump($data);
-        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false)];
+        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
     }
 
 
@@ -241,7 +244,7 @@ class Dome
      */
     public function sms()
     {
-        $Sms = new Sms(['aisle'=>'Aliyun']);
-        return $Sms->SendCode(13266579753);
+        $Sms = new Sms();
+        return $Sms->SendCode('register',13266579753);
     }
 }
