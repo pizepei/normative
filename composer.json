@@ -23,6 +23,7 @@
         "psr-4": {
             "app\\": "app/",
             "model\\": "model/",
+            "config\\": "config/",
             "service\\": "service/",
             "authority\\": "authority/"
         },
