@@ -55,8 +55,6 @@ class Dome
      */
     public function client( Request $Request)
     {
-
-        var_dump(__REQUEST_ID__);
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
@@ -70,6 +68,36 @@ class Dome
         $TerminalInfo = TerminalInfoModel::table();
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
     }
+
+
+
+    /**
+     * @param \pizepei\staging\Request $Request
+     *      get [object] 路径参数
+     *           id [string] path_id
+     *           name [string] path_id
+     * @return array [object]
+     * @title  命令行cli模式
+     * @explain 命令行cli模式运行方式  php index_cli.php --route /dome/cli/001/pizpe
+     * @router cli cli/:id[string]/:name[string]
+     * @throws \Exception
+     */
+    public function cli( Request $Request)
+    {
+        $terminalInfo = TerminalInfo::getArowserPro();
+        /**
+         * 存储经纬度信息
+         */
+        $IpInfo = $terminalInfo['IpInfo'];
+        $data = @array_merge($IpInfo,$terminalInfo);
+        if (isset($data['point'])){
+            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        }
+        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
+        $TerminalInfo = TerminalInfoModel::table();
+        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
+    }
+
 
     /**
      * @return array [object]
