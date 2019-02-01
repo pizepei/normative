@@ -55,6 +55,8 @@ class Dome
      */
     public function client( Request $Request)
     {
+
+        var_dump(__REQUEST_ID__);
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
@@ -69,7 +71,17 @@ class Dome
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
     }
 
-
+    /**
+     * @return array [object]
+     * @title  路由的应用
+     * @explain 获取当前请求id
+     * @router get request
+     * @throws \Exception
+     */
+    public function Request()
+    {
+        return __REQUEST_ID__;
+    }
     /**
      * @param  $Request
      *      path [object] 路径参数
