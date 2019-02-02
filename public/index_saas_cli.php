@@ -17,5 +17,5 @@ define('__EXPLOIT__',TRUE);// 是否开发模式
 
 require('../vendor/autoload.php');
 
-$Start = new pizepei\staging\Start;
+$Start = new pizepei\staging\Start('SAAS','..'.DIRECTORY_SEPARATOR.'saas_config');
 $Start->start('CLI');
