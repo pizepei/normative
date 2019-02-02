@@ -14,6 +14,7 @@
 namespace app\index;
 
 
+use config\app\SetConfig;
 use model\TerminalInfoModel;
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
@@ -108,6 +109,9 @@ class Dome
      */
     public function Request()
     {
+        var_dump(\Config::API_CONFIG);
+        SetConfig::API_CONFIG;
+
         return __REQUEST_ID__;
     }
     /**
