@@ -109,9 +109,6 @@ class Dome
      */
     public function Request()
     {
-        var_dump(\Config::API_CONFIG);
-        SetConfig::API_CONFIG;
-
         return __REQUEST_ID__;
     }
     /**
