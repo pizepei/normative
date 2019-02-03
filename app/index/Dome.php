@@ -46,6 +46,55 @@ class Dome
     /**
      * @param \pizepei\staging\Request $Request
      *      get [object] 路径参数
+     *           objectList [objectList] objectList
+     *              id [int] 年级
+     *              name [object] 名字
+     *                  name [string] 姓名
+     *                  name [string] 姓名
+     *           name [string number] path_id
+     *           list [list] list
+     *              name [int] 111
+     *              id [int] id
+     * @return array [object] 名字
+     *      nameList [objectList] 同学名字
+     *          name [string] 姓名
+     *      id [int] 年级id
+     * @title  路由参数绑定、数据返回
+     * @explain  测试路由的参数过滤，返回数据过滤
+     * @router get param/:id[string]/:name[string]
+     * @throws \Exception
+     */
+    public function param( Request $Request)
+    {
+        var_dump(json_encode([
+            [
+                'id'=>123456,
+                'name'=>[
+                    ['pizepei'],
+                ],
+            ],
+            [
+                'id'=>'123456',
+                'name'=>'pizepei',
+            ],
+
+        ]));
+
+        var_dump(json_encode([
+                'id'=>123456,
+                'name'=>'pizepei',
+
+        ]));
+
+        var_dump($Request);
+        var_dump($Request->input());
+        return $Request->input();
+    }
+
+
+    /**
+     * @param \pizepei\staging\Request $Request
+     *      get [object] 路径参数
      *           id [string] path_id
      *           name [string] path_id
      * @return array [object]
@@ -178,7 +227,7 @@ class Dome
      * @Author: pizepei
      * @Created: 2018/12/2 22:44
      *
-     * @return array
+     * @return array [json]
      * @throws \Exception
      *
      * @title  方法标题（一般是方法的简称）
@@ -196,12 +245,11 @@ class Dome
         $JsonWebToken = new JsonWebToken([],'common');
         return $JsonWebToken->setJWT();
     }
-
     /**
      * @Author: pizepei
      * @Created: 2019/01/2 22:44
      *
-     * @return array
+     * @return array [json]
      * @throws \Exception
      *
      * @title  获取uuid
@@ -239,7 +287,7 @@ class Dome
      * @Author: pizepei
      * @Created: 2019/01/2 22:44
      *
-     * @return array
+     * @return array [json]
      * @throws \Exception
      *
      * @title  获取随机数字
@@ -258,7 +306,7 @@ class Dome
      * @Author: pizepei
      * @Created: 2019/01/2 22:44
      *
-     * @return array
+     * @return array [json]
      * @throws \Exception
      *
      * @title  获取随机字符串
