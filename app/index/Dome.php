@@ -20,6 +20,7 @@ use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
+use pizepei\model\redis\Redis;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
 use pizepei\staging\Request;
@@ -335,5 +336,27 @@ class Dome
     {
         $Sms = new Sms();
         return $Sms->SendCode('register',13266579753);
+    }
+
+    /**
+     * @Author: pizepei
+     * @Created: 2019/1/21 23:08
+     *
+     * @throws \Exception
+     * @return array [object]
+     * @title  账号获取列表
+     * @explain
+     * @router get redis
+     */
+    public function redis()
+    {
+        /**
+         *        \pizepei\model\reids\Redis
+         */
+        $redis = new Redis();
+        //$redis = new Redis();
+
+
+        //RedisModel::class
     }
 }
