@@ -3,22 +3,142 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>开始使用layui</title>
+    <title>开发助手</title>
     <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
-<body>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">开发助手</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">API文档</a></li>
+            <li class="layui-nav-item"><a href="">权限文档</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">资源文档</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">图标</a></dd>
+                    <dd><a href="">公共API</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    PIZEPEI
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <!--<li class="layui-nav-item"><a href="">退了</a></li>-->
+        </ul>
+    </div>
 
-<!-- 你的HTML代码 -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll" >
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="nav-filter" id="nav-id">
 
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+
+
+
+            <blockquote class="layui-elem-quote">文档内容</blockquote>
+            <table id="demo" lay-filter="test"></table>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
 <script src="../layui/layui.js"></script>
 <script>
-    //一般直接写在一个js文件中
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer
-            ,form = layui.form;
+    //JavaScript代码区域
+    layui.use(['element','table','laytpl','jquery','laytpl'], function(){
+        var element = layui.element,
+        laytpl = layui.laytpl, $ =layui.jquery,laytpl=layui.laytpl,
+        table = layui.table;
 
-        layer.msg('Hello World');
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: '/demo/table/user/' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'username', title: '用户名', width:80}
+                ,{field: 'sex', title: '性别', width:80, sort: true}
+                ,{field: 'city', title: '城市', width:80}
+                ,{field: 'sign', title: '签名', width: 177}
+                ,{field: 'experience', title: '积分', width: 80, sort: true}
+                ,{field: 'score', title: '评分', width: 80, sort: true}
+                ,{field: 'classify', title: '职业', width: 80}
+                ,{field: 'wealth', title: '财富', width: 135, sort: true}
+            ]]
+        });
+
+        element.on('nav(test)', function(elem){
+            console.log(elem.context.name); //得到当前点击的DOM对象
+        });
+        element.render('nav')
+        $.ajax({//异步请求返回给后台
+            url:'nav',
+            type:'GET',
+            data:{},
+            dataType:'json',
+            success:function(data){            console.log(data); //得到当前点击的DOM对象
+                var getTpl = navtpl.innerHTML
+                    ,view = document.getElementById('nav-id');
+                laytpl(getTpl).render(data, function(html){
+                    view.innerHTML = html;
+                });
+                //这里获取到数据执行显示
+            }
+        });
+
+
+
+
+
+
     });
+
 </script>
+
 </body>
+
+<script id="navtpl" type="text/html">
+
+    {{#  layui.each(d, function(index, item){ }}
+    <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;">{{item.title}}</a>
+        <dl class="layui-nav-child">
+            {{#  layui.each(item.route, function(index, item){ }}
+            <dd><a href="javascript:;">
+            {{#  if(item.title.length === 0){ }}
+                {{index}}
+            {{#  }else{ }}
+                {{item.title}}
+             {{#  }}}
+            </a></dd>
+            {{#  }); }}
+        </dl>
+    </li>
+    {{#  }); }}
+
+</script>
+
 </html>

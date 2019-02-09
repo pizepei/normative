@@ -38,9 +38,7 @@ class Dome
      */
     public function index()
     {
-        //var_dump(require(__INIT__['index-view']));
-        //var_dump(file_get_contents(__INIT__['index-view']));
-        //echo file_get_contents(__INIT__['index-view']);
+
         require(__INIT__['index-view']);
     }
 
@@ -353,7 +351,7 @@ class Dome
         /**
          *        \pizepei\model\reids\Redis
          */
-        $redis = new Redis();
+        //$redis = new Redis();
         //$redis = new Redis();
 
 

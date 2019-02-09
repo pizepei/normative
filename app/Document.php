@@ -14,6 +14,7 @@
 namespace app;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
+use pizepei\staging\Route;
 
 
 class Document extends Controller
@@ -28,6 +29,20 @@ class Document extends Controller
      */
     public function index()
     {
-        require(__INIT__['index-view']);
+        $this->view('Document');
     }
+
+    /**
+     * @return array [json]
+     * @title  文档入口
+     * @explain 文档入口
+     * @router get nav debug:true
+     * @throws \Exception
+     */
+    public function nav()
+    {
+        return Route::init()->noteBlock;
+    }
+
+
 }

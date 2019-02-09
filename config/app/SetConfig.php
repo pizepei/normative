@@ -63,12 +63,6 @@ class SetConfig
             'header'=>[
                 'X-Powered-By'=>'ASP.NET',
                 'Server'=>'Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9',
-                /**
-                 * 或者 text/html; charset=UTF-8
-                 */
-                'Content-Type'=>'text/html; charset=UTF-8',
-
-                'Content-Type'=>'application/json;charset=UTF-8',
             ],
             /**
              * 是否对请求参数进行过滤（删除不在注解中的参数key）
