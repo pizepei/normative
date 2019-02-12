@@ -43,19 +43,77 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="nav-filter" id="nav-id">
 
+
             </ul>
         </div>
     </div>
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">
+        <div style="padding: 15px;background-color:#F0F0F0;" >
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>API详情</legend>
+                <div class="layui-field-box">
+
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md4">
+
+
+                            <div class="layui-card">
+                                <div class="layui-card-header">卡片面板1</div>
+                                <div class="layui-card-body">
+                                    卡片式面板面板通常用于非白色背景色的主体内<br>
+                                    从而映衬出边框投影
+                                </div>
+                            </div>
 
 
 
-            <blockquote class="layui-elem-quote">文档内容</blockquote>
+                        </div>
+                        <div class="layui-col-md4">
+
+
+                            <div class="layui-card">
+                                <div class="layui-card-header">卡片面板2</div>
+                                <div class="layui-card-body">
+                                    卡片式面板面板通常用于非白色背景色的主体内<br>
+                                    从而映衬出边框投影
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="layui-col-md4">
+
+
+                            <div class="layui-card">
+                                <div class="layui-card-header">卡片面板3</div>
+                                <div class="layui-card-body">
+                                    卡片式面板面板通常用于非白色背景色的主体内<br>
+                                    从而映衬出边框投影
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+            </fieldset>
+            GET请求参数
+            <hr class="layui-bg-green">
+            <!--<blockquote class="layui-elem-quote">文档内容</blockquote>-->
             <table id="demo" lay-filter="test"></table>
-
+            POST请求参数
+            <hr class="layui-bg-green">
+            <!--<blockquote class="layui-elem-quote">文档内容</blockquote>-->
+            <table id="demo2" lay-filter="test"></table>
         </div>
     </div>
 
@@ -78,19 +136,15 @@
             ,url: '/demo/table/user/' //数据接口
             ,page: true //开启分页
             ,cols: [[ //表头
-                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-                ,{field: 'username', title: '用户名', width:80}
-                ,{field: 'sex', title: '性别', width:80, sort: true}
-                ,{field: 'city', title: '城市', width:80}
-                ,{field: 'sign', title: '签名', width: 177}
-                ,{field: 'experience', title: '积分', width: 80, sort: true}
-                ,{field: 'score', title: '评分', width: 80, sort: true}
-                ,{field: 'classify', title: '职业', width: 80}
-                ,{field: 'wealth', title: '财富', width: 135, sort: true}
+                {field: 'id', title: '序号', width:80, sort: true, fixed: 'left'}
+                ,{field: 'username', title: 'GET', width:300}
+                ,{field: 'sex', title: 'POST', width:300}
+                ,{field: 'city', title: 'PATH', width:300}
+                ,{field: 'sign', title: 'RAW', width: 300}
             ]]
         });
 
-        element.on('nav(test)', function(elem){
+        element.on('nav(nav-filter)', function(elem){
             console.log(elem.context.name); //得到当前点击的DOM对象
         });
         element.render('nav')
@@ -104,6 +158,7 @@
                     ,view = document.getElementById('nav-id');
                 laytpl(getTpl).render(data, function(html){
                     view.innerHTML = html;
+                    element.render('nav'); //重新对导航进行渲染。注：layui 2.1.6 版本新增
                 });
                 //这里获取到数据执行显示
             }
@@ -123,7 +178,7 @@
 <script id="navtpl" type="text/html">
 
     {{#  layui.each(d, function(index, item){ }}
-    <li class="layui-nav-item layui-nav-itemed">
+    <li class="layui-nav-item ">
         <a href="javascript:;">{{item.title}}</a>
         <dl class="layui-nav-child">
             {{#  layui.each(item.route, function(index, item){ }}

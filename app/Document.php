@@ -22,8 +22,8 @@ class Document extends Controller
     protected $path  = '';
     /**
      * @return array [html]
-     * @title  文档入口
-     * @explain 文档入口
+     * @title  文档入口（开发助手）
+     * @explain 文档入口（API文档、权限文档、公共资源文档）
      * @router get index debug:true
      * @throws \Exception
      */
@@ -34,8 +34,8 @@ class Document extends Controller
 
     /**
      * @return array [json]
-     * @title  文档入口
-     * @explain 文档入口
+     * @title  API文档 侧边导航
+     * @explain  侧边导航
      * @router get nav debug:true
      * @throws \Exception
      */
