@@ -36,13 +36,35 @@ class Document extends Controller
      * @return array [json]
      * @title  API文档 侧边导航
      * @explain  侧边导航
-     * @router get nav debug:true
+     * @router get nav-list debug:true
      * @throws \Exception
      */
-    public function nav()
+    public function navList()
     {
         return Route::init()->noteBlock;
     }
 
+    /**
+     * @Author: pizepei
+     * @Created: 2019/2/12 23:01
+     *
+     * @param \pizepei\staging\Request $Request
+     *      get [object] 路径参数
+     *          father [string] 父路径
+     *          index [string] 当前路径
+     * @return array [json]
+     * @title  获取API文档信息
+     * @explain  根据大家侧边导航获取对应的获取API文档信息
+     * @router get index-nav debug:true
+     * @throws \Exception
+     */
+    public function getNav(Request $Request)
+    {
+        $input = $Request->input();
+        return ['data'=>[
+            'fatherInfo'=>Route::init()->noteBlock[$input['father']],
+            'info'=>Route::init()->noteBlock[$input['father']]['route'][$input['index']]]
+        ];
+    }
 
 }
