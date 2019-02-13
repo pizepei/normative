@@ -54,16 +54,22 @@ class Document extends Controller
      *          index [string] 当前路径
      * @return array [json]
      * @title  获取API文档信息
-     * @explain  根据大家侧边导航获取对应的获取API文档信息
+     * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get index-nav debug:true
      * @throws \Exception
      */
     public function getNav(Request $Request)
     {
         $input = $Request->input();
+        $fatherInfo = Route::init()->noteBlock[$input['father']];
+        $fatherInfo['index'] = $input['father'];
+        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        if(!empty($info)){
+            $info['index'] = $input['index'];
+        }
         return ['data'=>[
-            'fatherInfo'=>Route::init()->noteBlock[$input['father']],
-            'info'=>Route::init()->noteBlock[$input['father']]['route'][$input['index']]]
+            'fatherInfo'=>$fatherInfo,
+            'info'=>$info]
         ];
     }
 

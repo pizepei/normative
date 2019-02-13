@@ -55,48 +55,48 @@
                 <legend>API详情</legend>
                 <div class="layui-field-box">
 
-                    <div class="layui-row layui-col-space10">
-                        <div class="layui-col-md4">
+                    <div class="layui-row layui-col-space10" id="headTab-id">
+                        <!--<div class="layui-col-md4">-->
 
 
-                            <div class="layui-card">
-                                <div class="layui-card-header">控制器信息</div>
-                                <div class="layui-card-body">
-                                    卡片式面板面板通常用于非白色背景色的主体内<br>
-                                    从而映衬出边框投影
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div class="layui-col-md4">
-
-
-                            <div class="layui-card">
-                                <div class="layui-card-header">路由信息</div>
-                                <div class="layui-card-body">
-                                    卡片式面板面板通常用于非白色背景色的主体内<br>
-                                    从而映衬出边框投影
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="layui-col-md4">
-
-
-                            <div class="layui-card">
-                                <div class="layui-card-header">权限以及其他信息</div>
-                                <div class="layui-card-body">
-                                    卡片式面板面板通常用于非白色背景色的主体内<br>
-                                    从而映衬出边框投影
-                                </div>
-                            </div>
+                            <!--<div class="layui-card">-->
+                                <!--<div class="layui-card-header">控制器信息</div>-->
+                                <!--<div class="layui-card-body">-->
+                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
+                                    <!--从而映衬出边框投影-->
+                                <!--</div>-->
+                            <!--</div>-->
 
 
 
-                        </div>
+                        <!--</div>-->
+                        <!--<div class="layui-col-md4">-->
+
+
+                            <!--<div class="layui-card">-->
+                                <!--<div class="layui-card-header">路由信息</div>-->
+                                <!--<div class="layui-card-body">-->
+                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
+                                    <!--从而映衬出边框投影-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+                        <!--</div>-->
+                        <!--<div class="layui-col-md4">-->
+
+
+                            <!--<div class="layui-card">-->
+                                <!--<div class="layui-card-header">权限以及其他信息</div>-->
+                                <!--<div class="layui-card-body">-->
+                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
+                                    <!--从而映衬出边框投影-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+
+                        <!--</div>-->
                     </div>
 
 
@@ -132,7 +132,7 @@
 
         table.render({
             elem: '#demo'
-            ,height: 312
+            // ,height: 312
             ,url: '/demo/table/user/' //数据接口
             ,page: true //开启分页
             ,cols: [[ //表头
@@ -142,19 +142,67 @@
                 ,{field: 'fieldRestrain', title: '约束', width:'33.3%'}
             ]]
         });
-
+        // 菜单点击事件
         element.on('nav(nav-filter)', function(elem){
-            console.log(elem.context.name); //得到当前点击的DOM对象  route
-            console.log(elem.context.rel); //得到当前点击的DOM对象  父对象
-            console.log(elem.context.innerText); //得到当前点击的DOM对象
+            // console.log(elem.context.name); //得到当前点击的DOM对象  route
+            // console.log(elem.context.rel); //得到当前点击的DOM对象  父对象
+            // console.log(elem.context.innerText); //得到当前点击的DOM对象
+
+
             $.ajax({//异步请求返回给后台
                 url:'index-nav',
                 type:'GET',
                 data:{father:elem.context.rel,index:elem.context.name},
                 dataType:'json',
                 success:function(data){
+                    // headTabTpl
                     console.log(data); //得到当前点击的DOM对象
                     //这里获取到数据执行显示
+
+                    var getTpl = headTabTpl.innerHTML
+                        ,view = document.getElementById('headTab-id');
+                    laytpl(getTpl).render(data.data, function(html){
+                        view.innerHTML = html;
+                        element.render('nav'); //重新对导航进行渲染。注：layui 2.1.6 版本新增
+                    });
+                    //这里获取到数据执行显示
+                    // table.render({
+                    //     elem: '#demo'
+                    //     // ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    //     // ,height: 312
+                    //     ,url: '/demo/table/user/' //数据接口
+                    //     ,page: false //开启分页
+                    //     ,cols: [[ //表头
+                    //         // {field: 'id', title: '序号', width:60, sort: true, fixed: 'left'}
+                    //         {field: 'field', title: '字段', width:'33.3%',fixed: 'left'}
+                    //         ,{field: 'fieldExplain', title: '字段说明', width:'33.3%'}
+                    //         ,{field: 'fieldRestrain', title: '约束', width:'33.3%'}
+                    //     ]]
+                    // });
+                    table.render({
+                        elem: '#demo'
+                        ,url:'/test/table/demo1.json'
+                        ,toolbar: '#toolbarDemo'
+                        ,title: '用户数据表'
+                        ,cols: [[
+                            {type: 'checkbox', fixed: 'left'}
+                            ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
+                            ,{field:'username', title:'用户名', width:120, edit: 'text'}
+                            ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
+                                    return '<em>'+ res.email +'</em>'
+                                }}
+                            ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
+                            ,{field:'city', title:'城市', width:100}
+                            ,{field:'sign', title:'签名'}
+                            ,{field:'experience', title:'积分', width:80, sort: true}
+                            ,{field:'ip', title:'IP', width:120}
+                            ,{field:'logins', title:'登入次数', width:100, sort: true}
+                            ,{field:'joinTime', title:'加入时间', width:120}
+                            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        ]]
+                        ,page: true
+                    });
+
                 }
             });
         });
@@ -164,7 +212,8 @@
             type:'GET',
             data:{},
             dataType:'json',
-            success:function(data){            console.log(data); //得到当前点击的DOM对象
+            success:function(data){
+                console.log(data); //得到当前点击的DOM对象
                 var getTpl = navtpl.innerHTML
                     ,view = document.getElementById('nav-id');
                 laytpl(getTpl).render(data, function(html){
@@ -200,7 +249,7 @@
 </script>
 
 </body>
-
+<!--菜单模板-->
 <script id="navtpl" type="text/html">
 
     <li class="layui-nav-item ">
@@ -209,7 +258,7 @@
 
     {{#  layui.each(d, function(indexFather, item){ }}
     <li class="layui-nav-item ">
-        <a href="javascript:;">{{item.title}}</a>
+        <a href="javascript:;" rel="{{indexFather}}" >{{item.title}}</a>
         <dl class="layui-nav-child">
             {{#  layui.each(item.route, function(index, item){ }}
             <dd><a href="javascript:;" rel="{{indexFather}}" name="{{index}}">
@@ -225,5 +274,59 @@
     {{#  }); }}
 
 </script>
+<!--选项卡模板-->
+<script id="headTabTpl" type="text/html">
 
+    <div class="layui-col-md4">
+
+        <div class="layui-card">
+            <div class="layui-card-header">控制器信息</div>
+            <div class="layui-card-body">
+                <b>介绍：</b>{{d.fatherInfo.title}}<br>
+                <b>类名：</b>{{d.fatherInfo.class}}<br>
+                <b>创建者：</b>{{d.fatherInfo.User}}<br>
+                <b>命名空间：</b>{{d.fatherInfo.index}}<br>
+                <b>根路由：</b>{{d.fatherInfo.basePath}}<br>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-col-md4">
+
+        <div class="layui-card">
+            <div class="layui-card-header">路由信息</div>
+            <div class="layui-card-body">
+                {{#  if(d.info === null){ }}
+
+                {{#  }else{ }}
+                <b>标题：</b>{{d.info.title}}<br>
+                <b>解释：</b>{{d.info.explain}}<br>
+                <b>路由：</b><span class="layui-badge">{{d.info.routerType}}</span>&nbsp;&nbsp;</nbsp><span class="layui-badge">{{d.info.requestType}}</span>&nbsp;&nbsp;{{d.info.routerStr}}<br>
+                <b>正则内容：</b>{{d.info.matchStr}}<br>
+                {{#  }}}
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-col-md4">
+
+        <div class="layui-card">
+            <div class="layui-card-header">权限以及其他信息</div>
+            <div class="layui-card-body">
+                <b>权限组列表：</b>{{d.fatherInfo.authGroup}}<br>
+                <b>基础权限继承：</b>{{d.fatherInfo.baseAuth}}<br>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+</script>
 </html>

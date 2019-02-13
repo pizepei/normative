@@ -8,7 +8,6 @@
  * @title 简单的dome
  * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
  * @basePath /dome/
- * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 
 namespace app\index;
