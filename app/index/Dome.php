@@ -53,6 +53,16 @@ class Dome
      *           list [list] list
      *              name [int] 111
      *              id [int] id
+     *      post [object] post参数
+     *           list [object] list
+     *              name [int] 111
+     *              id [int] id
+     *      path [object] 路径参数
+     *          id [string] 参数id
+     *          name [string] 参数名字
+     *      rule [object] 数据流参数
+     *          id [string] 参数id
+     *          name [string] 参数名字
      * @return array [object] 名字
      *      nameList [objectList] 同学名字
      *          name [string] 姓名

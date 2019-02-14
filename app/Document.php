@@ -95,8 +95,6 @@ class Document extends Controller
         if(!empty($info)){
             $info['index'] = $input['index'];
         }
-
-
         if(isset($info['Param']) && !empty($info['Param'])){
 
             $info = $info['Param'][$input['type']]['substratum']??[];
@@ -105,19 +103,6 @@ class Document extends Controller
 
                 $Document = new \service\document\Document;
                 $infoData = $Document ->getParamInit($info);
-                //$i=0;
-                //foreach($info as $key=>$value){
-                //    $infoData[$i]['field'] = $key;
-                //    $infoData[$i]['fieldExplain'] = $value['fieldExplain'];//字段说明
-                //    $infoData[$i]['type'] = $value['fieldRestrain'][0];//字段说明
-                //    $infoData[$i]['fieldRestrain'] = implode(' | ',$value['fieldRestrain']);//约束
-                //
-                //    if(isset($value['substratum'])){
-                //        $this->recursiveParam($value['substratum'],$infoData,$i);
-                //    }else{
-                //        $i++;
-                //    }
-                //}
             }
 
         }else{

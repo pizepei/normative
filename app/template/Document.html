@@ -17,7 +17,8 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">资源文档</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">图标</a></dd>
+                    <dd><a href="">框架文档</a></dd>
+                    <dd><a href="">图标资源</a></dd>
                     <dd><a href="">公共API</a></dd>
                     <dd><a href="">授权管理</a></dd>
                 </dl>
@@ -56,83 +57,34 @@
                 <div class="layui-field-box">
 
                     <div class="layui-row layui-col-space10" id="headTab-id">
-                        <!--<div class="layui-col-md4">-->
-
-
-                            <!--<div class="layui-card">-->
-                                <!--<div class="layui-card-header">控制器信息</div>-->
-                                <!--<div class="layui-card-body">-->
-                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                                    <!--从而映衬出边框投影-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-
-
-                        <!--</div>-->
-                        <!--<div class="layui-col-md4">-->
-
-
-                            <!--<div class="layui-card">-->
-                                <!--<div class="layui-card-header">路由信息</div>-->
-                                <!--<div class="layui-card-body">-->
-                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                                    <!--从而映衬出边框投影-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-
-                        <!--</div>-->
-                        <!--<div class="layui-col-md4">-->
-
-
-                            <!--<div class="layui-card">-->
-                                <!--<div class="layui-card-header">权限以及其他信息</div>-->
-                                <!--<div class="layui-card-body">-->
-                                    <!--卡片式面板面板通常用于非白色背景色的主体内<br>-->
-                                    <!--从而映衬出边框投影-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-
-
-                        <!--</div>-->
+                            <!--简单控制器信息-->
                     </div>
-
-
-
-
 
 
                 </div>
             </fieldset>
-            <div id="table-div">
-                <table id="table-path" lay-filter="test"></table>
-                <table id="table-get" lay-filter="test"></table>
-                <table id="table-rule" lay-filter="test"></table>
-                <table id="table-post" lay-filter="test"></table>
+
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">请求参数</li>
+                    <li>返回参数</li>
+                </ul>
+                <div class="layui-tab-content" >
+                    <div class="layui-tab-item layui-show">
+                        <div id="table-div">
+                            <table id="table-path" lay-filter="test"></table>
+                            <table id="table-get" lay-filter="test"></table>
+                            <table id="table-rule" lay-filter="test"></table>
+                            <table id="table-post" lay-filter="test"></table>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">2</div>
+                </div>
             </div>
+
+
+
             <!--<blockquote class="layui-elem-quote">文档内容</blockquote>-->
-            <script type="text/html" id="toolbarDemo-get">
-
-                <span class="layui-badge layui-bg-green">GET请求参数</span>
-                <hr class="layui-bg-green">
-            </script>
-
-            <script type="text/html" id="toolbarDemo-post">
-                POST请求参数
-                <hr class="layui-bg-green">
-            </script>
-
-            <script type="text/html" id="toolbarDemo-rule">
-                RULE请求参数
-                <hr class="layui-bg-green">
-            </script>
-
-            <script type="text/html" id="toolbarDemo-path">
-                PATH请求参数
-                <hr class="layui-bg-green">
-            </script>
 
 
         </div>
@@ -268,7 +220,7 @@
                 elem: '#table-rule'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
-                ,toolbar: '#toolbarDemo-post'
+                ,toolbar: '#toolbarDemo-rule'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'rule'
                 ,cols: [[
                     {field: 'field', title: '字段', width:'32%',fixed: 'left'}
@@ -342,9 +294,7 @@
         <div class="layui-card">
             <div class="layui-card-header">控制器信息</div>
             <div class="layui-card-body">
-                <b>介绍：</b>{{d.fatherInfo.title}}<br>
-                <b>类名：</b>{{d.fatherInfo.class}}<br>
-                <b>创建者：</b>{{d.fatherInfo.User}}<br>
+                <b>介绍：</b>类名：{{d.fatherInfo.title}}&nbsp;&nbsp;|&nbsp;&nbsp;创建者：{{d.fatherInfo.User}}<br>
                 <b>命名空间：</b>{{d.fatherInfo.index}}<br>
                 <b>根路由：</b>{{d.fatherInfo.basePath}}<br>
                 <b>权限组列表：</b>{{d.fatherInfo.authGroup}}<br>
@@ -367,7 +317,7 @@
                 <b>路由：</b><span class="layui-badge">{{d.info.routerType}}</span>&nbsp;&nbsp;</nbsp><span class="layui-badge">{{d.info.requestType}}</span>&nbsp;&nbsp;{{d.info.routerStr}}<br>
                 <b>正则内容：</b>{{d.info.matchStr}}<br>
 
-                <b>方法信息：</b>name：{{d.info.function.name}}&nbsp;&nbsp;|&nbsp;&nbsp;Param：{{d.info.ParamObject}}&nbsp;&nbsp;|&nbsp;&nbsp;ObjectPath：{{d.info.routeParamObjectPath}}<br>
+                <b>方法信息：</b>name：{{d.info.function.name}}&nbsp;&nbsp;|&nbsp;&nbsp;Object：{{d.info.routeParamObjectPath}}&raquo;{{d.info.ParamObject}}<br>
 
                 {{#  }}}
 
@@ -381,4 +331,49 @@
 
 
 </script>
+
+
+
+
+<!--请求参数工具栏-->
+<script type="text/html" id="toolbarDemo-get">
+
+    <span class="layui-badge layui-bg-green">GET请求参数</span>
+    <hr class="layui-bg-green">
+</script>
+
+<script type="text/html" id="toolbarDemo-post">
+    <span class="layui-badge layui-bg-green">POST请求参数</span>
+
+    <hr class="layui-bg-green">
+</script>
+
+<script type="text/html" id="toolbarDemo-rule">
+    <span class="layui-badge layui-bg-green">RULE请求参数</span>
+
+    <hr class="layui-bg-green">
+</script>
+
+<script type="text/html" id="toolbarDemo-path">
+    <span class="layui-badge layui-bg-green">PATH请求参数</span>
+
+    <hr class="layui-bg-green">
+</script>
+<!--请求参数工具栏-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </html>
