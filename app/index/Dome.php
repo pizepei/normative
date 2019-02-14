@@ -222,8 +222,8 @@ class Dome
     }
 
     /**
-     * @Author: pizepei
-     * @Created: 2018/12/2 22:44
+     * @Author pizepei
+     * @Created 2018/12/2 22:44
      *
      * @return array [json]
      * @throws \Exception
@@ -244,8 +244,8 @@ class Dome
         return $JsonWebToken->setJWT();
     }
     /**
-     * @Author: pizepei
-     * @Created: 2019/01/2 22:44
+     * @Author pizepei
+     * @Created 2019/01/2 22:44
      *
      * @return array [json]
      * @throws \Exception

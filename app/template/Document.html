@@ -106,14 +106,35 @@
 
                 </div>
             </fieldset>
-            GET请求参数
-            <hr class="layui-bg-green">
+            <div id="table-div">
+                <table id="table-path" lay-filter="test"></table>
+                <table id="table-get" lay-filter="test"></table>
+                <table id="table-rule" lay-filter="test"></table>
+                <table id="table-post" lay-filter="test"></table>
+            </div>
             <!--<blockquote class="layui-elem-quote">文档内容</blockquote>-->
-            <table id="demo" lay-filter="test"></table>
-            POST请求参数
-            <hr class="layui-bg-green">
-            <!--<blockquote class="layui-elem-quote">文档内容</blockquote>-->
-            <table id="demo2" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo-get">
+
+                <span class="layui-badge layui-bg-green">GET请求参数</span>
+                <hr class="layui-bg-green">
+            </script>
+
+            <script type="text/html" id="toolbarDemo-post">
+                POST请求参数
+                <hr class="layui-bg-green">
+            </script>
+
+            <script type="text/html" id="toolbarDemo-rule">
+                RULE请求参数
+                <hr class="layui-bg-green">
+            </script>
+
+            <script type="text/html" id="toolbarDemo-path">
+                PATH请求参数
+                <hr class="layui-bg-green">
+            </script>
+
+
         </div>
     </div>
 
@@ -129,19 +150,6 @@
         var element = layui.element,
         laytpl = layui.laytpl, $ =layui.jquery,laytpl=layui.laytpl,
         table = layui.table;
-
-        table.render({
-            elem: '#demo'
-            // ,height: 312
-            ,url: '/demo/table/user/' //数据接口
-            ,page: true //开启分页
-            ,cols: [[ //表头
-                // {field: 'id', title: '序号', width:60, sort: true, fixed: 'left'}
-                {field: 'field', title: '字段', width:'33.3%',fixed: 'left'}
-                ,{field: 'fieldExplain', title: '字段说明', width:'33.3%'}
-                ,{field: 'fieldRestrain', title: '约束', width:'33.3%'}
-            ]]
-        });
         // 菜单点击事件
         element.on('nav(nav-filter)', function(elem){
             // console.log(elem.context.name); //得到当前点击的DOM对象  route
@@ -165,46 +173,21 @@
                         view.innerHTML = html;
                         element.render('nav'); //重新对导航进行渲染。注：layui 2.1.6 版本新增
                     });
-                    //这里获取到数据执行显示
-                    // table.render({
-                    //     elem: '#demo'
-                    //     // ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    //     // ,height: 312
-                    //     ,url: '/demo/table/user/' //数据接口
-                    //     ,page: false //开启分页
-                    //     ,cols: [[ //表头
-                    //         // {field: 'id', title: '序号', width:60, sort: true, fixed: 'left'}
-                    //         {field: 'field', title: '字段', width:'33.3%',fixed: 'left'}
-                    //         ,{field: 'fieldExplain', title: '字段说明', width:'33.3%'}
-                    //         ,{field: 'fieldRestrain', title: '约束', width:'33.3%'}
-                    //     ]]
-                    // });
-                    table.render({
-                        elem: '#demo'
-                        ,url:'/test/table/demo1.json'
-                        ,toolbar: '#toolbarDemo'
-                        ,title: '用户数据表'
-                        ,cols: [[
-                            {type: 'checkbox', fixed: 'left'}
-                            ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-                            ,{field:'username', title:'用户名', width:120, edit: 'text'}
-                            ,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
-                                    return '<em>'+ res.email +'</em>'
-                                }}
-                            ,{field:'sex', title:'性别', width:80, edit: 'text', sort: true}
-                            ,{field:'city', title:'城市', width:100}
-                            ,{field:'sign', title:'签名'}
-                            ,{field:'experience', title:'积分', width:80, sort: true}
-                            ,{field:'ip', title:'IP', width:120}
-                            ,{field:'logins', title:'登入次数', width:100, sort: true}
-                            ,{field:'joinTime', title:'加入时间', width:120}
-                            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
-                        ]]
-                        ,page: true
-                    });
+
+
+                    if(data.data.info == null){
+                        // alert($('#table-get'));
+                        $('#table-div').hide();
+
+                    }else{
+                        // 不是父控制器
+                        getRequestParam(elem);
+                        $('#table-div').show()
+                    }
 
                 }
             });
+
         });
         element.render('nav')
         $.ajax({//异步请求返回给后台
@@ -225,10 +208,6 @@
         });
 
 
-
-
-
-
     });
 
 
@@ -243,8 +222,89 @@
             // $("#btnSubmit").click();
         }
     }
+    /**
+     *请求获取请求参数信息
+     */
+    function getRequestParam(elem ){
+        layui.use(['element','table','laytpl','jquery','laytpl'], function(){
+            var element = layui.element,
+                laytpl = layui.laytpl, $ = layui.jquery, laytpl = layui.laytpl,
+                table = layui.table;
+            //这里获取到数据执行显示
+            table.render({
+                elem: '#table-get'
+                ,url:'request-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'get'}
+                ,toolbar: '#toolbarDemo-get'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                ,cols: [[
+                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                    ,{field: 'type', title: '数据类型', width:'10%'}
+                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+                ]]
+                ,page: false
+            });
+
+            //这里获取到数据执行显示
+            table.render({
+                elem: '#table-post'
+                ,url:'request-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'post'}
+                ,toolbar: '#toolbarDemo-post'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                ,cols: [[
+                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                    ,{field: 'type', title: '数据类型', width:'10%'}
+                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+
+                ]]
+                ,page: false
+            });
+
+            //这里获取到数据执行显示
+            table.render({
+                elem: '#table-rule'
+                ,url:'request-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
+                ,toolbar: '#toolbarDemo-post'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'rule'
+                ,cols: [[
+                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                    ,{field: 'type', title: '数据类型', width:'10%'}
+                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+
+                ]]
+                ,page: false
+            });
+
+            //这里获取到数据执行显示
+            table.render({
+                elem: '#table-path'
+                ,url:'request-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'path'}
+                ,toolbar: '#toolbarDemo-path'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                ,cols: [[
+                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                    ,{field: 'type', title: '数据类型', width:'10%'}
+                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+
+                ]]
+                ,page: false
+            });
 
 
+
+
+
+
+
+        });
+    }
 
 </script>
 
@@ -277,7 +337,7 @@
 <!--选项卡模板-->
 <script id="headTabTpl" type="text/html">
 
-    <div class="layui-col-md4">
+    <div class="layui-col-md6">
 
         <div class="layui-card">
             <div class="layui-card-header">控制器信息</div>
@@ -287,13 +347,14 @@
                 <b>创建者：</b>{{d.fatherInfo.User}}<br>
                 <b>命名空间：</b>{{d.fatherInfo.index}}<br>
                 <b>根路由：</b>{{d.fatherInfo.basePath}}<br>
-
+                <b>权限组列表：</b>{{d.fatherInfo.authGroup}}<br>
+                <b>基础权限继承：</b>{{d.fatherInfo.baseAuth}}<br>
             </div>
         </div>
 
     </div>
 
-    <div class="layui-col-md4">
+    <div class="layui-col-md6">
 
         <div class="layui-card">
             <div class="layui-card-header">路由信息</div>
@@ -301,25 +362,16 @@
                 {{#  if(d.info === null){ }}
 
                 {{#  }else{ }}
-                <b>标题：</b>{{d.info.title}}<br>
+                <b>标题：</b>{{d.info.title}} &nbsp;&nbsp;|&nbsp;&nbsp;Author：{{d.info.Author}}&nbsp;&nbsp;&nbsp;Created：{{d.info.Created}}<br>
                 <b>解释：</b>{{d.info.explain}}<br>
                 <b>路由：</b><span class="layui-badge">{{d.info.routerType}}</span>&nbsp;&nbsp;</nbsp><span class="layui-badge">{{d.info.requestType}}</span>&nbsp;&nbsp;{{d.info.routerStr}}<br>
                 <b>正则内容：</b>{{d.info.matchStr}}<br>
+
+                <b>方法信息：</b>name：{{d.info.function.name}}&nbsp;&nbsp;|&nbsp;&nbsp;Param：{{d.info.ParamObject}}&nbsp;&nbsp;|&nbsp;&nbsp;ObjectPath：{{d.info.routeParamObjectPath}}<br>
+
                 {{#  }}}
 
 
-            </div>
-        </div>
-
-    </div>
-
-    <div class="layui-col-md4">
-
-        <div class="layui-card">
-            <div class="layui-card-header">权限以及其他信息</div>
-            <div class="layui-card-body">
-                <b>权限组列表：</b>{{d.fatherInfo.authGroup}}<br>
-                <b>基础权限继承：</b>{{d.fatherInfo.baseAuth}}<br>
             </div>
         </div>
 

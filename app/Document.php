@@ -45,8 +45,8 @@ class Document extends Controller
     }
 
     /**
-     * @Author: pizepei
-     * @Created: 2019/2/12 23:01
+     * @Author pizepei
+     * @Created 2019/2/12 23:01
      *
      * @param \pizepei\staging\Request $Request
      *      get [object] 路径参数
@@ -72,5 +72,77 @@ class Document extends Controller
             'info'=>$info]
         ];
     }
+    /**
+     * @Author pizepei
+     * @Created 2019/2/14 23:01
+     *
+     * @param \pizepei\staging\Request $Request
+     *      get [object] get参数
+     *          father [string required] 父路径
+     *          index [string required] 当前路径
+     *          type [string required] 参数类型
+     * @return array [json]
+     * @title  获取一个API 的参数信息
+     * @explain  根据点击侧边导航获取对应的获取API文档信息
+     * @router get request-param debug:true
+     * @throws \Exception
+     */
+    public function RequestParam(Request $Request)
+    {
+        $input = $Request->input();
 
+        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        if(!empty($info)){
+            $info['index'] = $input['index'];
+        }
+
+
+        if(isset($info['Param']) && !empty($info['Param'])){
+
+            $info = $info['Param'][$input['type']]['substratum']??[];
+
+            if(!empty($info)){
+
+                $Document = new \service\document\Document;
+                $infoData = $Document ->getParamInit($info);
+                //$i=0;
+                //foreach($info as $key=>$value){
+                //    $infoData[$i]['field'] = $key;
+                //    $infoData[$i]['fieldExplain'] = $value['fieldExplain'];//字段说明
+                //    $infoData[$i]['type'] = $value['fieldRestrain'][0];//字段说明
+                //    $infoData[$i]['fieldRestrain'] = implode(' | ',$value['fieldRestrain']);//约束
+                //
+                //    if(isset($value['substratum'])){
+                //        $this->recursiveParam($value['substratum'],$infoData,$i);
+                //    }else{
+                //        $i++;
+                //    }
+                //}
+            }
+
+        }else{
+            $info = [];
+        }
+
+
+        return [
+            'code'=>0,
+            'msg'=>'获取'.$input['index'].'成功',
+            'count'=>count($info),
+            'data'=>$infoData??[]
+        ];
+    }
+
+    public function recursiveParam($info,&$infoData,&$i)
+    {
+        if(!empty($info)){
+            foreach($info as $key=>$value){
+                $infoData[$i]['field'] = $key;
+                $infoData[$i]['fieldExplain'] = $value['fieldExplain'];//字段说明
+                $infoData[$i]['type'] = $value['fieldRestrain'][0];//字段说明
+                $infoData[$i]['fieldRestrain'] = implode(' | ',$value['fieldRestrain']);//约束
+                $i++;
+            }
+        }
+    }
 }
