@@ -71,14 +71,22 @@
                 </ul>
                 <div class="layui-tab-content" >
                     <div class="layui-tab-item layui-show">
-                        <div id="table-div">
-                            <table id="table-path" lay-filter="test"></table>
-                            <table id="table-get" lay-filter="test"></table>
-                            <table id="table-rule" lay-filter="test"></table>
-                            <table id="table-post" lay-filter="test"></table>
+                        <div id="request-table-div">
+                            <table id="request-table-path" lay-filter="test"></table>
+                            <table id="request-table-get" lay-filter="test"></table>
+                            <table id="request-table-rule" lay-filter="test"></table>
+                            <table id="request-table-post" lay-filter="test"></table>
                         </div>
                     </div>
-                    <div class="layui-tab-item">2</div>
+                    <div class="layui-tab-item">
+
+                        <div id="return-table-div">
+                            <table id="return-table-json" lay-filter="test"></table>
+                        </div>
+
+
+
+                    </div>
                 </div>
             </div>
 
@@ -129,12 +137,16 @@
 
                     if(data.data.info == null){
                         // alert($('#table-get'));
-                        $('#table-div').hide();
+                        $('#request-table-div').hide();
+                        $('#return-table-div').hide();
+
 
                     }else{
                         // 不是父控制器
                         getRequestParam(elem);
-                        $('#table-div').show()
+                        $('#request-table-div').show();
+                        $('#return-table-div').show();
+
                     }
 
                 }
@@ -200,7 +212,7 @@
 
             //这里获取到数据执行显示
             table.render({
-                elem: '#table-post'
+                elem: '#request-table-post'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'post'}
                 ,toolbar: '#toolbarDemo-post'
@@ -217,7 +229,7 @@
 
             //这里获取到数据执行显示
             table.render({
-                elem: '#table-rule'
+                elem: '#request-table-rule'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
                 ,toolbar: '#toolbarDemo-rule'
@@ -234,7 +246,7 @@
 
             //这里获取到数据执行显示
             table.render({
-                elem: '#table-path'
+                elem: '#request-table-path'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'path'}
                 ,toolbar: '#toolbarDemo-path'
@@ -250,6 +262,21 @@
             });
 
 
+            table.render({
+                elem: '#return-table-json'
+                ,url:'return-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'json'}
+                ,toolbar: '#toolbarDemo-path'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                ,cols: [[
+                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                    ,{field: 'type', title: '数据类型', width:'10%'}
+                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+
+                ]]
+                ,page: false
+            });
 
 
 
@@ -361,8 +388,13 @@
 </script>
 <!--请求参数工具栏-->
 
+<!--返回参数工具栏-->
+<script type="text/html" id="toolbarDemo-return">
+    <span class="layui-badge layui-bg-green">返回参数</span>
 
-
+    <hr class="layui-bg-green">
+</script>
+<!--返回参数工具栏-->
 
 
 

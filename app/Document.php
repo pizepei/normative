@@ -69,11 +69,9 @@ class Document extends Controller
         }
         return $this->succeed([
             'fatherInfo'=>$fatherInfo,
-            'info'=>$info]);
-        //return ['data'=>[
-        //    'fatherInfo'=>$fatherInfo,
-        //    'info'=>$info]
-        //];
+            'info'=>$info]
+        );
+
     }
     /**
      * @Author pizepei
@@ -85,6 +83,11 @@ class Document extends Controller
      *          index [string required] 当前路径
      *          type [string required] 参数类型
      * @return array [json]
+     *      data [objectList] 数据
+     *          field [string] 参数名字
+     *          type [string] 参数数据类型
+     *          fieldExplain [string] 参数说明
+     *          fieldRestrain [string] 参数约束
      * @title  获取一个API 的参数信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get request-param debug:true
@@ -99,38 +102,63 @@ class Document extends Controller
             $info['index'] = $input['index'];
         }
         if(isset($info['Param']) && !empty($info['Param'])){
-
             $info = $info['Param'][$input['type']]['substratum']??[];
-
             if(!empty($info)){
+                $Document = new \service\document\Document;
+                $infoData = $Document ->getParamInit($info);
+            }
+        }else{
+            $info = [];
+        }
+        return $this->succeed($infoData??[],'获取'.$input['index'].'成功',0);
+    }
+
+
+    /**
+     * @Author pizepei
+     * @Created 2019/2/14 23:01
+     *
+     * @param \pizepei\staging\Request $Request
+     *      get [object] get参数
+     *          father [string required] 父路径
+     *          index [string required] 当前路径
+     *          type [string required] 参数类型
+     * @return array [json]
+     *      data [objectList] 数据
+     *          field [string] 参数名字
+     *          type [string] 参数数据类型
+     *          fieldExplain [string] 参数说明
+     *          fieldRestrain [string] 参数约束
+     * @title  获取一个API 的参数信息
+     * @explain  根据点击侧边导航获取对应的获取API文档信息
+     * @router get return-param debug:true
+     * @throws \Exception
+     */
+    public function ReturnParam(Request $Request)
+    {
+        $input = $Request->input();
+
+        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        if(!empty($info)){
+            $info['index'] = $input['index'];
+        }
+        if(isset($info['Return']) && !empty($info['Return'])){
+            $info = $info['Return']??[];
+            if(!empty($info)){
+                /**
+                 * 加入默认状态信息
+                 */
+                $info[__INIT__['SuccessReturnJsonMsg']['name']] = ['fieldRestrain'=>['string'],'fieldExplain'=>'状态说明'];
+                $info[__INIT__['SuccessReturnsJsonCode']['name']] = ['fieldRestrain'=>['string','int'],'fieldExplain'=>'状态码'];
 
                 $Document = new \service\document\Document;
                 $infoData = $Document ->getParamInit($info);
             }
-
         }else{
             $info = [];
         }
-
-
-        return [
-            'code'=>0,
-            'msg'=>'获取'.$input['index'].'成功',
-            'count'=>count($info),
-            'data'=>$infoData??[]
-        ];
+        return $this->succeed($infoData??[],'获取'.$input['index'].'成功',0);
     }
 
-    public function recursiveParam($info,&$infoData,&$i)
-    {
-        if(!empty($info)){
-            foreach($info as $key=>$value){
-                $infoData[$i]['field'] = $key;
-                $infoData[$i]['fieldExplain'] = $value['fieldExplain'];//字段说明
-                $infoData[$i]['type'] = $value['fieldRestrain'][0];//字段说明
-                $infoData[$i]['fieldRestrain'] = implode(' | ',$value['fieldRestrain']);//约束
-                $i++;
-            }
-        }
-    }
+
 }
