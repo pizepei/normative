@@ -67,10 +67,13 @@ class Document extends Controller
         if(!empty($info)){
             $info['index'] = $input['index'];
         }
-        return ['data'=>[
+        return $this->succeed([
             'fatherInfo'=>$fatherInfo,
-            'info'=>$info]
-        ];
+            'info'=>$info]);
+        //return ['data'=>[
+        //    'fatherInfo'=>$fatherInfo,
+        //    'info'=>$info]
+        //];
     }
     /**
      * @Author pizepei
