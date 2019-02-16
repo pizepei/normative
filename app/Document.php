@@ -137,14 +137,17 @@ class Document extends Controller
     public function ReturnParam(Request $Request)
     {
         $input = $Request->input();
-
         $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        if($info['ReturnType'] != $input['type']){
+            return $this->succeed([],'获取1'.$input['index'].'成功',0);
+        }
         if(!empty($info)){
             $info['index'] = $input['index'];
         }
         if(isset($info['Return']) && !empty($info['Return'])){
             $info = $info['Return']??[];
             if(!empty($info)){
+
                 /**
                  * 加入默认状态信息
                  */

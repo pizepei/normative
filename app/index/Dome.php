@@ -63,7 +63,7 @@ class Dome
      *      rule [object] 数据流参数
      *          id [string] 参数id
      *          name [string] 参数名字
-     * @return array [object] 名字
+     * @return array [json] 名字
      *      nameList [objectList] 同学名字
      *          name [string] 姓名
      *      id [int] 年级id

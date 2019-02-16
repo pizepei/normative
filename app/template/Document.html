@@ -14,6 +14,7 @@
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="">API文档</a></li>
             <li class="layui-nav-item"><a href="">权限文档</a></li>
+            <li class="layui-nav-item"><a href="">状态码文档</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">资源文档</a>
                 <dl class="layui-nav-child">
@@ -82,6 +83,8 @@
 
                         <div id="return-table-div">
                             <table id="return-table-json" lay-filter="test"></table>
+                            <table id="return-table-xml" lay-filter="test"></table>
+
                         </div>
 
 
@@ -296,6 +299,28 @@
                 ]]
                 ,page: false
             });
+
+
+
+            table.render({
+                elem: '#return-table-xml'
+                ,url:'return-param'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'xml'}
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数JSON</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                        {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
+                        ,{field: 'type', title: '数据类型', width:'10%'}
+                        ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                        ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+                    ]]
+                ,page: false
+            });
+
+
 
         });
     }
