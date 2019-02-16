@@ -116,7 +116,6 @@
             // console.log(elem.context.rel); //得到当前点击的DOM对象  父对象
             // console.log(elem.context.innerText); //得到当前点击的DOM对象
 
-
             $.ajax({//异步请求返回给后台
                 url:'index-nav',
                 type:'GET',
@@ -136,7 +135,7 @@
 
 
                     if(data.data.info == null){
-                        // alert($('#table-get'));
+
                         $('#request-table-div').hide();
                         $('#return-table-div').hide();
 
@@ -196,17 +195,22 @@
                 table = layui.table;
             //这里获取到数据执行显示
             table.render({
-                elem: '#table-get'
+                elem: '#request-table-get'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'get'}
-                ,toolbar: '#toolbarDemo-get'
+                // ,toolbar: '#toolbarDemo-get'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [[
-                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">PATH请求参数</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
                     ,{field: 'type', title: '数据类型', width:'10%'}
                     ,{field: 'fieldRestrain', title: '约束', width:'25%'}
                     ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-                ]]
+                ]
+                ]
                 ,page: false
             });
 
@@ -215,10 +219,14 @@
                 elem: '#request-table-post'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'post'}
-                ,toolbar: '#toolbarDemo-post'
+                // ,toolbar: '#toolbarDemo-post'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [[
-                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">P0ST请求参数</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
                     ,{field: 'type', title: '数据类型', width:'10%'}
                     ,{field: 'fieldRestrain', title: '约束', width:'25%'}
                     ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
@@ -232,10 +240,14 @@
                 elem: '#request-table-rule'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
-                ,toolbar: '#toolbarDemo-rule'
+                // ,toolbar: '#toolbarDemo-rule'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'rule'
-                ,cols: [[
-                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">RULE请求参数</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
                     ,{field: 'type', title: '数据类型', width:'10%'}
                     ,{field: 'fieldRestrain', title: '约束', width:'25%'}
                     ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
@@ -249,10 +261,14 @@
                 elem: '#request-table-path'
                 ,url:'request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'path'}
-                ,toolbar: '#toolbarDemo-path'
+                // ,toolbar: '#toolbarDemo-path'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [[
-                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">PATH请求参数</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
                     ,{field: 'type', title: '数据类型', width:'10%'}
                     ,{field: 'fieldRestrain', title: '约束', width:'25%'}
                     ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
@@ -266,21 +282,20 @@
                 elem: '#return-table-json'
                 ,url:'return-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'json'}
-                ,toolbar: '#toolbarDemo-path'
+                // ,toolbar: '#toolbarDemo-path'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [[
-                    {field: 'field', title: '字段', width:'32%',fixed: 'left'}
+                ,cols: [
+                    [ //标题栏
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数JSON</span>',width:'100%', colspan: 4}
+                    ],
+                    [
+                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
                     ,{field: 'type', title: '数据类型', width:'10%'}
                     ,{field: 'fieldRestrain', title: '约束', width:'25%'}
                     ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-
                 ]]
                 ,page: false
             });
-
-
-
-
 
         });
     }
@@ -366,25 +381,21 @@
 <script type="text/html" id="toolbarDemo-get">
 
     <span class="layui-badge layui-bg-green">GET请求参数</span>
-    <hr class="layui-bg-green">
 </script>
 
 <script type="text/html" id="toolbarDemo-post">
     <span class="layui-badge layui-bg-green">POST请求参数</span>
 
-    <hr class="layui-bg-green">
 </script>
 
 <script type="text/html" id="toolbarDemo-rule">
     <span class="layui-badge layui-bg-green">RULE请求参数</span>
 
-    <hr class="layui-bg-green">
 </script>
 
 <script type="text/html" id="toolbarDemo-path">
     <span class="layui-badge layui-bg-green">PATH请求参数</span>
 
-    <hr class="layui-bg-green">
 </script>
 <!--请求参数工具栏-->
 
@@ -392,7 +403,6 @@
 <script type="text/html" id="toolbarDemo-return">
     <span class="layui-badge layui-bg-green">返回参数</span>
 
-    <hr class="layui-bg-green">
 </script>
 <!--返回参数工具栏-->
 

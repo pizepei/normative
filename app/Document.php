@@ -88,7 +88,7 @@ class Document extends Controller
      *          type [string] 参数数据类型
      *          fieldExplain [string] 参数说明
      *          fieldRestrain [string] 参数约束
-     * @title  获取一个API 的参数信息
+     * @title  获取API的请求参数信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get request-param debug:true
      * @throws \Exception
@@ -129,7 +129,7 @@ class Document extends Controller
      *          type [string] 参数数据类型
      *          fieldExplain [string] 参数说明
      *          fieldRestrain [string] 参数约束
-     * @title  获取一个API 的参数信息
+     * @title  获取API的返回参数信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get return-param debug:true
      * @throws \Exception
