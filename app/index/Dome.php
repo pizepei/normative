@@ -22,11 +22,12 @@ use pizepei\model\db\Db;
 use pizepei\model\redis\Redis;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
+use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
 use pizepei\terminalInfo\TerminalInfo;
 
-class Dome
+class Dome extends Controller
 {
 
     /**
@@ -37,10 +38,8 @@ class Dome
      */
     public function index()
     {
-
         require(__INIT__['index-view']);
     }
-
     /**
      * @param \pizepei\staging\Request $Request
      *      get [object] 路径参数
@@ -134,7 +133,7 @@ class Dome
      *      get [object] 路径参数
      *           id [string] path_id
      *           name [string] path_id
-     * @return array [object]
+     * @return array [json]
      * @title  命令行cli模式
      * @explain 命令行cli模式运行方式  php index_cli.php --route /dome/cli/001/pizpe
      * @router cli cli/:id[string]/:name[string]
@@ -156,17 +155,17 @@ class Dome
         return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
     }
 
-
     /**
-     * @return array [object]
-     * @title  路由的应用
+     * @return array [json]
+     *      requestId [uuid] 当前请求id
+     * @title  获取当前请求id
      * @explain 获取当前请求id
      * @router get request
      * @throws \Exception
      */
     public function Request()
     {
-        return __REQUEST_ID__;
+        return $this->succeed(['requestId'=>__REQUEST_ID__]);
     }
     /**
      * @param  $Request

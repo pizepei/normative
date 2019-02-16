@@ -205,7 +205,7 @@
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
                 ,cols: [
                     [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">PATH请求参数</span>',width:'100%', colspan: 4}
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">GET请求参数</span>',width:'100%', colspan: 4}
                     ],
                     [
                     {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
@@ -309,7 +309,7 @@
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
                 ,cols: [
                     [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数JSON</span>',width:'100%', colspan: 4}
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数XML</span>',width:'100%', colspan: 4}
                     ],
                     [
                         {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
@@ -381,7 +381,7 @@
                 {{#  }else{ }}
                 <b>标题：</b>{{d.info.title}} &nbsp;&nbsp;|&nbsp;&nbsp;Author：{{d.info.Author}}&nbsp;&nbsp;&nbsp;Created：{{d.info.Created}}<br>
                 <b>解释：</b>{{d.info.explain}}<br>
-                <b>路由：</b><span class="layui-badge">{{d.info.routerType}}</span>&nbsp;&nbsp;</nbsp><span class="layui-badge">{{d.info.requestType}}</span>&nbsp;&nbsp;{{d.info.routerStr}}<br>
+                <b>路由：</b><span class="layui-badge">{{d.info.routerType}}</span>&nbsp;&nbsp;</nbsp><span class="layui-badge">{{d.info.requestType}}</span>&nbsp;&nbsp;{{d.info.routerStr}}&nbsp;&nbsp; <span class="layui-bg-green">{{d.info.ReturnType}}</span><br>
                 <b>正则内容：</b>{{d.info.matchStr}}<br>
 
                 <b>方法信息：</b>name：{{d.info.function.name}}&nbsp;&nbsp;|&nbsp;&nbsp;Object：{{d.info.routeParamObjectPath}}&raquo;{{d.info.ParamObject}}<br>
@@ -398,47 +398,6 @@
 
 
 </script>
-
-
-
-
-<!--请求参数工具栏-->
-<script type="text/html" id="toolbarDemo-get">
-
-    <span class="layui-badge layui-bg-green">GET请求参数</span>
-</script>
-
-<script type="text/html" id="toolbarDemo-post">
-    <span class="layui-badge layui-bg-green">POST请求参数</span>
-
-</script>
-
-<script type="text/html" id="toolbarDemo-rule">
-    <span class="layui-badge layui-bg-green">RULE请求参数</span>
-
-</script>
-
-<script type="text/html" id="toolbarDemo-path">
-    <span class="layui-badge layui-bg-green">PATH请求参数</span>
-
-</script>
-<!--请求参数工具栏-->
-
-<!--返回参数工具栏-->
-<script type="text/html" id="toolbarDemo-return">
-    <span class="layui-badge layui-bg-green">返回参数</span>
-
-</script>
-<!--返回参数工具栏-->
-
-
-
-
-
-
-
-
-
 
 
 

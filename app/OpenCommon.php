@@ -19,6 +19,8 @@ class OpenCommon extends Controller
 {
     /**
      * @param \pizepei\staging\Request $Request [json]
+     *      path [object] 路径参数
+     *          verify [string] 获取的微信域名切割参数
      * @return array [html]
      * @title  微信域名验证
      * @explain 微信配置时需要使用文件验证此方法可自动验证

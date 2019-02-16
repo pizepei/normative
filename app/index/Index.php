@@ -5,7 +5,7 @@
  * Date: 2018/8/6
  * Time: 15:25
  * @baseAuth 基础权限继承（加命名空间的类名称）
- * @title 人脸识别模块
+ * @title 默认控制器
  * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
  * @basePath /index/dome
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
