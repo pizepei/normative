@@ -15,6 +15,7 @@ namespace app\index;
 
 use config\app\SetConfig;
 use model\TerminalInfoModel;
+use model\TestModel;
 use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
@@ -66,48 +67,26 @@ class Dome extends Controller
      *      nameList [objectList] 同学名字
      *          name [string] 姓名
      *      id [int] 年级id
-     * @title  路由参数绑定、数据返回
+     * @title  演示请求参数与数据返回
      * @explain  测试路由的参数过滤，返回数据过滤
      * @router get param/:id[string]/:name[string]
      * @throws \Exception
      */
     public function param( Request $Request)
     {
-        var_dump(json_encode([
-            [
-                'id'=>123456,
-                'name'=>[
-                    ['pizepei'],
-                ],
-            ],
-            [
-                'id'=>'123456',
-                'name'=>'pizepei',
-            ],
-
-        ]));
-
-        var_dump(json_encode([
-                'id'=>123456,
-                'name'=>'pizepei',
-
-        ]));
-
-        var_dump($Request);
-        var_dump($Request->input());
-        return $Request->input();
+        return $this->succeed($Request->input(),'测试路由的参数过滤，返回数据过滤');
     }
 
 
     /**
      * @param \pizepei\staging\Request $Request
-     *      get [object] 路径参数
-     *           id [string] path_id
-     *           name [string] path_id
-     * @return array [object]
-     * @title  路由的应用
-     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
-     * @router cli /client/:id[string]/:name[string]
+     *      path [object] 路径参数
+     *           id [string] id
+     *           name [string] 名字
+     * @return array [json]
+     * @title  获取详细client信息
+     * @explain 演示获取详细的client信息
+     * @router get client/:id[string]/:name[string]
      * @throws \Exception
      */
     public function client( Request $Request)
@@ -123,19 +102,24 @@ class Dome extends Controller
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $TerminalInfo = TerminalInfoModel::table();
-        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
+
+        return $this->succeed([
+            'location'=>$TerminalInfo->insert([$data,$data,$data],false),
+            'path'=>$Request->path(),
+            'input'=>$Request->input(),
+        ]);
     }
 
 
 
     /**
      * @param \pizepei\staging\Request $Request
-     *      get [object] 路径参数
+     *      path [object] 路径参数
      *           id [string] path_id
      *           name [string] path_id
      * @return array [json]
      * @title  命令行cli模式
-     * @explain 命令行cli模式运行方式  php index_cli.php --route /dome/cli/001/pizpe
+     * @explain 命令行cli模式运行方式: php index_cli.php --route /dome/cli/001/pizpe(命令行模式请求参数请使用path方式)
      * @router cli cli/:id[string]/:name[string]
      * @throws \Exception
      */
@@ -152,14 +136,14 @@ class Dome extends Controller
         }
         $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
         $TerminalInfo = TerminalInfoModel::table();
-        return ['msg'=>'Hello World！','location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()];
+        $this->succeed(['location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()]);
     }
 
     /**
      * @return array [json]
      *      requestId [uuid] 当前请求id
      * @title  获取当前请求id
-     * @explain 获取当前请求id
+     * @explain 获取当前请求id,请求id是时空内唯一的
      * @router get request
      * @throws \Exception
      */
@@ -167,26 +151,33 @@ class Dome extends Controller
     {
         return $this->succeed(['requestId'=>__REQUEST_ID__]);
     }
+
     /**
-     * @param  $Request
+     * @Author pizepei
+     * @Created 2019/2/16 22:18
+     *
+     * @param \pizepei\staging\Request $Request
      *      path [object] 路径参数
      *           user [int] path_id
+     * @title  路径混合参数演示
+     * @explain
      * @return array [object]
      *      user [int] 用户id
-     * @title  / 路由的应用
-     * @explain 注意所有 path 路由都使用 正则表达式为唯一凭证 所以 / 路由只能有一个
      * @router get /dd:user[int]/index.txt
      */
-    public function path($Request)
+    public function path(Request $Request)
     {
-        $id = $Request->path('user');
-        return $id;
+        return $this->succeed($Request->path());
     }
+
     /**
+     * @Author pizepei
+     * @Created 2019/2/16 22:23
+     *
+     * @return array [json]
      * @title 获取路由信息
-     * @explain 路由对象在框架初始化时就实例化了，同时该对象一直保留
-     *              在框架控制器、模型等框架初始化后的所有地方都可直接使用 Route::init()获取到该对象
-     * @router get index
+     * @explain 路由对象在框架初始化时就实例化了，同时该对象一直保留,在框架控制器、模型等框架初始化后的所有地方都可直接使用 Route::init()获取到该对象
+     * @router get route
      */
     public function getRoute()
     {
@@ -199,9 +190,17 @@ class Dome extends Controller
             'atRoute'=>$Route->atRoute,//路由
         ];
     }
+
     /**
-     * @title  缓存
+     * @Author pizepei
+     * @Created 2019/2/16 22:24
+     *
+     * @return array [json]
+     * @title  获取缓存
+     * @explain 获取缓存
+     * @authGroup 权限分组对应文件头部 @authGroup
      * @router get cache
+     *
      */
     public function cache()
     {
@@ -217,17 +216,30 @@ class Dome extends Controller
     }
 
     /**
-     * @title db 操作->add
+     * @Author pizepei
+     * @Created 2019/2/16 22:34
+     * @throws \Exception
+     * @param \pizepei\staging\Request $Request
+     *      post [object] 插入数据
+     *          content [object] 模拟数据
+     *             name [string] key
+     *             value [string] 值
+     * @return array [json] 插入结果
+     *
+     * @title   数据库操作->add
      * @explain 框架模型操作-.增加数据操作
-     * @router get db
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     * @router post db
+     *
      */
-    public function dbAdd()
+    public function dbAdd(Request $Request)
     {
-        //\pizepei\model\db\Test::table();
-        Test::table();
 
-        //var_dump(Test::table());
-
+        $Test = TestModel::table();
+        return $this->succeed($Test->add(
+                $Request->input('','post')
+        ),'一个增加操作');
     }
 
     /**
