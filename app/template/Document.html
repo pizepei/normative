@@ -329,6 +329,9 @@
      */
     function setTableDivStatus(data,elem){
 
+        layui.use(['jquery'], function(){
+            var $ = layui.jquery;
+
         if(data.data.info == null){
 
             $('#request-table-div').hide();
@@ -350,7 +353,6 @@
             }else{
                 $('#request-table-path-div').show();
             }
-
             if(data.data.info.Param.rule === undefined){
                 $('#request-table-rule-div').hide();
             }else{
@@ -362,8 +364,9 @@
                 $('#request-table-post-div').show();
             }
 
-
         }
+        });
+
     }
 </script>
 
