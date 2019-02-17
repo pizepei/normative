@@ -73,10 +73,22 @@
                 <div class="layui-tab-content" >
                     <div class="layui-tab-item layui-show">
                         <div id="request-table-div">
-                            <table id="request-table-path" lay-filter="test"></table>
-                            <table id="request-table-get" lay-filter="test"></table>
-                            <table id="request-table-rule" lay-filter="test"></table>
-                            <table id="request-table-post" lay-filter="test"></table>
+                            <div id="request-table-path-div">
+                                <table id="request-table-path" lay-filter="test"></table>
+                            </div>
+
+                            <div id="request-table-get-div">
+                                <table id="request-table-get" lay-filter="test"></table>
+                            </div>
+
+                            <div id="request-table-rule-div">
+                                <table id="request-table-rule" lay-filter="test"></table>
+                            </div>
+
+                            <div id="request-table-post-div">
+                                <table id="request-table-post" lay-filter="test"></table>
+                            </div>
+
                         </div>
                     </div>
                     <div class="layui-tab-item">
@@ -135,21 +147,8 @@
                         view.innerHTML = html;
                         element.render('nav'); //重新对导航进行渲染。注：layui 2.1.6 版本新增
                     });
-
-
-                    if(data.data.info == null){
-
-                        $('#request-table-div').hide();
-                        $('#return-table-div').hide();
-
-
-                    }else{
-                        // 不是父控制器
-                        getRequestParam(elem);
-                        $('#request-table-div').show();
-                        $('#return-table-div').show();
-
-                    }
+                    //设置显示逻辑、和亲戚逻辑
+                    setTableDivStatus(data,elem);
 
                 }
             });
@@ -325,6 +324,47 @@
         });
     }
 
+    /**
+     * 设置Table的显示状态
+     */
+    function setTableDivStatus(data,elem){
+
+        if(data.data.info == null){
+
+            $('#request-table-div').hide();
+            $('#return-table-div').hide();
+
+        }else{
+            // 不是父控制器
+            getRequestParam(elem);
+            $('#request-table-div').show();
+            $('#return-table-div').show();
+            if(data.data.info.Param.get === undefined){
+                $('#request-table-get-div').hide();
+            }else{
+                $('#request-table-get-div').show();
+
+            }
+            if(data.data.info.Param.path === undefined){
+                $('#request-table-path-div').hide();
+            }else{
+                $('#request-table-path-div').show();
+            }
+
+            if(data.data.info.Param.rule === undefined){
+                $('#request-table-rule-div').hide();
+            }else{
+                $('#request-table-rule-div').show();
+            }
+            if(data.data.info.Param.post === undefined){
+                $('#request-table-post-div').hide();
+            }else{
+                $('#request-table-post-div').show();
+            }
+
+
+        }
+    }
 </script>
 
 </body>
