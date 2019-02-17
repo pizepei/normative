@@ -27,6 +27,7 @@ use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
 use pizepei\terminalInfo\TerminalInfo;
+use test\Test;
 
 class Dome extends Controller
 {
@@ -377,4 +378,31 @@ class Dome extends Controller
 
         //RedisModel::class
     }
+
+    /**
+     * @Author pizepei
+     * @Created 2019/2/17 16:23
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          string [string required] 被搜索的字符串
+     *          expression [string required] 使用的表达式
+     * @return array [json]
+     *
+     * @throws \Exception
+
+     * @title  正则表达式
+     * @explain 正则表达式实验
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router post preg_match
+     */
+    public function preg_match(Request $Request)
+    {
+        preg_match($Request->input('expression','post'),$Request->input('string','post'),$result);
+        return $this->succeed($result);
+    }
+
+
 }
