@@ -16,7 +16,8 @@
         "pizepei/model": "dev-master",
         "pizepei/func": "dev-master",
         "pizepei/staging":"dev-master",
-        "pizepei/terminal-info":"dev-master"
+        "pizepei/terminal-info":"dev-master",
+        "pizepei/wechat":"dev-master"
     },
 
     "autoload": {
