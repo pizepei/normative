@@ -13,6 +13,7 @@
 namespace app\index;
 
 
+use function AlibabaCloud\Client\json;
 use config\app\SetConfig;
 use model\TerminalInfoModel;
 use model\TestModel;
@@ -47,9 +48,9 @@ class Dome extends Controller
      *      get [object] 路径参数
      *           objectList [objectList] objectList
      *              id [int] 年级
-     *              name [object] 名字
+     *              name [raw] 名字
      *                  name [string] 姓名
-     *                  name [string] 姓名
+     *                  Name [string] 姓名
      *           name [string number] path_id
      *           list [list] list
      *              name [int] 111
@@ -75,7 +76,18 @@ class Dome extends Controller
      */
     public function param( Request $Request)
     {
-        return $this->succeed($Request->input(),'测试路由的参数过滤，返回数据过滤');
+        return $this->succeed([
+            'Request'=>[[
+                            'id'=>'123456',
+                            'name'=>[
+                                'name'=>'12',
+                                'Name'=>'zepei',
+                                'Name2'=>'zepei',
+                            ],
+                            'Name'=>'zepei',
+                            ]],
+            'input'=>$Request->input()
+        ],'测试路由的参数过滤，返回数据过滤');
     }
 
 
