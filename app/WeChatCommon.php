@@ -14,8 +14,12 @@
 namespace app;
 
 
+use model\wechat\OpenAccreditInformLog;
+use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
+use pizepei\wechat\basics\AccessToken;
+use pizepei\wechat\service\Open;
 
 class WeChatCommon extends Controller
 {
@@ -67,9 +71,15 @@ class WeChatCommon extends Controller
     }
     /**
      * @param \pizepei\staging\Request $Request [xml]
-     *      raw [xml] 数据流
-     *          ToUserName [string] 开发者ai
-     * @return array [html]
+     *      get [object] 参数
+     *          timestamp [int]    消息接口token验证参数
+     *          nonce [int]    消息接口token验证参数
+     *          echostr [int]  消息接口token验证参数
+     *          signature [string] 消息接口token验证参数
+     *          openid [string] 消息接口token验证参数
+     *          encrypt_type [string] 消息接口token验证参数
+     *          msg_signature [string] 消息接口token验证参数
+     * @return array [json]
      * @title  第三方服务授权接口
      * @explain 用于接收取消授权通知、授权成功通知、授权更新通知，也用于接收ticket，ticket是验证平台方的重要凭据。
      * @router post open/accredit/inform debug:false
@@ -77,13 +87,38 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
-        var_dump($_SERVER['HTTP_CONTENT_TYPE']);
+        file_put_contents('request.txt',json_encode($Request->input('','get')));
+        file_put_contents('input.txt',file_get_contents("php://input"));
+        $redis = new Redis();
+        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
+        //OpenAccreditInformLog
+        OpenAccreditInformLog::table()->add([[
+            'input'=>file_get_contents("php://input"),
+            'request'=>$Request->input('','get'),
+            'InfoType'=>'',
+        ]]);
+        $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
 
-        var_dump($Request->input('','raw'));
-
-        return $Request->path()['appid'];
+        return $result;
     }
-//
+
+    /**
+     * @param \pizepei\staging\Request $Request [xml]
+     *      raw [xml] 数据流
+     *          ToUserName [string] 开发者ai
+     * @return array [html]
+     * @title  测试接口
+     * @explain 测试接口
+     * @router get open/test debug:false
+     * @throws \Exception
+     */
+    public function test (Request $Request)
+    {
+
+        new AccessToken(\Config::OPEN_WECHAT_CONFIG,new Redis());
+
+        return 'appid';
+    }
 
 
 }
