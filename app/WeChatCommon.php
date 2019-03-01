@@ -63,7 +63,6 @@ class WeChatCommon extends Controller
      */
     public function openMessage(Request $Request)
     {
-        var_dump($_SERVER['HTTP_CONTENT_TYPE']);
 
         var_dump($Request->input('','raw'));
 
@@ -87,17 +86,17 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
-        file_put_contents('request.txt',json_encode($Request->input('','get')));
-        file_put_contents('input.txt',file_get_contents("php://input"));
         $redis = new Redis();
         Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
-        //OpenAccreditInformLog
-        OpenAccreditInformLog::table()->add([[
-            'input'=>file_get_contents("php://input"),
-            'request'=>$Request->input('','get'),
-            'InfoType'=>'',
-        ]]);
+
         $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
+
+        OpenAccreditInformLog::table()->add([[
+                                                 'input'=>file_get_contents("php://input"),
+                                                 'request'=>$Request->input('','get'),
+                                                 'InfoType'=>$result['InfoType'],
+                                                 'msg'=>$result,
+                                             ]]);
 
         return $result;
     }

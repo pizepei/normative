@@ -29,6 +29,9 @@ class OpenAccreditInformLog extends Model
         'request'=>[
             'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'get请求参数',
         ],
+        'msg'=>[
+            'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'解密',
+        ],
         'InfoType'=>[
             'TYPE'=>'varchar(100)', 'DEFAULT'=>'', 'COMMENT'=>'事件类型',
         ],
@@ -50,13 +53,13 @@ class OpenAccreditInformLog extends Model
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 0;
+    protected $table_version = 1;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
     protected $table_structure_log = [
         1=>[
-            //['uuid','ADD',"uuid char(36)  DEFAULT NULL COMMENT 'uuid'",'uuid','pizepei'],
+            ['smg','ADD'," msg  json  COMMENT '解密' ",'解密','pizepei'],
         ]
     ];
 }
