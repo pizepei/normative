@@ -89,6 +89,9 @@ class WeChatCommon extends Controller
         $redis = new Redis();
         Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
 
+        //file_put_contents('request.txt',json_encode($Request->input('','get')));
+        //file_put_contents('input.txt',json_encode(file_get_contents("php://input")));
+
         $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
 
         OpenAccreditInformLog::table()->add([[
@@ -98,6 +101,36 @@ class WeChatCommon extends Controller
                                                  'msg'=>$result,
                                              ]]);
 
+        /**
+         * 授权authorized
+         * 取消授权unauthorized
+         */
+        switch ($result['InfoType'])
+        {
+            case "component_verify_ticket":
+
+                break;
+            case "unauthorized"://取消授权
+                /**
+                 * 修改为未授权
+                 */
+                break;
+
+            case "authorized"://进行授权（可能是重复授权）authorization_code
+                //{"AppId": "wx309126e884ba220b", "InfoType": "authorized", "CreateTime": "1551433717", "PreAuthCode": "preauthcode@@@WlJPQ_NyKfa88lDCgM0P_9OO4hbeGHMvU_a7NnDiE8GuBTObtjPi7Y8N9CD6qiwf", "AuthorizerAppid": "wx3260515a4514ec94", "AuthorizationCode": "queryauthcode@@@4FPd5Ao5R-troYmL_Ua1r6zmA1FhSfAj-YJjvHAGZZVzmuFbEdGMrw_GXFeeo4yoydkENa-AxVWBvhnEgBk3Yw", "AuthorizationCodeExpiredTime": "1551437317"}
+                $authorizerAccessInfo = Open::authorizerAccessInfo($result['postObj']['AuthorizationCode']);
+                /**
+                 * 保存或者修改信息配置
+                 */
+
+
+                break;
+
+
+            default:
+
+                break;
+        }
         return $result;
     }
 
