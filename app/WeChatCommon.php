@@ -14,7 +14,8 @@
 namespace app;
 
 
-use model\wechat\OpenAccreditInformLog;
+use model\wechat\OpenAccreditInformLogModel;
+use model\wechat\OpenAuthorizerUserInfoModel;
 use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
@@ -90,11 +91,11 @@ class WeChatCommon extends Controller
         Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
 
         //file_put_contents('request.txt',json_encode($Request->input('','get')));
-        //file_put_contents('input.txt',json_encode(file_get_contents("php://input")));
+        //file_put_contents('input.txt',file_get_contents("php://input"));
 
         $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
 
-        OpenAccreditInformLog::table()->add([[
+        OpenAccreditInformLogModel::table()->add([[
                                                  'input'=>file_get_contents("php://input"),
                                                  'request'=>$Request->input('','get'),
                                                  'InfoType'=>$result['InfoType'],
@@ -117,12 +118,53 @@ class WeChatCommon extends Controller
                 break;
 
             case "authorized"://进行授权（可能是重复授权）authorization_code
-                //{"AppId": "wx309126e884ba220b", "InfoType": "authorized", "CreateTime": "1551433717", "PreAuthCode": "preauthcode@@@WlJPQ_NyKfa88lDCgM0P_9OO4hbeGHMvU_a7NnDiE8GuBTObtjPi7Y8N9CD6qiwf", "AuthorizerAppid": "wx3260515a4514ec94", "AuthorizationCode": "queryauthcode@@@4FPd5Ao5R-troYmL_Ua1r6zmA1FhSfAj-YJjvHAGZZVzmuFbEdGMrw_GXFeeo4yoydkENa-AxVWBvhnEgBk3Yw", "AuthorizationCodeExpiredTime": "1551437317"}
-                $authorizerAccessInfo = Open::authorizerAccessInfo($result['postObj']['AuthorizationCode']);
                 /**
                  * 保存或者修改信息配置
                  */
+                $resultData = OpenAuthorizerUserInfoModel::table()->where([
+                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
+                ])->fetch();
 
+                if($resultData)
+                {
+                    $result['authorizerAccessInfo']['id'] =$resultData['id'];
+
+                    return OpenAuthorizerUserInfoModel::table()
+                        ->where(
+                                [
+                                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
+                                ]
+                        )
+                        ->insert($result['authorizerAccessInfo']);
+
+                }else{
+                    OpenAuthorizerUserInfoModel::table()->add($result['authorizerAccessInfo']);
+                }
+
+                break;
+            case "updateauthorized"://进行授权（可能是重复授权）authorization_code
+                /**
+                 * 保存或者修改信息配置
+                 */
+                $resultData = OpenAuthorizerUserInfoModel::table()->where([
+                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
+                ])->fetch();
+                var_dump($resultData);
+                if($resultData)
+                {
+                    $result['authorizerAccessInfo']['id'] =$resultData['id'];
+
+                    return OpenAuthorizerUserInfoModel::table()
+                        ->where(
+                            [
+                                'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
+                            ]
+                        )
+                        ->insert($result['authorizerAccessInfo']);
+
+                }else{
+                    OpenAuthorizerUserInfoModel::table()->add($result['authorizerAccessInfo']);
+                }
 
                 break;
 
@@ -138,7 +180,7 @@ class WeChatCommon extends Controller
      * @param \pizepei\staging\Request $Request [xml]
      *      raw [xml] 数据流
      *          ToUserName [string] 开发者ai
-     * @return array [html]
+     * @return array [json]
      * @title  测试接口
      * @explain 测试接口
      * @router get open/test debug:false
@@ -146,10 +188,11 @@ class WeChatCommon extends Controller
      */
     public function test (Request $Request)
     {
+        //new AccessToken(\Config::OPEN_WECHAT_CONFIG,new Redis());
+        $redis = new Redis();
+        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
+        return Open::authorizerInfo('wx3260515a4514ec94');
 
-        new AccessToken(\Config::OPEN_WECHAT_CONFIG,new Redis());
-
-        return 'appid';
     }
 
 

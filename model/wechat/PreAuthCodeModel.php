@@ -1,10 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pizepei
- * Date: 2019/3/1
- * Time: 14:00
- * @title 微信开放平台第三方平台授权事件接收URL日志
+ * @Author: pizepei
+ * @ProductName: PhpStorm
+ * @Created: 2019/3/2 15:53
+ * @title 微信获取授权url时的授权代码
  */
 
 namespace model\wechat;
@@ -12,9 +11,8 @@ namespace model\wechat;
 
 use pizepei\model\db\Model;
 
-class OpenAccreditInformLog extends Model
+class PreAuthCodeModel extends Model
 {
-
     /**
      * 表结构
      * @var array
@@ -23,17 +21,14 @@ class OpenAccreditInformLog extends Model
         'id'=>[
             'TYPE'=>'uuid','COMMENT'=>'主键uuid','DEFAULT'=>false,
         ],
-        'input'=>[
-            'TYPE'=>'text', 'DEFAULT'=>false, 'COMMENT'=>'input原始数据',
+        'uuid'=>[
+            'TYPE'=>'uuid', 'DEFAULT'=>'', 'COMMENT'=>'关联uuid',
         ],
-        'request'=>[
-            'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'get请求参数',
+        'PreAuthCode'=>[
+            'TYPE'=>'varchar(150)', 'DEFAULT'=>'', 'COMMENT'=>'授权码',
         ],
-        'msg'=>[
-            'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'解密',
-        ],
-        'InfoType'=>[
-            'TYPE'=>'varchar(100)', 'DEFAULT'=>'', 'COMMENT'=>'事件类型',
+        'url'=>[
+            'TYPE'=>'varchar(500)', 'DEFAULT'=>'', 'COMMENT'=>'获取的url',
         ],
         /**
          * UNIQUE 唯一
@@ -49,17 +44,15 @@ class OpenAccreditInformLog extends Model
     /**
      * @var string 表备注（不可包含@版本号关键字）
      */
-    protected $table_comment = '微信开放平台第三方平台授权事件接收URL日志';
+    protected $table_comment = '微信获取授权url时的授权代码';
     /**
      * @var int 表版本（用来记录表结构版本）在表备注后面@$table_version
      */
-    protected $table_version = 1;
+    protected $table_version = 0;
     /**
      * @var array 表结构变更日志 版本号=>['表结构修改内容sql','表结构修改内容sql']
      */
     protected $table_structure_log = [
-        1=>[
-            ['smg','ADD'," msg  json  COMMENT '解密' ",'解密','pizepei'],
-        ]
+
     ];
 }
