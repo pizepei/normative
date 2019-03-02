@@ -115,6 +115,18 @@ class WeChatCommon extends Controller
                 /**
                  * 修改为未授权
                  */
+                var_dump($result);
+                $resultData = OpenAuthorizerUserInfoModel::table()->where([
+                    'authorizer_appid'=>$result['postObj']['AuthorizerAppid'],
+                ])->fetch();
+                if(!empty($resultData)){
+                    return OpenAuthorizerUserInfoModel::table()->insert(
+                        [
+                            'id'=>$resultData['id'],
+                            'status'=>3,
+                        ]);
+                }
+
                 break;
 
             case "authorized"://进行授权（可能是重复授权）authorization_code
@@ -128,13 +140,10 @@ class WeChatCommon extends Controller
                 if($resultData)
                 {
                     $result['authorizerAccessInfo']['id'] =$resultData['id'];
+                    $result['authorizerAccessInfo']['status'] =2;
+
 
                     return OpenAuthorizerUserInfoModel::table()
-                        ->where(
-                                [
-                                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
-                                ]
-                        )
                         ->insert($result['authorizerAccessInfo']);
 
                 }else{
@@ -149,19 +158,13 @@ class WeChatCommon extends Controller
                 $resultData = OpenAuthorizerUserInfoModel::table()->where([
                     'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
                 ])->fetch();
-                var_dump($resultData);
                 if($resultData)
                 {
                     $result['authorizerAccessInfo']['id'] =$resultData['id'];
+                    $result['authorizerAccessInfo']['status'] =2;
 
                     return OpenAuthorizerUserInfoModel::table()
-                        ->where(
-                            [
-                                'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
-                            ]
-                        )
                         ->insert($result['authorizerAccessInfo']);
-
                 }else{
                     OpenAuthorizerUserInfoModel::table()->add($result['authorizerAccessInfo']);
                 }
