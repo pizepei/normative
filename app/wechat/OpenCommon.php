@@ -39,7 +39,7 @@ class OpenCommon extends Controller
     public function getAccreditUrl($Request)
     {
         $redis = new Redis();
-        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
+        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis);
         $data = Open::getAccreditUrl($Request->path('id'),'http://oauth.heil.top/open/receive/authorizer_access?uuid='.$Request->path('id'));
         PreAuthCodeModel::table()->add(['url'=>$data['url'],'PreAuthCode'=>$data['pre_auth_code'],'uuid'=>$Request->path('id')]);
         echo '<a href="'.$data['url'].'">去授权</a>';
@@ -61,11 +61,13 @@ class OpenCommon extends Controller
      */
     public function access_token($Request)
     {
+
+        var_dump(Redis::init()->info());
         /**
          * 通过appid获取
          */
         $AuthorizerUser = OpenAuthorizerUserInfoModel::table()->where(['authorizer_appid'=>$Request->path('appid')])->fetch();
-        $AccessToken = new AccessToken(\Config::OPEN_WECHAT_CONFIG,Redis::init()->redis);
+        $AccessToken = new AccessToken(\Config::OPEN_WECHAT_CONFIG,Redis::init());
         return ['access_token'=>$AccessToken->access_token($Request->path('appid'),$AuthorizerUser['authorizer_refresh_token'],true)];
     }
 

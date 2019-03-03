@@ -87,8 +87,7 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
-        $redis = new Redis();
-        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
+        Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
 
         //file_put_contents('request.txt',json_encode($Request->input('','get')));
         //file_put_contents('input.txt',file_get_contents("php://input"));
@@ -115,7 +114,6 @@ class WeChatCommon extends Controller
                 /**
                  * 修改为未授权
                  */
-                var_dump($result);
                 $resultData = OpenAuthorizerUserInfoModel::table()->where([
                     'authorizer_appid'=>$result['postObj']['AuthorizerAppid'],
                 ])->fetch();
@@ -191,9 +189,8 @@ class WeChatCommon extends Controller
      */
     public function test (Request $Request)
     {
-        //new AccessToken(\Config::OPEN_WECHAT_CONFIG,new Redis());
-        $redis = new Redis();
-        Open::init(\Config::OPEN_WECHAT_CONFIG,$redis->redis);
+
+        Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
         return Open::authorizerInfo('wx3260515a4514ec94');
 
     }
