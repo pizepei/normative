@@ -66,7 +66,7 @@ class OpenCommon extends Controller
          */
         $AuthorizerUser = OpenAuthorizerUserInfoModel::table()->where(['authorizer_appid'=>$Request->path('appid')])->fetch();
         $AccessToken = new AccessToken(\Config::OPEN_WECHAT_CONFIG,Redis::init()->redis);
-        return $AccessToken->access_token($Request->path('appid'),$AuthorizerUser['authorizer_refresh_token']);
+        return ['access_token'=>$AccessToken->access_token($Request->path('appid'),$AuthorizerUser['authorizer_refresh_token'],true)];
     }
 
 
