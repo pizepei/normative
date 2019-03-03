@@ -14,9 +14,11 @@
 namespace app\wechat;
 
 
+use model\wechat\OpenAuthorizerUserInfoModel;
 use model\wechat\PreAuthCodeModel;
 use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
+use pizepei\wechat\basics\AccessToken;
 use pizepei\wechat\service\Open;
 
 class OpenCommon extends Controller
@@ -42,4 +44,31 @@ class OpenCommon extends Controller
         PreAuthCodeModel::table()->add(['url'=>$data['url'],'PreAuthCode'=>$data['pre_auth_code'],'uuid'=>$Request->path('id')]);
         echo '<a href="'.$data['url'].'">去授权</a>';
     }
+
+
+    /**
+     * @param \pizepei\staging\Request $Request [json]
+     *      path [object] 路径参数
+     *          id [string] 获取的微信域名切割参数
+     * @return array [json]
+     *
+     * @title   获取授权连接（授权管理）
+     *
+     * @explain 通过uuid获取授权连接
+     *
+     * @router get receive/access_token/:appid[string]
+     * @throws \Exception
+     */
+    public function access_token($Request)
+    {
+        /**
+         * 通过appid获取
+         */
+        $AuthorizerUser = OpenAuthorizerUserInfoModel::table()->where(['authorizer_appid'=>$Request->path('appid')])->fetch();
+        $AccessToken = new AccessToken(\Config::OPEN_WECHAT_CONFIG,Redis::init()->redis);
+        return $AccessToken->access_token($Request->path('appid'),$AuthorizerUser['authorizer_refresh_token']);
+    }
+
+
+
 }
