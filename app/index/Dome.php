@@ -346,7 +346,7 @@ class Dome extends Controller
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
      * @authGroup 权限分组对应文件头部 @authGroup
      *
-     * @router get str-rand
+     * @router get str-rand debug:true
      */
     public function str_rand()
     {
