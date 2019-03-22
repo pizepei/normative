@@ -163,5 +163,4 @@ class Document extends Controller
         return $this->succeed($infoData??[],'获取'.$input['index'].'成功',0);
     }
 
-
 }
