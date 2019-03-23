@@ -403,7 +403,10 @@
         <dl class="layui-nav-child">
             {{#  layui.each(item.route, function(index, item){ }}
             <dd><a href="javascript:;" rel="{{indexFather}}" name="{{index}}">
-            {{#  if(item.title.length === 0){ }}
+            {{#  if(item.title === undefined){ }}
+                {{index}}
+
+            {{# }else  if(item.title.length === 0){ }}
                 {{index}}
             {{#  }else{ }}
                 {{item.title}}

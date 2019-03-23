@@ -90,7 +90,7 @@ class Document extends Controller
      *          fieldRestrain [string] 参数约束
      * @title  获取API的请求参数信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
-     * @router get request-param debug:true
+     * @router get request-param
      * @throws \Exception
      */
     public function RequestParam(Request $Request)
