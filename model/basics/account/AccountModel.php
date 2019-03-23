@@ -7,7 +7,7 @@
  * 平台主账号表
  */
 
-namespace basics\model\account;
+namespace model\basics\account;
 
 
 use pizepei\model\db\Db;
@@ -45,6 +45,24 @@ class AccountModel extends Db
         ],
         'parent_id'=>[
             'TYPE'=>'uuid', 'DEFAULT'=>'', 'COMMENT'=>'父级组织id（uuid）',
+        ],
+        'password_hash'=>[
+            'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'password_hash函数返回值',
+        ],
+        'logon_token_salt'=>[
+            'TYPE'=>'varchar(42)', 'DEFAULT'=>'', 'COMMENT'=>'登录token_salt',
+        ],
+        'password_wrong_count'=>[
+            'TYPE'=>"ENUM('3','5','6','8','10')", 'DEFAULT'=>5, 'COMMENT'=>'密码错误数',
+        ],
+        'password_wrong_lock'=>[
+            'TYPE'=>"ENUM('10','20','30','60','12','24')", 'DEFAULT'=>10, 'COMMENT'=>'密码错误超过限制的锁定时间：分钟',
+        ],
+        'logon_token_period_pattern'=>[
+            'TYPE'=>"ENUM('1','2','3','4','5')", 'DEFAULT'=>1, 'COMMENT'=>'登录token模式1、谨慎（分钟为单位）2、常规（小时为单位）3、方便（天为单位）4、游客（单位分钟没有操作注销）',
+        ],
+        'logon_token_period_time'=>[
+            'TYPE'=>"int(10)", 'DEFAULT'=>10, 'COMMENT'=>'登录token有效期',
         ],
         'type'=>[
             'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'账号类型1普通子账号、2应用账号、3应用管理员、4管理员',

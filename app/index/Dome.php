@@ -14,6 +14,7 @@ namespace app\index;
 
 
 use function AlibabaCloud\Client\json;
+use model\basics\account\AccountModel;
 use config\app\SetConfig;
 use model\TerminalInfoModel;
 use model\TestModel;
@@ -416,5 +417,30 @@ class Dome extends Controller
         return $this->succeed($result);
     }
 
+    /**
+     * @Author pizepei
+     * @Created 2019/3/23 16:23
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          code [string required] 验证码
+     * @return array [json]
+     *
+     * @throws \Exception
+
+     * @title  登录验证
+     * @explain 登录验证
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router post logon
+     */
+    public function logon(Request $Request)
+    {
+        AccountModel::table()->fetchAll();
+        return $this->succeed('333');
+    }
 
 }
