@@ -23,25 +23,25 @@ class AccountModel extends Db
             'TYPE'=>'uuid','COMMENT'=>'主键uuid','DEFAULT'=>false,
         ],
         'number'=>[
-            'TYPE'=>'varchar(32)', 'DEFAULT'=>'', 'COMMENT'=>'编号固定开头的账号编码',
+            'TYPE'=>'varchar(32)', 'DEFAULT'=>'', 'COMMENT'=>'编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)',
+        ],
+        'surname'=>[
+            'TYPE'=>'varchar(150)', 'DEFAULT'=>'', 'COMMENT'=>'真实姓氏',
         ],
         'name'=>[
-            'TYPE'=>'varchar(150)', 'DEFAULT'=>'', 'COMMENT'=>'真实姓名',
+            'TYPE'=>'varchar(150)', 'DEFAULT'=>'', 'COMMENT'=>'真实名',
         ],
         'nickname'=>[
             'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'昵称',
+        ],
+        'user_name'=>[
+            'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'姓名',
         ],
         'email'=>[
             'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'邮箱',
         ],
         'phone'=>[
             'TYPE'=>'varchar(11)', 'DEFAULT'=>'', 'COMMENT'=>'手机号码',
-        ],
-        'openid'=>[
-            'TYPE'=>'varchar(40)', 'DEFAULT'=>'', 'COMMENT'=>'微信id',
-        ],
-        'id_Cards'=>[
-            'TYPE'=>'varchar(18)', 'DEFAULT'=>'', 'COMMENT'=>'身份证',
         ],
         'parent_id'=>[
             'TYPE'=>'uuid', 'DEFAULT'=>'', 'COMMENT'=>'父级组织id（uuid）',
@@ -65,7 +65,7 @@ class AccountModel extends Db
             'TYPE'=>"int(10)", 'DEFAULT'=>10, 'COMMENT'=>'登录token有效期',
         ],
         'type'=>[
-            'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'账号类型1普通子账号、2应用账号、3应用管理员、4管理员',
+            'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'账号类型1普通子账号common、2游客tourist、3应用账号app、4应用管理员appAdmin、5应用超级管理员appSuperAdmin、6超级管理员Administrators',
         ],
         'status'=>[
             'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'状态1等待审核、2审核通过3、禁止使用4、保留',
@@ -81,8 +81,9 @@ class AccountModel extends Db
             ['TYPE'=>'UNIQUE','FIELD'=>'number','NAME'=>'number','USING'=>'BTREE','COMMENT'=>'编号固定开头的账号编码'],
             ['TYPE'=>'UNIQUE','FIELD'=>'email','NAME'=>'email','USING'=>'BTREE','COMMENT'=>'邮箱'],
             ['TYPE'=>'UNIQUE','FIELD'=>'phone','NAME'=>'phone','USING'=>'BTREE','COMMENT'=>'手机号码'],
-            ['TYPE'=>'UNIQUE','FIELD'=>'id_Cards','NAME'=>'id_Cards','USING'=>'BTREE','COMMENT'=>'身份证'],
-        ],//索引 KEY `ip` (`ip`) COMMENT 'sss '
+            ['TYPE'=>'KEY','FIELD'=>'user_name','NAME'=>'user_name','USING'=>'BTREE','COMMENT'=>'真实姓名'],
+
+        ],//索引 KEY `ip` (`ip`) COMMENT 'sss 'user_name
 
         'PRIMARY'=>'id',//主键
 

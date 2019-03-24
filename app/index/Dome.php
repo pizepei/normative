@@ -23,6 +23,7 @@ use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
 use pizepei\model\redis\Redis;
+use pizepei\service\encryption\PasswordHash;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
 use pizepei\staging\Controller;
@@ -44,6 +45,7 @@ class Dome extends Controller
     {
         require(__INIT__['index-view']);
     }
+
     /**
      * @param \pizepei\staging\Request $Request
      *      get [object] 路径参数
@@ -75,20 +77,22 @@ class Dome extends Controller
      * @router get param/:id[string]/:name[string]
      * @throws \Exception
      */
-    public function param( Request $Request)
+    public function param(Request $Request)
     {
         return $this->succeed([
-            'Request'=>[[
-                            'id'=>'123456',
-                            'name'=>[
-                                'name'=>'12',
-                                'Name'=>'zepei',
-                                'Name2'=>'zepei',
-                            ],
-                            'Name'=>'zepei',
-                            ]],
-            'input'=>$Request->input()
-        ],'测试路由的参数过滤，返回数据过滤');
+            'Request' => [
+                [
+                    'id'   => '123456',
+                    'name' => [
+                        'name'  => '12',
+                        'Name'  => 'zepei',
+                        'Name2' => 'zepei',
+                    ],
+                    'Name' => 'zepei',
+                ]
+            ],
+            'input'   => $Request->input()
+        ], '测试路由的参数过滤，返回数据过滤');
     }
 
 
@@ -103,27 +107,26 @@ class Dome extends Controller
      * @router get client/:id[string]/:name[string]
      * @throws \Exception
      */
-    public function client( Request $Request)
+    public function client(Request $Request)
     {
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
          */
         $IpInfo = $terminalInfo['IpInfo'];
-        $data = @array_merge($IpInfo,$terminalInfo);
-        if (isset($data['point'])){
-            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        $data   = @array_merge($IpInfo, $terminalInfo);
+        if(isset($data['point'])){
+            $data['point'] = ['GeomFromText', 'POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
         }
-        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
-        $TerminalInfo = TerminalInfoModel::table();
+        $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $TerminalInfo       = TerminalInfoModel::table();
 
         return $this->succeed([
-            'location'=>$TerminalInfo->insert([$data,$data,$data],false),
-            'path'=>$Request->path(),
-            'input'=>$Request->input(),
+            'location' => $TerminalInfo->insert([$data, $data, $data], false),
+            'path'     => $Request->path(),
+            'input'    => $Request->input(),
         ]);
     }
-
 
 
     /**
@@ -137,20 +140,20 @@ class Dome extends Controller
      * @router cli cli/:id[string]/:name[string]
      * @throws \Exception
      */
-    public function cli( Request $Request)
+    public function cli(Request $Request)
     {
         $terminalInfo = TerminalInfo::getArowserPro();
         /**
          * 存储经纬度信息
          */
         $IpInfo = $terminalInfo['IpInfo'];
-        $data = @array_merge($IpInfo,$terminalInfo);
-        if (isset($data['point'])){
-            $data['point'] = ['GeomFromText','POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
+        $data   = @array_merge($IpInfo, $terminalInfo);
+        if(isset($data['point'])){
+            $data['point'] = ['GeomFromText', 'POINT('.$data['point']['x'].' '.$data['point']['y'].')'];
         }
-        $data['user_agent'] =  $_SERVER['HTTP_USER_AGENT'];
-        $TerminalInfo = TerminalInfoModel::table();
-        $this->succeed(['location'=>$TerminalInfo->insert([$data,$data,$data],false),'path'=>$Request->path(),'input'=>$Request->input()]);
+        $data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $TerminalInfo       = TerminalInfoModel::table();
+        $this->succeed(['location' => $TerminalInfo->insert([$data, $data, $data], false), 'path' => $Request->path(), 'input' => $Request->input()]);
     }
 
     /**
@@ -163,7 +166,7 @@ class Dome extends Controller
      */
     public function Request()
     {
-        return $this->succeed(['requestId'=>__REQUEST_ID__]);
+        return $this->succeed(['requestId' => __REQUEST_ID__]);
     }
 
     /**
@@ -196,12 +199,13 @@ class Dome extends Controller
     public function getRoute()
     {
         $Route = Route::init();
+
         return [
-            'controller'=>$Route->controller,//控制器
-            'module'=>$Route->module,//模块
-            'method'=>$Route->method,//控制器方法
-            'atPath'=>$Route->atPath,//路径
-            'atRoute'=>$Route->atRoute,//路由
+            'controller' => $Route->controller,//控制器
+            'module'     => $Route->module,//模块
+            'method'     => $Route->method,//控制器方法
+            'atPath'     => $Route->atPath,//路径
+            'atRoute'    => $Route->atRoute,//路由
         ];
     }
 
@@ -221,12 +225,13 @@ class Dome extends Controller
         /**
          * 设置缓存
          */
-        $result = Cache::set(['test','data'],['ddd','ddd']);
+        $result = Cache::set(['test', 'data'], ['ddd', 'ddd']);
         /**
          * 读取缓存
          */
-        $data = Cache::get(['test','data']);
-        return ['result'=>$result,'cache'=>$data];
+        $data = Cache::get(['test', 'data']);
+
+        return ['result' => $result, 'cache' => $data];
     }
 
     /**
@@ -251,9 +256,10 @@ class Dome extends Controller
     {
 
         $Test = TestModel::table();
+
         return $this->succeed($Test->add(
-                $Request->input('','post')
-        ),'一个增加操作');
+            $Request->input('', 'post')
+        ), '一个增加操作');
     }
 
     /**
@@ -275,9 +281,11 @@ class Dome extends Controller
         //Test::table();
         //return ['jwt'];
         //JsonWebToken::Payload
-        $JsonWebToken = new JsonWebToken([],'common');
+        $JsonWebToken = new JsonWebToken([], 'common');
+
         return $JsonWebToken->setJWT();
     }
+
     /**
      * @Author pizepei
      * @Created 2019/01/2 22:44
@@ -300,12 +308,11 @@ class Dome extends Controller
         $Uuid = Uuid::table();
         $Uuid->insert(
             [
-                ['Build'=>['33333','dddss']],
-                ['Build'=>['dddd','44444']],
+                ['Build' => ['33333', 'dddss']],
+                ['Build' => ['dddd', '44444']],
             ]
         );
         //$Uuid->get('b9dd397d-05fc-a87c-3290-4b7760f19542');
-
 
 
         //return ['db-uuid'=>Db::getUuid(),'func'=>Func::M('str')::getUuid(),'insert'=>$Uuid->insert(
@@ -335,6 +342,7 @@ class Dome extends Controller
         return Func::M('str')::int_rand(10);
 
     }
+
     /**
      * @Author: pizepei
      * @Created: 2019/01/2 22:44
@@ -367,7 +375,8 @@ class Dome extends Controller
     public function sms()
     {
         $Sms = new Sms();
-        return $Sms->SendCode('register',13266579753);
+
+        return $Sms->SendCode('register', 13266579753);
     }
 
     /**
@@ -403,7 +412,6 @@ class Dome extends Controller
      * @return array [json]
      *
      * @throws \Exception
-
      * @title  正则表达式
      * @explain 正则表达式实验
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
@@ -413,7 +421,8 @@ class Dome extends Controller
      */
     public function preg_match(Request $Request)
     {
-        preg_match($Request->input('expression','post'),$Request->input('string','post'),$result);
+        preg_match($Request->input('expression', 'post'), $Request->input('string', 'post'), $result);
+
         return $this->succeed($result);
     }
 
@@ -429,7 +438,6 @@ class Dome extends Controller
      * @return array [json]
      *
      * @throws \Exception
-
      * @title  登录验证
      * @explain 登录验证
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
@@ -439,8 +447,53 @@ class Dome extends Controller
      */
     public function logon(Request $Request)
     {
-        AccountModel::table()->fetchAll();
-        return $this->succeed('333');
+        $PasswordHash = new PasswordHash();
+        $Account = AccountModel::table()->where(
+            [
+                'phone'=>$Request->input('phone','post'),
+            ]
+        )->fetch();
+
+        return $this->succeed([
+            'password_verify'=>$PasswordHash->password_verify(
+            $Request->input('password','post'),
+            $Account['password_hash']
+            ),
+            'Account'=>$Account,
+        ]);
     }
 
+    /**
+     * @Author pizepei
+     * @Created 2019/3/23 16:23
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          email [string email] 邮箱
+     *          code [string required] 验证码
+     * @return array [json]
+     *
+     * @throws \Exception
+     * @title  登录验证
+     * @explain 登录验证
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @authGroup 权限分组对应文件头部 @authGroup
+     *
+     * @router post register
+     */
+    public function register(Request $Request)
+    {
+        $PasswordHash = new PasswordHash();
+        $password_hash = $PasswordHash->password_hash($Request->input('password','post'));
+        if(!empty($password_hash)){
+            $Data['password_hash'] = $password_hash;
+        }
+        $Data['number'] = 'common_'.Func::M('str')::int_rand(20);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
+        $Data['phone'] = $Request->input('phone','post');
+        $Data['email'] = $Request->input('email','post');
+
+        return $this->succeed(AccountModel::table()->add($Data));
+    }
 }
