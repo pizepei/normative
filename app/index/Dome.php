@@ -30,6 +30,7 @@ use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
 use pizepei\terminalInfo\TerminalInfo;
+use service\basics\account\AccountService;
 use test\Test;
 
 class Dome extends Controller
@@ -485,15 +486,19 @@ class Dome extends Controller
      */
     public function register(Request $Request)
     {
-        $PasswordHash = new PasswordHash();
-        $password_hash = $PasswordHash->password_hash($Request->input('password','post'));
-        if(!empty($password_hash)){
-            $Data['password_hash'] = $password_hash;
-        }
-        $Data['number'] = 'common_'.Func::M('str')::int_rand(20);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
-        $Data['phone'] = $Request->input('phone','post');
-        $Data['email'] = $Request->input('email','post');
 
-        return $this->succeed(AccountModel::table()->add($Data));
+        $AccountService = new AccountService();
+
+        return $AccountService->register(\Config::ACCOUNT,$Request->input('','post'),$this);
+        //$PasswordHash = new PasswordHash();
+        //$password_hash = $PasswordHash->password_hash($Request->input('password','post'));
+        //if(!empty($password_hash)){
+        //    $Data['password_hash'] = $password_hash;
+        //}
+        //$Data['number'] = 'common_'.Func::M('str')::int_rand(20);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
+        //$Data['phone'] = $Request->input('phone','post');
+        //$Data['email'] = $Request->input('email','post');
+        //
+        //return $this->succeed(AccountModel::table()->add($Data));
     }
 }

@@ -15,6 +15,7 @@ namespace app;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
+use service\document\DocumentService;
 
 
 class Document extends Controller
@@ -104,7 +105,8 @@ class Document extends Controller
         if(isset($info['Param']) && !empty($info['Param'])){
             $info = $info['Param'][$input['type']]['substratum']??[];
             if(!empty($info)){
-                $Document = new \service\document\Document;
+
+                $Document = new DocumentService;
                 $infoData = $Document ->getParamInit($info);
             }
         }else{
@@ -154,7 +156,7 @@ class Document extends Controller
                 $info[__INIT__['SuccessReturnJsonMsg']['name']] = ['fieldRestrain'=>['string'],'fieldExplain'=>'状态说明'];
                 $info[__INIT__['SuccessReturnsJsonCode']['name']] = ['fieldRestrain'=>['string','int'],'fieldExplain'=>'状态码'];
 
-                $Document = new \service\document\Document;
+                $Document = new DocumentService;
                 $infoData = $Document ->getParamInit($info);
             }
         }else{

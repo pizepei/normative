@@ -9,7 +9,7 @@
 namespace service\document;
 
 
-class Document
+class DocumentService
 {
     /**
      * 获取文档只的请求参数（文档格式）
@@ -37,6 +37,12 @@ class Document
         return $infoData??[];
     }
 
+    /**
+     * @param $info
+     * @param $infoData
+     * @param $i
+     * @param $str
+     */
     public function recursiveParam($info,&$infoData,&$i,&$str)
     {
         $not = '&not;';
