@@ -67,4 +67,18 @@ class AccountMilestoneModel extends Model
             //['uuid','ADD',"uuid char(36)  DEFAULT NULL COMMENT 'uuid'",'uuid','pizepei'],
         ]
     ];
+    /**
+     * 类型模板
+     * 1注册、2修改密码、3修改手机、4修改邮箱、5密码错误超限、6异地登录、7
+     * replace_type
+     */
+    protected $replace_type =[
+        1=>'注册',
+        2=>'修改密码',
+        3=>'修改手机',
+        4=>'修改邮箱',
+        5=>'密码错误超限',
+        6=>'异地登录',
+        7=>'其他',
+    ];
 }

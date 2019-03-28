@@ -12,6 +12,7 @@
  */
 
 namespace app\index;
+use model\basics\account\AccountMilestoneModel;
 use pizepei\staging\Request;
 use pizepei\staging\Controller;
 use pizepei\model\cache\Cache;
@@ -187,16 +188,26 @@ class Index extends Controller
             'terminal'=>$Build,
         ];
     }
+
     /**
+     * @Author pizepei
+     * @Created 2019/3/28 23:04
+     *
      * @param $Request
      *      direct_id [string] 主id
      *      from_id [string] 从id（集合json   [id，id，id]）
      * @return array [objectList] 数据
      *      id [string] id
      * @router get /test.html auth:public
+     * @throws \Exception
      */
     public function test($Request='')
     {
+        return AccountMilestoneModel::table()
+            ->where(['account_id'=>'64254288-15C4-FC41-6C56-2AF6A0F3616D'])
+            ->replaceField('fetch',['type']);
+
+
 
         var_dump($Request);
         //echo dechex('10090239');
