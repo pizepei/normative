@@ -448,18 +448,35 @@ class Dome extends Controller
      */
     public function logon(Request $Request)
     {
-        $PasswordHash = new PasswordHash();
+        /**
+         * 验证码系统
+         */
+
+
+        /**
+         * 查询账号是否存在（可能会是邮箱  或者用户名）
+         *
+         * 用户编码 为用户唯一标准     不同的用户编码  可以是同一个手机号码、或者邮箱   ？
+         */
         $Account = AccountModel::table()->where(
             [
-                'phone'=>$Request->input('phone','post'),
+                'phone'=>$Request->post('phone'),
             ]
         )->fetch();
 
+        if(empty($Account)){
+            return $this->error($Request->post('phone'),'用户或密码错误');
+        }
+        $AccountService = new AccountService();
+        $AccountService->logon(\Config::ACCOUNT,$Request->post(),$Account,$this);
+
+        $PasswordHash = new PasswordHash();
+
         return $this->succeed([
-            'password_verify'=>$PasswordHash->password_verify(
-            $Request->input('password','post'),
-            $Account['password_hash']
-            ),
+            //'password_verify'=>$PasswordHash->password_verify(
+            //$Request->input('password','post'),
+            //$Account['password_hash']
+            //),
             'Account'=>$Account,
         ]);
     }
@@ -477,8 +494,8 @@ class Dome extends Controller
      * @return array [json]
      *
      * @throws \Exception
-     * @title  登录验证
-     * @explain 登录验证
+     * @title  注册账号
+     * @explain 基础注册账号
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
      * @authGroup 权限分组对应文件头部 @authGroup
      *
@@ -489,7 +506,7 @@ class Dome extends Controller
 
         $AccountService = new AccountService();
 
-        return $AccountService->register(\Config::ACCOUNT,$Request->input('','post'),$this);
+        return $AccountService->register(\Config::ACCOUNT,$Request->post(),$this);
         //$PasswordHash = new PasswordHash();
         //$password_hash = $PasswordHash->password_hash($Request->input('password','post'));
         //if(!empty($password_hash)){
@@ -501,4 +518,9 @@ class Dome extends Controller
         //
         //return $this->succeed(AccountModel::table()->add($Data));
     }
+
+
+
+
+
 }
