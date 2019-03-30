@@ -459,7 +459,7 @@ class Dome extends Controller
          */
         $Account = AccountModel::table()
             ->where(['phone'=>$Request->post('phone')])
-            ->fetch();
+            ->replaceField('fetch',['type','status']);
 
         if(empty($Account)){
             return $this->error($Request->post('phone'),'用户或密码错误');
@@ -497,22 +497,40 @@ class Dome extends Controller
      */
     public function register(Request $Request)
     {
-
         $AccountService = new AccountService();
-
         return $AccountService->register(\Config::ACCOUNT,$Request->post(),$this);
-        //$PasswordHash = new PasswordHash();
-        //$password_hash = $PasswordHash->password_hash($Request->input('password','post'));
-        //if(!empty($password_hash)){
-        //    $Data['password_hash'] = $password_hash;
-        //}
-        //$Data['number'] = 'common_'.Func::M('str')::int_rand(20);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
-        //$Data['phone'] = $Request->input('phone','post');
-        //$Data['email'] = $Request->input('email','post');
-        //
-        //return $this->succeed(AccountModel::table()->add($Data));
     }
 
+    /**
+     * @Author pizepei
+     * @Created 2019/3/30 21:33
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          code [string required] 验证码
+     * @return array [json]
+     *
+     * @title  方法标题（一般是方法的简称）
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 修改密码
+     * @authGroup 权限分组对应文件头部 @authGroup
+     * @throws \Exception
+     * @router post changePassword
+     */
+    public function changePassword(Request $Request)
+    {
+        $Account = AccountModel::table()
+            ->where(['phone'=>$Request->post('phone')])
+            ->replaceField('fetch',['type','status']);
+        if(empty($Account)){
+            $this->error($Request->post(),'用户不存在');
+        }
+        $AccountService = new AccountService();
+        return $AccountService->changePassword(\Config::ACCOUNT,$Request->post(),$Account,$this);
+
+    }
 
 
 

@@ -79,7 +79,7 @@ class AccountMilestoneModel extends Model
         4=>'修改邮箱',
         5=>'密码错误超限',
         6=>'异地登录',
-        7=>'其他',
+        7=>'更改加密参数（系统自动）',
     ];
     /**
      * 类型模板

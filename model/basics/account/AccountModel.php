@@ -68,7 +68,7 @@ class AccountModel extends Db
             'TYPE'=>"ENUM('1','2','3','4','5','6','7','8')", 'DEFAULT'=>'1', 'COMMENT'=>'账号类型1普通子账号common、2游客tourist、3应用账号app、4应用管理员appAdmin、5应用超级管理员appSuperAdmin、6超级管理员Administrators',
         ],
         'status'=>[
-            'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'状态1等待审核、2审核通过3、禁止使用4、保留',
+            'TYPE'=>"ENUM('1','2','3','4','5')", 'DEFAULT'=>'1', 'COMMENT'=>'状态1等待审核、2审核通过3、禁止使用4、保留',
         ],
         /**
          * UNIQUE 唯一
@@ -103,5 +103,31 @@ class AccountModel extends Db
         1=>[
             //['uuid','ADD',"uuid char(36)  DEFAULT NULL COMMENT 'uuid'",'uuid','pizepei'],
         ]
+    ];
+    /**
+     * 类型模板
+     * 状态1等待审核、2审核通过3、禁止使用4、保留
+     * replace_type
+     */
+    protected $replace_status =[
+        1=>'等待审核',
+        2=>'审核通过',
+        3=>'禁止使用',
+        4=>'保留',
+        5=>'保留',
+    ];
+    /**
+     * 账号类型
+     * 账号类型1普通子账号common、2游客tourist、3应用账号app、4应用管理员appAdmin、5应用超级管理员appSuperAdmin、6超级管理员Administrators
+     * @var array
+     */
+    protected $replace_type =[
+        1=>'普通子账号common',
+        2=>'游客tourist',
+        3=>'应用账号app',
+        4=>'应用管理员appAdmin',
+        5=>'应用超级管理员appSuperAdmin',
+        6=>'超级管理员Administrators',
+        7=>'其他',
     ];
 }

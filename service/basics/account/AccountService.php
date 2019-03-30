@@ -68,11 +68,14 @@ class AccountService
     }
 
     /**
-     * 登录
+     * @Author pizepei
+     * @Created 2019/3/30 21:28
+     *
      * @param array                       $config 配置
      * @param array                       $Request 请求参数
-     * @param array                       $userData  会员数据
+     * @param array                       $userData 会员数据
      * @param \pizepei\staging\Controller $Controller 控制器
+     * @return array|bool|string
      */
     public function logon(array $config,array $Request,array $userData,Controller $Controller)
     {
@@ -109,17 +112,76 @@ class AccountService
                 /**
                  * 写入里程碑事件
                  */
-                AccountMilestoneModel::table()->add(['account_id'=>$userData['id'],'message'=> ['registerData'=>[ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']],'requestId'=>__REQUEST_ID__], 'type'=>7,]);
+                if(empty(AccountMilestoneModel::table()->add(['account_id'=>$userData['id'],'message'=> ['registerData'=>[ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']],'requestId'=>__REQUEST_ID__], 'type'=>7,]))){
+                    return $Controller->error('系统错误','系统错误','L002');
+                }
             }
         }
+        /**
+         *
+         */
         return $hashResult;
     }
 
 
     /**
-     * 修改密码
+     * @Author pizepei
+     * @Created 2019/3/30 21:35
+     *
+     * @param array                       $config 配置
+     * @param array                       $Request 请求数据
+     * @param array                       $userData 用户数据
+     * @param \pizepei\staging\Controller $Controller 控制器类
+     * @return array
+     *
+     * @title  修改密码
+     * @explain 修改密码（注意配置）
      */
+    public function changePassword(array $config,array $Request,array $userData,Controller $Controller)
+    {
+        /**
+         * 实例化密码类
+         */
+        $PasswordHash = new PasswordHash();
+        /**
+         * 判断密码格式
+         */
+        if(empty($PasswordHash->password_match($config['password_regular'][0],$Request['password']))){
+            return $Controller->error($Request['password'],$config['password_regular'][1]);
+        }
+        /**
+         * 判断密码要求
+         *      如：上次修改  是否是原密码
+         */
 
+        /**
+         *生成新密码 获取密码hash
+         */
+        $password_hash = $PasswordHash->password_hash($Request['password'],$config['algo'],$config['options']);
+        if(empty($password_hash)){
+            return $Controller->error('系统错误','系统错误','L003');
+        }
+        /**
+         * 修改并且写入里程碑事件update
+         */
+        $updateData = ['password_hash'=>$password_hash,'version'=>$userData['version']+1];
+        $AccountModel = AccountModel::table()->where(['version'=>$userData['version']])->update($updateData);
+        //$AccountModel = AccountModel::table()->where(['version'=>$userData['version']])->insert([ 'id'=>$userData['id'],'password_hash'=>$password_hash,'version'=>$userData['version']+1]);
+        if($AccountModel == 1){
+            /**
+             * 写入里程碑事件
+             */
+            if(empty(AccountMilestoneModel::table()->add(['account_id'=>$userData['id'],'message'=> ['registerData'=>[ 'id'=>$userData['id'],'password_hash'=>$password_hash,'version'=>$userData['version']+1],'requestId'=>__REQUEST_ID__], 'type'=>7,]))){
+                return $Controller->error('系统错误','系统错误','L002');
+            }
+        }else{
+            return $Controller->succeed($AccountModel,'修改错误');
+
+        }
+        return $Controller->succeed($AccountModel,'修改成功');
+
+
+    }
     /**
      * 修改
      * logon_token_salt
