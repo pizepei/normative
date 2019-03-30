@@ -205,7 +205,7 @@ class Index extends Controller
     {
         return AccountMilestoneModel::table()
             ->where(['account_id'=>'64254288-15C4-FC41-6C56-2AF6A0F3616D'])
-            ->replaceField('fetch',['type']);
+            ->replaceField('fetch',['type','status']);
 
 
 
