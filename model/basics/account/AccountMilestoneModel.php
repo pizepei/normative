@@ -26,10 +26,10 @@ class AccountMilestoneModel extends Model
             'TYPE'=>'uuid', 'DEFAULT'=>'', 'COMMENT'=>'account表id',
         ],
         'type'=>[
-            'TYPE'=>"ENUM('1','2','3','4','5','6','7','8','9','10')", 'DEFAULT'=>'1', 'COMMENT'=>'1注册、2修改密码、3修改手机、4修改邮箱、5密码错误超限、6异地登录、7',
+            'TYPE'=>"ENUM('1','2','3','4','5','6','7','8','9','10')", 'DEFAULT'=>'1', 'COMMENT'=>'1注册、2修改密码、3修改手机、4修改邮箱、5密码错误超限、6异地登录、7更改加密参数',
         ],
         'status'=>[
-            'TYPE'=>"ENUM('1','2','3','4')", 'DEFAULT'=>'1', 'COMMENT'=>'状态1等待审核、2审核通过3、禁止使用4、保留',
+            'TYPE'=>"ENUM('1','2','3','4','5')", 'DEFAULT'=>'1', 'COMMENT'=>'状态1等待审核、2审核通过3、禁止使用4、保留',
         ],
         'message'=>[
             'TYPE'=>"json", 'DEFAULT'=>false, 'COMMENT'=>'详细信息',
@@ -68,10 +68,10 @@ class AccountMilestoneModel extends Model
         ]
     ];
     /**
-     * 类型模板
-     * 1注册、2修改密码、3修改手机、4修改邮箱、5密码错误超限、6异地登录、7
-     * replace_type
-     */
+ * 类型模板
+ * 1注册、2修改密码、3修改手机、4修改邮箱、5密码错误超限、6异地登录、7
+ * replace_type
+ */
     protected $replace_type =[
         1=>'注册',
         2=>'修改密码',
@@ -80,5 +80,17 @@ class AccountMilestoneModel extends Model
         5=>'密码错误超限',
         6=>'异地登录',
         7=>'其他',
+    ];
+    /**
+     * 类型模板
+     * 状态1等待审核、2审核通过3、禁止使用4、保留
+     * replace_type
+     */
+    protected $replace_status =[
+        1=>'等待审核',
+        2=>'审核通过',
+        3=>'禁止使用',
+        4=>'保留',
+        5=>'保留',
     ];
 }

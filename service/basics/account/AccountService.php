@@ -59,17 +59,7 @@ class AccountService
         if(is_array($AccountData)){
             $id = array_keys($AccountData)[0]??null;
         }
-        /**
-         * 写入里程碑事件
-         */
-        AccountMilestoneModel::table()->add(
-            [
-                'account_id'=>$id,//账号id
-                'message'=>
-                    ['registerData'=>$Data,'requestId'=>__REQUEST_ID__],
-                'type'=>1,//注册
-            ]
-        );
+
         /**
          * 注册账号
          */
@@ -107,20 +97,22 @@ class AccountService
         $hashResult = $PasswordHash->password_verify($Request['password'],$userData['password_hash'],$config['algo'],$config['options']);
 
         if(!$hashResult['result']){
-            $Controller->error($Request,'账号或者密码错误');
+            return $Controller->error($Request,'账号或者密码错误');
         }
 
-        if(!$hashResult['newHash']){
+        if($hashResult['newHash']){
             /**
              * 密码加密参数有修改
              */
-            $AccountModel = AccountModel::table()->where(
-                [
-                    'id'=>$userData['id']
-                ]
-            );
-
+            $AccountModel = AccountModel::table()->insert([ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']]);
+            if($AccountModel === 1){
+                /**
+                 * 写入里程碑事件
+                 */
+                AccountMilestoneModel::table()->add(['account_id'=>$userData['id'],'message'=> ['registerData'=>[ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']],'requestId'=>__REQUEST_ID__], 'type'=>7,]);
+            }
         }
+        return $hashResult;
     }
 
 
