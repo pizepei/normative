@@ -392,13 +392,13 @@ class Dome extends Controller
      */
     public function redis()
     {
+        Cache::set(['test','bbt'],[0=>'45']);
+        return Cache::get(['test','bbt']);
         /**
          *        \pizepei\model\reids\Redis
          */
         //$redis = new Redis();
         //$redis = new Redis();
-
-
         //RedisModel::class
     }
 
