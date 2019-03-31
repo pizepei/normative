@@ -460,7 +460,10 @@ class Dome extends Controller
         $Account = AccountModel::table()
             ->where(['phone'=>$Request->post('phone')])
             ->replaceField('fetch',['type','status']);
-
+        $Account = AccountModel::table()
+            ->where(['phone'=>$Request->post('phone')])
+            ->cache(['Account','info'])
+            ->replaceField('fetch',['type','status']);
         if(empty($Account)){
             return $this->error($Request->post('phone'),'用户或密码错误');
         }
