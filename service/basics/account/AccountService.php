@@ -118,8 +118,15 @@ class AccountService
             }
         }
         /**
-         *
+         *判断登录限制
+         * 密码错误数量
+         * 同时登录数
          */
+
+
+
+
+
         return $hashResult;
     }
 
@@ -133,7 +140,7 @@ class AccountService
      * @param array                       $userData 用户数据
      * @param \pizepei\staging\Controller $Controller 控制器类
      * @return array
-     *
+     * @throws \Exception
      * @title  修改密码
      * @explain 修改密码（注意配置）
      */
@@ -182,6 +189,28 @@ class AccountService
 
 
     }
+
+    /**
+     * @Author pizepei
+     * @Created 2019/3/31 12:41
+     *
+     * @title  构建登录JWT
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     *
+     */
+    public function logonJwt()
+    {
+        /**
+         * 配置
+         */
+
+
+
+
+
+    }
+
+
     /**
      * 修改
      * logon_token_salt

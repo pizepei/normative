@@ -52,6 +52,11 @@ class AccountModel extends Db
         'logon_token_salt'=>[
             'TYPE'=>'varchar(42)', 'DEFAULT'=>'', 'COMMENT'=>'登录token_salt',
         ],
+
+        'logon_online_count'=>[
+            'TYPE'=>"ENUM('3','5','6','8','10','15')", 'DEFAULT'=>5, 'COMMENT'=>'同时在线数',
+        ],
+
         'password_wrong_count'=>[
             'TYPE'=>"ENUM('3','5','6','8','10')", 'DEFAULT'=>5, 'COMMENT'=>'密码错误数',
         ],
