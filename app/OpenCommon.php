@@ -40,8 +40,14 @@ class OpenCommon extends Controller
          */
 
         foreach($_FILES as $key=>$value){
+            /**
+             * 相同key的数组文件上传
+             */
+            if(is_array($value)){
 
+            }else{
 
+            }
 
 
 
