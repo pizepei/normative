@@ -31,6 +31,23 @@ class OpenCommon extends Controller
     public function openMessage(Request $Request)
     {
         /**
+         * 请求签名接口
+         * 参数  需要显示的域名
+         *
+         *
+         * 签名确定域名准确性
+         *
+         * 签名   sha1（域名+appid+AppSecret+时间戳+随机字符串）       域名+时间戳+随机字符串+appid
+         *
+         *
+         *接受接口
+         *
+         * 验证签名 签名正确
+         *      使用appid查询 域名是否授权，授权就上传到对应的appid目录返回域名+时间+文件路径+文件名称
+         */
+
+
+        /**
          * 获取当前域名
          */
         //$HOST = $_SERVER['HTTP_HOST'];
