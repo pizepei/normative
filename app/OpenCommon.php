@@ -34,6 +34,8 @@ class OpenCommon extends Controller
          * 获取当前域名
          */
         $HOST = $_SERVER['HTTP_HOST'];
+        //var_dump(\Config::FILES_UPLOAD_APP_SCHEMA);
+        //var_dump(\Config::FILES_UPLOAD_APP);
 
         /**
          * 处理文件
@@ -43,9 +45,22 @@ class OpenCommon extends Controller
             /**
              * 相同key的数组文件上传
              */
-            if(is_array($value)){
+            if(is_array($value['name'])){
 
             }else{
+                /**
+                 * 判断文件大小
+                 */
+                if($value['size'] > \Config::FILES_UPLOAD_APP_SCHEMA['files-upload']['size']){
+                    return $this->error(['name'=>$key,'data'=>$value],'文件大小超过：'.(\Config::FILES_UPLOAD_APP_SCHEMA['files-upload']['size']/1024).'kb');
+                }
+                /**
+                 * 判断文件类型
+                 */
+                if(!in_array($value['type'],\Config::FILES_UPLOAD_APP_SCHEMA['files-upload']['type'])){
+                    return $this->error(['name'=>$key,'data'=>$value],'不允许的文件类型：'.$value['type']);
+                }
+
 
             }
 
