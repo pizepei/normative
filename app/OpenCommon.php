@@ -33,7 +33,8 @@ class OpenCommon extends Controller
         /**
          * 获取当前域名
          */
-        $HOST = $_SERVER['HTTP_HOST'];
+        //$HOST = $_SERVER['HTTP_HOST'];
+        //var_dump($_SERVER['HTTP_REFERER']);
         //var_dump(\Config::FILES_UPLOAD_APP_SCHEMA);
         //var_dump(\Config::FILES_UPLOAD_APP);
 
@@ -60,25 +61,28 @@ class OpenCommon extends Controller
                 if(!in_array($value['type'],\Config::FILES_UPLOAD_APP_SCHEMA['files-upload']['type'])){
                     return $this->error(['name'=>$key,'data'=>$value],'不允许的文件类型：'.$value['type']);
                 }
-
-
+                /**
+                 * 判断是否限制域名
+                 */
+                if(!empty(\Config::FILES_UPLOAD_APP['domain'])){
+                    $i = 0;
+                    foreach(\Config::FILES_UPLOAD_APP['domain'] as $valueDomain)
+                    {
+                        preg_match($valueDomain,$_SERVER['HTTP_REFERER'], $result);
+                        /**
+                         *匹配
+                         */
+                        if(!empty($result)){
+                            $domain = $result[0];
+                            $i++;
+                        }
+                    }
+                    if(!$i){
+                        return $this->error(['name'=>$key,'data'=>$value],'不允许的来源域名：'.$_SERVER['HTTP_REFERER']);
+                    }
+                }
             }
-
-
-
         }
-
-
-
-
-        /**
-         * 获取文件大小
-         */
-
-
-        /**
-         * 获取文件类型
-         */
 
 
         /**
