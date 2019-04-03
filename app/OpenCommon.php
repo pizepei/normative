@@ -12,6 +12,8 @@
  */
 
 namespace app;
+use pizepei\encryption\SHA1;
+use pizepei\func\Func;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 
@@ -21,7 +23,6 @@ class OpenCommon extends Controller
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      path [object] 路径参数
-     *      post [object]
      * @return array [json]
      * @title  文件上传
      * @explain 文件上传（公开的但是会判断上传域名）
@@ -45,6 +46,15 @@ class OpenCommon extends Controller
          * 验证签名 签名正确
          *      使用appid查询 域名是否授权，授权就上传到对应的appid目录返回域名+时间+文件路径+文件名称
          */
+
+        //$token, $timestamp, $nonce, $encrypt_msg
+        $timestamp = time();
+        $nonce =    Func::M('str')::str_rand(10);
+        $encrypt_msg = '[域名,appid,表单，有效期（分钟单位）]';
+        $SHA1 = new SHA1();
+
+        $SHA1->getSHA1(\Config::FILES_UPLOAD_APP['token'],$timestamp,$nonce,$encrypt_msg);
+
 
 
         /**
