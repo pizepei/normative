@@ -20,6 +20,31 @@ use pizepei\staging\Request;
 class OpenCommon extends Controller
 {
 
+
+
+
+    /**
+     * @param \pizepei\staging\Request $Request [xml]
+     *      path [object] 路径参数
+     *      get [object]
+     *          filesName [string] 表单名称
+     * @return array [json]
+     * @title  文件上传
+     * @explain 文件上传（公开的但是会判断上传域名）
+     * @router get files-upload-signature
+     * @throws \Exception
+     */
+    public function filesUploadSignature(Request $Request)
+    {
+        //sha1（域名+appid+AppSecret+时间戳+随机字符串）       域名+时间戳+随机字符串+appid
+        return $Request->input('','raw');
+    }
+
+
+
+
+
+
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      path [object] 路径参数
@@ -29,7 +54,7 @@ class OpenCommon extends Controller
      * @router post files-upload
      * @throws \Exception
      */
-    public function openMessage(Request $Request)
+    public function filesUpload(Request $Request)
     {
         /**
          * 请求签名接口
