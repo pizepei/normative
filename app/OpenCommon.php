@@ -12,6 +12,7 @@
  */
 
 namespace app;
+use AlibabaCloud\Domain\V20180129\EmailVerified;
 use pizepei\encryption\SHA1;
 use pizepei\func\Func;
 use pizepei\staging\Controller;
@@ -22,12 +23,12 @@ class OpenCommon extends Controller
 
 
 
-
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      path [object] 路径参数
      *      get [object]
-     *          filesName [string] 表单名称
+     *          filesName [string required] 表单名称
+     *          referer [string] 显示图片时的页面 如果不传默认获取请求头内容
      * @return array [json]
      * @title  文件上传
      * @explain 文件上传（公开的但是会判断上传域名）
@@ -37,7 +38,58 @@ class OpenCommon extends Controller
     public function filesUploadSignature(Request $Request)
     {
         //sha1（域名+appid+AppSecret+时间戳+随机字符串）       域名+时间戳+随机字符串+appid
-        return $Request->input('','raw');
+
+        /**
+         * 请求签名接口
+         * 参数  需要显示的域名
+         *
+         * 签名确定域名准确性
+         *
+         * 签名   sha1（域名+appid+AppSecret+时间戳+随机字符串）       域名+时间戳+随机字符串+appid
+         *
+         *接受接口
+         *
+         * 验证签名 签名正确
+         *      使用appid查询 域名是否授权，授权就上传到对应的appid目录返回域名+时间+文件路径+文件名称
+         */
+        /**
+         * 判断是否限制域名
+         */
+        $referer = $Request->input('referer');
+
+        if(empty($referer)){
+            $referer = $_SERVER['HTTP_REFERER']??'*';
+        }
+
+        if(!empty(\Config::FILES_UPLOAD_APP['domain'])){
+            $i = 0;
+            foreach(\Config::FILES_UPLOAD_APP['domain'] as $valueDomain)
+            {
+                preg_match($valueDomain,$referer, $result);
+                /**
+                 *匹配
+                 */
+                if(!empty($result)){
+                    $domain = $result[0];
+                    $i++;
+                }
+            }
+            if(!$i){
+                return $this->error($referer,'不允许的来源域名：'.$referer);
+            }
+        }
+        //$token, $timestamp, $nonce, $encrypt_msg
+        $timestamp = time();
+        $nonce =    Func::M('str')::str_rand(10);
+        $encrypt_msg = \Config::FILES_UPLOAD_APP['appid'].$referer.$Request->input('filesName').\Config::FILES_UPLOAD_APP['period'];//'[appid.域名,表单，有效期（分钟单位）]'.
+        $SHA1 = new SHA1();
+        $msgSignature = $SHA1->getSHA1(\Config::FILES_UPLOAD_APP['token'],$timestamp,$nonce,$encrypt_msg);
+        return [
+            'timestamp'=>$timestamp,
+            'nonce'=>$nonce,
+            'encrypt_msg'=>$encrypt_msg,
+            'msgSignature'=>$msgSignature,
+        ];
     }
 
 
@@ -56,29 +108,6 @@ class OpenCommon extends Controller
      */
     public function filesUpload(Request $Request)
     {
-        /**
-         * 请求签名接口
-         * 参数  需要显示的域名
-         *
-         *
-         * 签名确定域名准确性
-         *
-         * 签名   sha1（域名+appid+AppSecret+时间戳+随机字符串）       域名+时间戳+随机字符串+appid
-         *
-         *
-         *接受接口
-         *
-         * 验证签名 签名正确
-         *      使用appid查询 域名是否授权，授权就上传到对应的appid目录返回域名+时间+文件路径+文件名称
-         */
-
-        //$token, $timestamp, $nonce, $encrypt_msg
-        $timestamp = time();
-        $nonce =    Func::M('str')::str_rand(10);
-        $encrypt_msg = '[域名,appid,表单，有效期（分钟单位）]';
-        $SHA1 = new SHA1();
-
-        $SHA1->getSHA1(\Config::FILES_UPLOAD_APP['token'],$timestamp,$nonce,$encrypt_msg);
 
 
 
