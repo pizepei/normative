@@ -15,6 +15,7 @@ namespace app;
 use function AlibabaCloud\Client\json;
 use AlibabaCloud\Domain\V20180129\EmailVerified;
 use pizepei\encryption\aes\Prpcrypt;
+use pizepei\encryption\google\GoogleAuthenticator;
 use pizepei\encryption\SHA1;
 use pizepei\func\Func;
 use pizepei\service\filesupload\FilesUpload;
@@ -64,5 +65,22 @@ class OpenCommon extends Controller
         return $FilesUpload->verifySignature($Request->post(),$this);
     }
 
+    /**
+     * @param \pizepei\staging\Request $Request [xml]
+     *      post [object] 路径参数
+     *          code [int] 验证码
+     * @return array [json]
+     * @title  文件上传
+     * @explain 文件上传（公开的但是会判断上传域名）
+     * @router post google-authenticator
+     * @throws \Exception
+     */
+    public function googleAuthenticator(Request $Request)
+    {
+        $secret = '3FBUDFZ4DP6JJVM5';
+       $GoogleAuthenticator =  new GoogleAuthenticator();
+       $GoogleAuthenticator->createSecret();
 
+        return$GoogleAuthenticator->getQRCodeGoogleUrl('ppx',$secret);
+    }
 }

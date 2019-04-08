@@ -12,6 +12,7 @@ namespace service\basics\account;
 
 use model\basics\account\AccountMilestoneModel;
 use model\basics\account\AccountModel;
+use pizepei\encryption\google\GoogleAuthenticator;
 use pizepei\func\Func;
 use pizepei\service\encryption\PasswordHash;
 use pizepei\staging\Controller;
@@ -85,11 +86,6 @@ class AccountService
          *          1、实际进行操作是是使用项目全局的logon_token_salt拼接用户logon_token_salt
          *          2、在强制用户下线时：项目全局强制可通过修改项目logon_token_salt，单一用户相关用户logon_token_salt
          *          3、由于是jwt方式用户logon_token_salt要注意缓存存在和数据安全
-         *
-         */
-
-        /**
-         *
          */
         /**
          * 实例化密码类
@@ -102,6 +98,20 @@ class AccountService
         if(!$hashResult['result']){
             return $Controller->error($Request,'账号或者密码错误');
         }
+        /**
+         *A双因子认证secret
+         */
+        if(!empty($userData['2fa_secret'])){
+            $GoogleAuthenticator =  new GoogleAuthenticator();
+            if(!$GoogleAuthenticator->verifyCode($userData['2fa_secret'],$Request['codeFA']??''))
+            {
+                return $Controller->error($Request,'双因子认证错误');
+            }
+        }
+        //$secret = '3FBUDFZ4DP6JJVM5';
+        //$GoogleAuthenticator->createSecret();
+        //
+        //return$GoogleAuthenticator->getQRCodeGoogleUrl('ppx',$secret);
 
         if($hashResult['newHash']){
             /**

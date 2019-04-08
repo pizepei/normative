@@ -436,6 +436,7 @@ class Dome extends Controller
      *          phone [int number] 手机号码
      *          password [string required] 密码
      *          code [string required] 验证码
+     *          codeFA [string] 2FA双因子认证code
      * @return array [json]
      *
      * @throws \Exception
@@ -449,9 +450,8 @@ class Dome extends Controller
     public function logon(Request $Request)
     {
         /**
-         * 验证码系统
+         * 图形验证码系统
          */
-
 
         /**
          * 查询账号是否存在（可能会是邮箱  或者用户名）
@@ -460,10 +460,10 @@ class Dome extends Controller
         $Account = AccountModel::table()
             ->where(['phone'=>$Request->post('phone')])
             ->replaceField('fetch',['type','status']);
-        $Account = AccountModel::table()
-            ->where(['phone'=>$Request->post('phone')])
-            ->cache(['Account','info'])
-            ->replaceField('fetch',['type','status']);
+        //$Account = AccountModel::table()
+        //    ->where(['phone'=>$Request->post('phone')])
+        //    ->cache(['Account','info'])
+        //    ->replaceField('fetch',['type','status']);
         if(empty($Account)){
             return $this->error($Request->post('phone'),'用户或密码错误');
         }
