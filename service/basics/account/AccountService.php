@@ -14,6 +14,7 @@ use model\basics\account\AccountMilestoneModel;
 use model\basics\account\AccountModel;
 use pizepei\encryption\google\GoogleAuthenticator;
 use pizepei\func\Func;
+use pizepei\model\redis\Redis;
 use pizepei\service\encryption\PasswordHash;
 use pizepei\staging\Controller;
 
@@ -80,6 +81,15 @@ class AccountService
      */
     public function logon(array $config,array $Request,array $userData,Controller $Controller)
     {
+
+        /**
+         * 查询密码错误限制
+         */
+        $passwordWrongLock = $this->passwordWrongLock($userData);
+        if($passwordWrongLock)
+        {
+            return $Controller->error([],$passwordWrongLock);
+        }
         /**
          * 注意为了保证安全
          *      登录需要使用的logon_token_salt 解密进行如下处理
@@ -96,6 +106,7 @@ class AccountService
         $hashResult = $PasswordHash->password_verify($Request['password'],$userData['password_hash'],$config['algo'],$config['options']);
 
         if(!$hashResult['result']){
+            $this->passwordWrongLock($userData,false);
             return $Controller->error($Request,'账号或者密码错误');
         }
         /**
@@ -108,10 +119,6 @@ class AccountService
                 return $Controller->error($Request,'双因子认证错误');
             }
         }
-        //$secret = '3FBUDFZ4DP6JJVM5';
-        //$GoogleAuthenticator->createSecret();
-        //
-        //return$GoogleAuthenticator->getQRCodeGoogleUrl('ppx',$secret);
 
         if($hashResult['newHash']){
             /**
@@ -127,20 +134,122 @@ class AccountService
                 }
             }
         }
+
         /**
-         *判断登录限制
-         * 密码错误数量
+         * 登录数量限制
+         */
+        $this->logonRestrictPeriod($userData);
+
+        return $this->logonRestrict($userData,$Controller);
+
+    }
+
+    /**
+     * @param array                       $userData
+     * @param \pizepei\staging\Controller $Controller
+     */
+    public function logonRestrict(array $userData,Controller $Controller)
+    {
+        /**
+         * 判断登录限制
          * 同时登录数
+         * 使用redis存储密码错误信息、登录设备
+         */
+        /**
+         * 实例化redis
+         */
+        /**
+         * 判断是否同时在线限制
+         */
+        return [];
+    }
+    
+    
+    
+    protected function logonRestrictPeriod(array $userData,$Type=true)
+    {
+        /**
+         * jwt 缓存
          */
 
 
+        if($Type){
+            $Redis = Redis::init();
+            $data = [
+                'time'=>time(),
+                'period'=>time()+30,
+                'id'=>$userData['id'],
+                'Last_operating_time'=>time(),
+                'logon_token_period_pattern'=>$userData['logon_token_period_pattern'],
+                'logon_token_period_time'=>$userData['logon_token_period_time']
+            ];
+            $Redis->hset('user-logon-JWT:'.$userData['id'],'signature',json_encode($data));
+            $Redis->hset('user-logon-JWT:'.$userData['id'],'signature2',json_encode($data));
+            /**
+             * 查询出所有的的设备
+             */
+            $jwtList = $Redis->hgetall('user-logon-JWT:'.$userData['id']);
+            var_dump($jwtList);
 
+            if(!empty($jwtList)){
+                /**
+                 * 有设备在jwt判断是否有效无效删除
+                 */
+                foreach($jwtList as $key=>$value)
+                {
 
+                }
+            }
+        }
 
-        return $hashResult;
     }
+    /**
+     * 密码错误限制
+     * @param array $userData
+     * @param bool  $Type  true 查询是否成功限制 false 设置错误缓存
+     * @return bool|string
+     */
+    protected function passwordWrongLock(array$userData,$Type=true)
+    {
+        $Redis = Redis::init();
+
+        if($Type){
+            /**
+             * 查询密码错误
+             */
+            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');//查，取值
+            if($password_wrong_count){
+                /**
+                 * 判断密码错误数
+                 */
+                if($password_wrong_count >= $userData['password_wrong_count']){
+                    $password_wrong_time = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time');//查，取值【value|false】
+
+                    if(((time()-$password_wrong_time)/60) >$userData['password_wrong_lock'])
+                    {
+                        /**
+                         * 修改成为数量为0
+                         */
+                        $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',0);
+                    }else{
+                        return '密码错误超限:'.round(($userData['password_wrong_lock']-((time()-$password_wrong_time)/60))).'分钟后解除限制';
+                    }
+                }
+            }
+            return false;
+        }else{
+            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');
+            if($password_wrong_count){
+                $password_wrong_count = $password_wrong_count+1;
+            }else{
+                $password_wrong_count = 1;
+            }
+            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',$password_wrong_count);
+            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time',time());
+        }
 
 
+    }
     /**
      * @Author pizepei
      * @Created 2019/3/30 21:35
