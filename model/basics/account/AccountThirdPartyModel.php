@@ -22,7 +22,7 @@ class AccountThirdPartyModel extends Model
         'id'=>[
             'TYPE'=>'uuid','COMMENT'=>'主键uuid','DEFAULT'=>false,
         ],
-        'account'=>[
+        'account_id'=>[
             'TYPE'=>'json', 'DEFAULT'=>false, 'COMMENT'=>'account表id',
         ],
         'openid'=>[
