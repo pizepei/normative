@@ -16,6 +16,7 @@ use pizepei\encryption\google\GoogleAuthenticator;
 use pizepei\func\Func;
 use pizepei\model\redis\Redis;
 use pizepei\service\encryption\PasswordHash;
+use pizepei\service\jwt\JsonWebToken;
 use pizepei\staging\Controller;
 
 class AccountService
@@ -315,18 +316,17 @@ class AccountService
      *
      * @title  构建登录JWT
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
-     *
+     * @param $secret
+     * @param $Payload
+     * @throws \Exception
      */
-    public function logonJwt()
+    public function setLogonJwt($secret,$Payload)
     {
-        /**
-         * 配置
-         */
+        $JsonWebToken = new JsonWebToken();
+        $jwtArray = $JsonWebToken->setJWT($Payload,\Config::JSON_WEB_TOKEN_SECRET[$secret]);
+        $decodeJWT = $JsonWebToken->decodeJWT($jwtArray['str'],\Config::JSON_WEB_TOKEN_SECRET[$secret]);
 
-
-
-
-
+        return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT];
     }
 
 
