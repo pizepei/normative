@@ -30,9 +30,7 @@ class Account extends Controller
     public function index()
     {
         //Db::table()->insert();
-        return AccountThirdPartyModel::table()->add(['status'=>3,'type'=>'WeChat','openid'=>'77779676','account'=>[Db::getUuid()]]);
-
-        return AccountModel::table()->fetchAll();
+        return AccountThirdPartyModel::table()->add(['status'=>3,'type'=>'WeChat','openid'=>'77779676','account_id'=>[Db::getUuid()]]);
     }
 
 

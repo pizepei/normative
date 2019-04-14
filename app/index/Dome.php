@@ -468,6 +468,13 @@ class Dome extends Controller
             return $this->error($Request->post('phone'),'用户或密码错误');
         }
         $AccountService = new AccountService();
+        $Payload= ['UUID'=>'000-0000-0000-00-000000'];
+
+
+
+
+        return $AccountService->setLogonJwt('common',$Payload);
+
         $result =  $AccountService->logon(\Config::ACCOUNT,$Request->post(),$Account,$this);
         if(isset($result['result']) && $result['result']){
             return $this->succeed([
