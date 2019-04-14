@@ -165,15 +165,11 @@ class AccountService
         return [];
     }
     
-    
-    
     protected function logonRestrictPeriod(array $userData,$Type=true)
     {
         /**
          * jwt 缓存
          */
-
-
         if($Type){
             $Redis = Redis::init();
             $data = [
@@ -325,8 +321,43 @@ class AccountService
         $JsonWebToken = new JsonWebToken();
         $jwtArray = $JsonWebToken->setJWT($Payload,\Config::JSON_WEB_TOKEN_SECRET[$secret]);
         $decodeJWT = $JsonWebToken->decodeJWT($jwtArray['str'],\Config::JSON_WEB_TOKEN_SECRET[$secret]);
+        $Redis = Redis::init();
+        //$data = [
+        //    'time'=>time(),
+        //    'period'=>time()+30,
+        //    'id'=>$userData['id'],
+        //    'Last_operating_time'=>time(),
+        //    'logon_token_period_pattern'=>$userData['logon_token_period_pattern'],
+        //    'logon_token_period_time'=>$userData['logon_token_period_time']
+        //];
+        //$Redis->hset('user-logon-JWT:'.$userData['id'],'signature',json_encode($Payload));
+        //$Redis->hset('user-logon-JWT:'.$userData['id'],'signature2',json_encode($Payload));
+        /**
+         * 查询出所有的的设备
+         */
+        //$jwtList = $Redis->hgetall('user-logon-JWT:'.$userData['id']);
+        //var_dump($jwtList);
+        /**
+         *
+         */
+
+
 
         return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT];
+    }
+
+    /**
+     * @Author pizepei
+     * @Created 2019/4/14 11:28
+     *
+     * @title  方法标题（一般是方法的简称）
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     */
+    public function decodeLogonJwt()
+    {
+        /**
+         * 获取缓存
+         */
     }
 
 
