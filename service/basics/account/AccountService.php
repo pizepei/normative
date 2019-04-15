@@ -135,11 +135,25 @@ class AccountService
                 }
             }
         }
-
         /**
          * 登录数量限制
          */
-        $this->logonRestrictPeriod($userData);
+        if($this->logonCount($userData['id']) > $userData['logon_online_count']){ return $Controller->error([],'在线设备数量：当前在线'.$userData['logon_online_count']); }
+
+        $Payload= [
+            'nickname'=>$userData['nickname'],
+            'type'=>$userData['type'],
+            'number'=>$userData['number'],
+            'iss'=>'logonServer',//主题
+            'aud'=>'user',//受众
+            'sub'=>'userLogon',//主题number
+            'period_pattern'=>$userData['logon_token_period_pattern'],
+            'period_time'=>$userData['logon_token_period_time'],
+        ];
+        return $this->setLogonJwt('common',$Payload,$userData['logon_token_salt'],'number');
+
+
+        //$this->logonRestrictPeriod($userData);
 
         return $this->logonRestrict($userData,$Controller);
 
@@ -307,45 +321,75 @@ class AccountService
     }
 
     /**
-     * @Author pizepei
-     * @Created 2019/3/31 12:41
-     *
-     * @title  构建登录JWT
-     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
-     * @param $secret
-     * @param $Payload
+     *  构建登录JWT
+     * @param        $secret
+     * @param        $Payload
+     * @param string $TokenSalt
+     * @param string $TokenSaltName
+     * @return array
      * @throws \Exception
      */
-    public function setLogonJwt($secret,$Payload)
+    public function setLogonJwt($secret,$Payload,$TokenSalt,$TokenSaltName ='number')
     {
-        $JsonWebToken = new JsonWebToken();
-        $jwtArray = $JsonWebToken->setJWT($Payload,\Config::JSON_WEB_TOKEN_SECRET[$secret]);
-        $decodeJWT = $JsonWebToken->decodeJWT($jwtArray['str'],\Config::JSON_WEB_TOKEN_SECRET[$secret]);
+        if(!isset($Payload['number'])){ throw new \Exception('非法数据');}
         $Redis = Redis::init();
-        //$data = [
-        //    'time'=>time(),
-        //    'period'=>time()+30,
-        //    'id'=>$userData['id'],
-        //    'Last_operating_time'=>time(),
-        //    'logon_token_period_pattern'=>$userData['logon_token_period_pattern'],
-        //    'logon_token_period_time'=>$userData['logon_token_period_time']
-        //];
-        //$Redis->hset('user-logon-JWT:'.$userData['id'],'signature',json_encode($Payload));
-        //$Redis->hset('user-logon-JWT:'.$userData['id'],'signature2',json_encode($Payload));
+
+        $JsonWebToken = new JsonWebToken();
+        $jwtArray = $JsonWebToken->setJWT($Payload,\Config::JSON_WEB_TOKEN_SECRET[$secret],$TokenSalt,$TokenSaltName);
         /**
-         * 查询出所有的的设备
+         * redis key
+         *      'user-logon-JWT:signature'.$userData['id']
+         * logon_token_salt
          */
-        //$jwtList = $Redis->hgetall('user-logon-JWT:'.$userData['id']);
-        //var_dump($jwtList);
+         $logonSignature= $Redis->get('user-logon-jwt-info:'.$Payload['number'].':'.$jwtArray['signature']);
+         if(!empty($logonSignature)){
+             throw new \Exception('系统繁忙');
+         }
         /**
-         *
+         * 写入缓存
          */
+        $Redis->setex('user-logon-jwt-info:'.$Payload['number'].':'.$jwtArray['signature'],$jwtArray['exp'],json_encode($Payload));
+        $this->logonTokenSalt($Payload['number'],$TokenSalt);
 
-
-
-        return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT];
+        $decodeJWT = $JsonWebToken->decodeJWT($jwtArray['str'],\Config::JSON_WEB_TOKEN_SECRET[$secret],$Redis);
+        //KEYS
+        return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT??[]];
     }
 
+    /**
+     * 当前登录设备数量
+     * @param string $number
+     * @param bool   $del
+     * @return int
+     */
+    public function logonCount(string $number,bool$del= false)
+    {
+        $Redis = Redis::init();
+        if($del)
+        {
+            return $Redis->del($Redis->keys('user-logon-jwt-info:'.$number.'*'));
+        }
+        return count($Redis->keys('user-logon-jwt-info:'.$number.'*'));
+    }
+
+    /**
+     * 登录TokenSalt获取与设置
+     * @param string $number
+     * @param string $value
+     * @return bool|string
+     */
+    public function logonTokenSalt(string $number,string $value)
+    {
+        $Redis = Redis::init();
+        /**
+         * 设置
+         */
+        if($value)
+        {
+            return $Redis->set('user-logon-jwt-tokenSalt:'.$number,$value);
+        }
+        return $Redis->get('user-logon-jwt-tokenSalt:'.$number);
+    }
     /**
      * @Author pizepei
      * @Created 2019/4/14 11:28
