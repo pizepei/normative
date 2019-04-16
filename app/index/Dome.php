@@ -459,7 +459,8 @@ class Dome extends Controller
          */
         $Account = AccountModel::table()
             ->where(['phone'=>$Request->post('phone')])
-            ->replaceField('fetch',['type','status']);
+            ->fetch();
+            //->replaceField('fetch',['type','status']);
         //$Account = AccountModel::table()
         //    ->where(['phone'=>$Request->post('phone')])
         //    ->cache(['Account','info'])
@@ -468,7 +469,6 @@ class Dome extends Controller
             return $this->error($Request->post('phone'),'用户或密码错误');
         }
         $AccountService = new AccountService();
-        //return $AccountService->setLogonJwt('common',$Payload);
 
         $result =  $AccountService->logon(\Config::ACCOUNT,$Request->post(),$Account,$this);
         if(isset($result['result']) && $result['result']){
@@ -536,8 +536,28 @@ class Dome extends Controller
         return $AccountService->changePassword(\Config::ACCOUNT,$Request->post(),$Account,$this);
 
     }
-
-
+    /**
+     * @Author pizepei
+     * @Created 2019/3/30 21:33
+     *
+     * @param \pizepei\staging\Request $Request
+     *      get [object] get
+     *          jwtStr [string required] jwt
+     * @return array [json]
+     *
+     * @title  验证jwt
+     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @authTiny 修改密码
+     * @authGroup 权限分组对应文件头部 @authGroup
+     * @throws \Exception
+     * @router get decodeLogonJwt
+     */
+    public function decodeLogonJwt( Request $Request)
+    {
+        $AccountService = new AccountService();
+        $Redis = Redis::init();
+        return $AccountService->decodeLogonJwt('common',$Request->input('jwtStr'),$Redis);
+    }
 
 
 }

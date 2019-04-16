@@ -79,9 +79,13 @@ class AccountService
      * @param array                       $userData 会员数据
      * @param \pizepei\staging\Controller $Controller 控制器
      * @return array|bool|string
+     * @throws \Exception
      */
     public function logon(array $config,array $Request,array $userData,Controller $Controller)
     {
+        /**
+         * 判断可登录的用户
+         */
 
         /**
          * 查询密码错误限制
@@ -98,6 +102,7 @@ class AccountService
          *          2、在强制用户下线时：项目全局强制可通过修改项目logon_token_salt，单一用户相关用户logon_token_salt
          *          3、由于是jwt方式用户logon_token_salt要注意缓存存在和数据安全
          */
+
         /**
          * 实例化密码类
          * 验证是否密码正确
@@ -149,118 +154,48 @@ class AccountService
             'sub'=>'userLogon',//主题number
             'period_pattern'=>$userData['logon_token_period_pattern'],
             'period_time'=>$userData['logon_token_period_time'],
+            'exp'=>$this->logoExp($userData['logon_token_period_pattern'],$userData['logon_token_period_time']),
         ];
+
         return $this->setLogonJwt('common',$Payload,$userData['logon_token_salt'],'number');
 
-
-        //$this->logonRestrictPeriod($userData);
-
-        return $this->logonRestrict($userData,$Controller);
-
     }
 
     /**
-     * @param array                       $userData
-     * @param \pizepei\staging\Controller $Controller
+     * 获取登录有效期
+     * @param $periodPattern
+     * @param $periodTime
+     * @return float|int|string
      */
-    public function logonRestrict(array $userData,Controller $Controller)
+    public function logoExp($periodPattern ,$periodTime)
     {
-        /**
-         * 判断登录限制
-         * 同时登录数
-         * 使用redis存储密码错误信息、登录设备
-         */
-        /**
-         * 实例化redis
-         */
-        /**
-         * 判断是否同时在线限制
-         */
-        return [];
-    }
-    
-    protected function logonRestrictPeriod(array $userData,$Type=true)
-    {
-        /**
-         * jwt 缓存
-         */
-        if($Type){
-            $Redis = Redis::init();
-            $data = [
-                'time'=>time(),
-                'period'=>time()+30,
-                'id'=>$userData['id'],
-                'Last_operating_time'=>time(),
-                'logon_token_period_pattern'=>$userData['logon_token_period_pattern'],
-                'logon_token_period_time'=>$userData['logon_token_period_time']
-            ];
-            $Redis->hset('user-logon-JWT:'.$userData['id'],'signature',json_encode($data));
-            $Redis->hset('user-logon-JWT:'.$userData['id'],'signature2',json_encode($data));
-            /**
-             * 查询出所有的的设备
-             */
-            $jwtList = $Redis->hgetall('user-logon-JWT:'.$userData['id']);
-            var_dump($jwtList);
-
-            if(!empty($jwtList)){
-                /**
-                 * 有设备在jwt判断是否有效无效删除
-                 */
-                foreach($jwtList as $key=>$value)
-                {
-
-                }
-            }
+        $exp = '';
+        $h = 60*60*60;
+        switch($periodPattern)
+        {
+            case 1://谨慎（分钟为单位）
+                $exp = 60*$periodTime;
+                break;
+            case 2://常规（小时为单位）
+                $exp = $h*$periodTime;
+                break;
+            case 3://方便（天为单位）
+                $exp = $periodTime*$h*24;
+                break;
+            case 4://游客（单位分钟没有操作注销
+                $exp = $periodTime*60;
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            default:
         }
-
+        return $exp;
+        //登录token有效期
     }
-    /**
-     * 密码错误限制
-     * @param array $userData
-     * @param bool  $Type  true 查询是否成功限制 false 设置错误缓存
-     * @return bool|string
-     */
-    protected function passwordWrongLock(array$userData,$Type=true)
-    {
-        $Redis = Redis::init();
-
-        if($Type){
-            /**
-             * 查询密码错误
-             */
-            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');//查，取值
-            if($password_wrong_count){
-                /**
-                 * 判断密码错误数
-                 */
-                if($password_wrong_count >= $userData['password_wrong_count']){
-                    $password_wrong_time = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time');//查，取值【value|false】
-
-                    if(((time()-$password_wrong_time)/60) >$userData['password_wrong_lock'])
-                    {
-                        /**
-                         * 修改成为数量为0
-                         */
-                        $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',0);
-                    }else{
-                        return '密码错误超限:'.round(($userData['password_wrong_lock']-((time()-$password_wrong_time)/60))).'分钟后解除限制';
-                    }
-                }
-            }
-            return false;
-        }else{
-            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');
-            if($password_wrong_count){
-                $password_wrong_count = $password_wrong_count+1;
-            }else{
-                $password_wrong_count = 1;
-            }
-            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',$password_wrong_count);
-            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time',time());
-        }
 
 
-    }
     /**
      * @Author pizepei
      * @Created 2019/3/30 21:35
@@ -313,7 +248,6 @@ class AccountService
             }
         }else{
             return $Controller->succeed($AccountModel,'修改错误');
-
         }
         return $Controller->succeed($AccountModel,'修改成功');
 
@@ -338,8 +272,6 @@ class AccountService
         $jwtArray = $JsonWebToken->setJWT($Payload,\Config::JSON_WEB_TOKEN_SECRET[$secret],$TokenSalt,$TokenSaltName);
         /**
          * redis key
-         *      'user-logon-JWT:signature'.$userData['id']
-         * logon_token_salt
          */
          $logonSignature= $Redis->get('user-logon-jwt-info:'.$Payload['number'].':'.$jwtArray['signature']);
          if(!empty($logonSignature)){
@@ -351,11 +283,9 @@ class AccountService
         $Redis->setex('user-logon-jwt-info:'.$Payload['number'].':'.$jwtArray['signature'],$jwtArray['exp'],json_encode($Payload));
         $this->logonTokenSalt($Payload['number'],$TokenSalt);
 
-        $decodeJWT = $JsonWebToken->decodeJWT($jwtArray['str'],\Config::JSON_WEB_TOKEN_SECRET[$secret],$Redis);
         //KEYS
         return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT??[]];
     }
-
     /**
      * 当前登录设备数量
      * @param string $number
@@ -371,7 +301,6 @@ class AccountService
         }
         return count($Redis->keys('user-logon-jwt-info:'.$number.'*'));
     }
-
     /**
      * 登录TokenSalt获取与设置
      * @param string $number
@@ -394,19 +323,64 @@ class AccountService
      * @Author pizepei
      * @Created 2019/4/14 11:28
      *
-     * @title  方法标题（一般是方法的简称）
-     * @explain 一般是方法功能说明、逻辑说明、注意事项等。
+     * @title 验证解密
+     * @throws \Exception
      */
-    public function decodeLogonJwt()
+    public function decodeLogonJwt($secret,$jwtStr,$Redis)
     {
         /**
          * 获取缓存
          */
+        $JsonWebToken = new JsonWebToken();
+
+        $decodeJWT = $JsonWebToken->decodeJWT($jwtStr,\Config::JSON_WEB_TOKEN_SECRET[$secret],$Redis);
+        return $decodeJWT;
     }
-
-
     /**
-     * 修改
-     * logon_token_salt
+     * 密码错误限制
+     * @param array $userData
+     * @param bool  $Type  true 查询是否成功限制 false 设置错误缓存
+     * @return bool|string
      */
+    protected function passwordWrongLock(array$userData,$Type=true)
+    {
+        $Redis = Redis::init();
+
+        if($Type){
+            /**
+             * 查询密码错误
+             */
+            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');//查，取值
+            if($password_wrong_count){
+                /**
+                 * 判断密码错误数
+                 */
+                if($password_wrong_count >= $userData['password_wrong_count']){
+                    $password_wrong_time = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time');//查，取值【value|false】
+
+                    if(((time()-$password_wrong_time)/60) >$userData['password_wrong_lock'])
+                    {
+                        /**
+                         * 修改成为数量为0
+                         */
+                        $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',0);
+                    }else{
+                        return '密码错误超限:'.round(($userData['password_wrong_lock']-((time()-$password_wrong_time)/60))).'分钟后解除限制';
+                    }
+                }
+            }
+            return false;
+        }else{
+            $password_wrong_count = $Redis->hget('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count');
+            if($password_wrong_count){
+                $password_wrong_count = $password_wrong_count+1;
+            }else{
+                $password_wrong_count = 1;
+            }
+            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',$password_wrong_count);
+            $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_time',time());
+        }
+
+
+    }
 }
