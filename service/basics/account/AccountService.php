@@ -157,7 +157,8 @@ class AccountService
             'exp'=>$this->logoExp($userData['logon_token_period_pattern'],$userData['logon_token_period_time']),
         ];
 
-        return $this->setLogonJwt('common',$Payload,$userData['logon_token_salt'],'number');
+        $result = $this->setLogonJwt('common',$Payload,$userData['logon_token_salt'],'number');
+        return $result;
 
     }
 
@@ -284,7 +285,7 @@ class AccountService
         $this->logonTokenSalt($Payload['number'],$TokenSalt);
 
         //KEYS
-        return ['jwtArray'=>$jwtArray,'decodeJWT'=>$decodeJWT??[]];
+        return ['jwtArray'=>$jwtArray];
     }
     /**
      * 当前登录设备数量

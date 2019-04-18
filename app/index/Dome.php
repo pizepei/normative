@@ -471,10 +471,10 @@ class Dome extends Controller
         $AccountService = new AccountService();
 
         $result =  $AccountService->logon(\Config::ACCOUNT,$Request->post(),$Account,$this);
-        if(isset($result['result']) && $result['result']){
+        if(isset($result['jwtArray']['str']) && $result['jwtArray']){
             return $this->succeed([
                 'result'=>$result,
-                'Account'=>$Account,
+                'access_token'=>$result['jwtArray']['str']
             ],'登录成功');
         }
         return $result;
