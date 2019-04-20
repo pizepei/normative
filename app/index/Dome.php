@@ -6,26 +6,20 @@
  * Time: 15:25
  * @baseAuth 基础权限继承（加命名空间的类名称）
  * @title 简单的dome
- * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
+ * @authGroup [user:用户相关,admin:管理员相关] 权限组列表（在显示权限时继续分组）
  * @basePath /dome/
  */
 
 namespace app\index;
 
 
-use function AlibabaCloud\Client\json;
 use model\basics\account\AccountModel;
-use config\app\SetConfig;
 use model\TerminalInfoModel;
 use model\TestModel;
-use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
-use pizepei\model\db\Db;
-use pizepei\model\db\Model;
 use pizepei\model\db\TableAlterLogModel;
 use pizepei\model\redis\Redis;
-use pizepei\service\encryption\PasswordHash;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
 use pizepei\staging\Controller;
@@ -33,7 +27,6 @@ use pizepei\staging\Request;
 use pizepei\staging\Route;
 use pizepei\terminalInfo\TerminalInfo;
 use service\basics\account\AccountService;
-use test\Test;
 
 class Dome extends Controller
 {
@@ -77,6 +70,8 @@ class Dome extends Controller
      *      id [int] 年级id
      * @title  演示请求参数与数据返回
      * @explain  测试路由的参数过滤，返回数据过滤
+     * @authGroup 权限分组对应文件头部 @authGroup
+     * @authExpand [staff:员工权限,admin:管理员权限]  权限拓展在选择接口级别的权限时可选，进入控制器后可使用控制器方法获取到当前用户角色的权限
      * @router get param/:id[string]/:name[string]
      * @throws \Exception
      */
