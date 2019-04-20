@@ -31,34 +31,34 @@ class FestivalModel extends Model
             'TYPE'=>'varchar(255)', 'DEFAULT'=>'', 'COMMENT'=>'备注说明',
         ],
         'year'=>[
-            'TYPE'=>'int(4)', 'DEFAULT'=>'', 'COMMENT'=>'年',
+            'TYPE'=>'int(4)', 'DEFAULT'=>'1997', 'COMMENT'=>'年',
         ],
         'month'=>[
-            'TYPE'=>'int(2)', 'DEFAULT'=>'', 'COMMENT'=>'月',
+            'TYPE'=>'int(2)', 'DEFAULT'=>'00', 'COMMENT'=>'月',
         ],
         'day'=>[
-            'TYPE'=>'int(2)', 'DEFAULT'=>'', 'COMMENT'=>'日',
+            'TYPE'=>'int(2)', 'DEFAULT'=>'00', 'COMMENT'=>'日',
         ],
         'hour'=>[
-            'TYPE'=>'int(2)', 'DEFAULT'=>'', 'COMMENT'=>'小时（24小时）',
+            'TYPE'=>'int(2)', 'DEFAULT'=>'00', 'COMMENT'=>'小时（24小时）',
         ],
         'minute'=>[
-            'TYPE'=>'int(2)', 'DEFAULT'=>'', 'COMMENT'=>'分钟',
+            'TYPE'=>'int(2)', 'DEFAULT'=>'00', 'COMMENT'=>'分钟',
         ],
         'second'=>[
-            'TYPE'=>'int(2)', 'DEFAULT'=>'', 'COMMENT'=>'秒',
+            'TYPE'=>'int(2)', 'DEFAULT'=>'00', 'COMMENT'=>'秒',
         ],
         'time'=>[
-            'TYPE'=>'int(10)', 'DEFAULT'=>'', 'COMMENT'=>'时间戳',
+            'TYPE'=>'int(10)', 'DEFAULT'=>0, 'COMMENT'=>'时间戳',
         ],
         'calendar'=>[
-            'TYPE'=>"ENUM('1','2','3')", 'DEFAULT'=>'', 'COMMENT'=>'日历类型1农历 2 阳历',
+            'TYPE'=>"ENUM('1','2','3')", 'DEFAULT'=>'2', 'COMMENT'=>'日历类型1农历 2 阳历',
         ],
         'remind_count'=>[
             'TYPE'=>"ENUM('1','2','3','4','5','6')", 'DEFAULT'=>'1', 'COMMENT'=>'提醒数',
         ],
         'ahead_remind_type'=>[
-            'TYPE'=>"ENUM('1','2','3','4','5')", 'DEFAULT'=>'', 'COMMENT'=>'提前提醒类型1、天2、小时3、分钟4、秒5、倒计时',
+            'TYPE'=>"ENUM('1','2','3','4','5')", 'DEFAULT'=>'1', 'COMMENT'=>'提前提醒类型1、天2、小时3、分钟4、秒5、倒计时',
         ],
         'ahead_remind'=>[
             'TYPE'=>"int(10)", 'DEFAULT'=>0, 'COMMENT'=>'提前提醒数',
@@ -88,8 +88,15 @@ class FestivalModel extends Model
          * FULLTEXT 文本
          */
         'INDEX'=>[
-            ['TYPE'=>'UNIQUE','FIELD'=>'number','NAME'=>'number','USING'=>'BTREE','COMMENT'=>'编号固定开头的账号编码'],
+            //['TYPE'=>'UNIQUE','FIELD'=>'number','NAME'=>'number','USING'=>'BTREE','COMMENT'=>'编号固定开头的账号编码'],
             ['TYPE'=>'KEY','FIELD'=>'account_id','NAME'=>'account_id','USING'=>'BTREE','COMMENT'=>'账号id'],
+            ['TYPE'=>'KEY','FIELD'=>'type','NAME'=>'type','USING'=>'BTREE','COMMENT'=>'类型'],
+            ['TYPE'=>'KEY','FIELD'=>'year','NAME'=>'year','USING'=>'BTREE','COMMENT'=>'年'],
+            ['TYPE'=>'KEY','FIELD'=>'month','NAME'=>'month','USING'=>'BTREE','COMMENT'=>'月'],
+            ['TYPE'=>'KEY','FIELD'=>'day','NAME'=>'day','USING'=>'BTREE','COMMENT'=>'日'],
+
+
+
         ],//索引 KEY `ip` (`ip`) COMMENT 'sss 'user_name
 
         'PRIMARY'=>'id',//主键

@@ -9,7 +9,9 @@
 namespace model\basics\account;
 
 
-class AccountOperationsModel
+use pizepei\model\db\Model;
+
+class AccountOperationsModel extends Model
 {
 
 }
