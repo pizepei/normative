@@ -22,6 +22,8 @@ use pizepei\config\JsonWebTokenConfig;
 use pizepei\func\Func;
 use pizepei\model\cache\Cache;
 use pizepei\model\db\Db;
+use pizepei\model\db\Model;
+use pizepei\model\db\TableAlterLogModel;
 use pizepei\model\redis\Redis;
 use pizepei\service\encryption\PasswordHash;
 use pizepei\service\jwt\JsonWebToken;
@@ -156,6 +158,25 @@ class Dome extends Controller
         $TerminalInfo       = TerminalInfoModel::table();
         $this->succeed(['location' => $TerminalInfo->insert([$data, $data, $data], false), 'path' => $Request->path(), 'input' => $Request->input()]);
     }
+    /**
+     * @param \pizepei\staging\Request $Request
+     *      path [object] 路径参数
+     *           id [string] path_id
+     *           name [string] path_id
+     * @return array [json]
+     * @title  命令行cli模式
+     * @explain 命令行cli模式运行方式: php index_cli.php --route /dome/cli/001/pizpe(命令行模式请求参数请使用path方式)
+     * @router get cliDbInitStructure
+     * @throws \Exception
+     */
+    public function cliDbInitStructure(Request $Request)
+    {
+
+        $model = TableAlterLogModel::table();
+        $model->initStructure();
+    }
+
+
 
     /**
      * @return array [json]
