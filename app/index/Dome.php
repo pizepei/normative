@@ -4,14 +4,31 @@
  * User: pizepei
  * Date: 2018/8/6
  * Time: 15:25
- * @baseAuth 基础权限继承（加命名空间的类名称）
+ * @baseAuth UserAuth:aut
  * @title 简单的dome
- * @authGroup [user:用户相关,admin:管理员相关] 权限组列表（在显示权限时继续分组）
+ * @authGroup [user:用户相关,admin:管理员相关] 权限组列表（在显示权限时继续分组）资源
  * @basePath /dome/
  */
 
 namespace app\index;
 
+/**
+ * 模块资源 （用户管理、商品管理）
+ *     操作资源  增 删 改 查
+ *
+ * 路由方法中的权限资源：每个路由都可注册到不同的操作资源只
+ *
+ * 在显示操作资源是：首先列出模块-》列出操作资源-》每个操作资源只注册的路由方法
+ *
+ * 选择并且保存时：保存的是每个路由的唯一权限代码
+ * 判断权限是是直接判断路由权限代码是否在保存的列表中
+ *
+ *
+ * baseAuth 权限控制器  里面注册 模块资源
+ *
+ *方法路由：注册到不同操作权限资源里面用authGroup【admin.bbx:user.bbx】中文名字、注册扩展扩展authExtend  控制器：方法（方法里面有返回数据、）
+ *
+ */
 
 use model\basics\account\AccountModel;
 use model\TerminalInfoModel;
@@ -70,7 +87,6 @@ class Dome extends Controller
      *      id [int] 年级id
      * @title  演示请求参数与数据返回
      * @explain  测试路由的参数过滤，返回数据过滤
-     * @authGroup 权限分组对应文件头部 @authGroup
      * @authExpand [staff:员工权限,admin:管理员权限]  权限拓展在选择接口级别的权限时可选，进入控制器后可使用控制器方法获取到当前用户角色的权限
      * @router get param/:id[string]/:name[string]
      * @throws \Exception
@@ -233,7 +249,6 @@ class Dome extends Controller
      * @return array [json]
      * @title  获取缓存
      * @explain 获取缓存
-     * @authGroup 权限分组对应文件头部 @authGroup
      * @router get cache
      *
      */
@@ -265,7 +280,6 @@ class Dome extends Controller
      * @title   数据库操作->add
      * @explain 框架模型操作-.增加数据操作
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      * @router post db
      *
      */
@@ -289,7 +303,6 @@ class Dome extends Controller
      * @title  方法标题（一般是方法的简称）
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router get jwt
      */
@@ -313,7 +326,6 @@ class Dome extends Controller
      * @title  获取uuid
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router get uuid
      */
@@ -350,7 +362,6 @@ class Dome extends Controller
      * @title  获取随机数字
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router get int-rand
      */
@@ -370,7 +381,6 @@ class Dome extends Controller
      * @title  获取随机字符串
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router get str-rand debug:true
      */
@@ -432,7 +442,6 @@ class Dome extends Controller
      * @title  正则表达式
      * @explain 正则表达式实验
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router post preg_match
      */
@@ -459,8 +468,8 @@ class Dome extends Controller
      * @title  登录验证
      * @explain 登录验证
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
-     *
+     * @authGroup admin.del:删除账号操作,user.del:删除账号操作,user.add:添加账号操作
+     * @authExtend UserExtend.list:删除账号操作,UserExtend.add:删除账号操作
      * @router post logon
      */
     public function logon(Request $Request)
@@ -512,7 +521,6 @@ class Dome extends Controller
      * @title  注册账号
      * @explain 基础注册账号
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router post register
      */
@@ -536,7 +544,6 @@ class Dome extends Controller
      * @title  方法标题（一般是方法的简称）
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 修改密码
-     * @authGroup 权限分组对应文件头部 @authGroup
      * @throws \Exception
      * @router post changePassword
      */
@@ -564,12 +571,14 @@ class Dome extends Controller
      * @title  验证jwt
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 修改密码
-     * @authGroup 权限分组对应文件头部 @authGroup
+     * @authGroup admin.del:删除账号操作,user.del:删除账号操作,user.add:添加账号操作
+     * @authExtend UserExtend.list:删除账号操作
      * @throws \Exception
      * @router get decodeLogonJwt
      */
     public function decodeLogonJwt( Request $Request)
     {
+        // *方法路由：注册到不同操作权限资源里面用authGroup【admin.bbx:user.bbx】中文名字、注册扩展扩展authExtend  控制器：方法（方法里面有返回数据、）
         $AccountService = new AccountService();
         $Redis = Redis::init();
         return $AccountService->decodeLogonJwt('common',$Request->input('jwtStr'),$Redis);

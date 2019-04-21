@@ -59,7 +59,6 @@ class Index extends Controller
      *          updateAt [datetime]
      *
      * @authTiny [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup user
      * @router get  /router/:user[int]/:id[int]  auth:public
      */
     public function router($Request)

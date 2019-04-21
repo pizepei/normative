@@ -29,7 +29,6 @@ class Service
      * @title  方法标题（一般是方法的简称）
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup 权限分组对应文件头部 @authGroup
      *
      * @router get calendar/lunar/:date[string]
      */
