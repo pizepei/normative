@@ -468,7 +468,7 @@ class Dome extends Controller
      * @title  登录验证
      * @explain 登录验证
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup admin.del:删除账号操作,user.del:删除账号操作,user.add:添加账号操作
+     * @authGroup admin.del:删除账号操作,user.del:删除账英国号操作,user.add:添加账号操作
      * @authExtend UserExtend.list:删除账号操作,UserExtend.add:删除账号操作
      * @router post logon
      */
@@ -571,7 +571,7 @@ class Dome extends Controller
      * @title  验证jwt
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 修改密码
-     * @authGroup admin.del:删除账号操作,user.del:删除账号操作,user.add:添加账号操作
+     * @authGroup admin.del:删除管理员账号操作,user.del:删除账号操作,user.add:添加账号操作
      * @authExtend UserExtend.list:删除账号操作
      * @throws \Exception
      * @router get decodeLogonJwt
