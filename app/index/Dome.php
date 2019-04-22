@@ -169,23 +169,7 @@ class Dome extends Controller
         $TerminalInfo       = TerminalInfoModel::table();
         $this->succeed(['location' => $TerminalInfo->insert([$data, $data, $data], false), 'path' => $Request->path(), 'input' => $Request->input()]);
     }
-    /**
-     * @param \pizepei\staging\Request $Request
-     *      path [object] 路径参数
-     *           id [string] path_id
-     *           name [string] path_id
-     * @return array [json]
-     * @title  命令行cli模式
-     * @explain 命令行cli模式运行方式: php index_cli.php --route /dome/cli/001/pizpe(命令行模式请求参数请使用path方式)
-     * @router get cliDbInitStructure
-     * @throws \Exception
-     */
-    public function cliDbInitStructure(Request $Request)
-    {
 
-        $model = TableAlterLogModel::table();
-        $model->initStructure();
-    }
 
 
 
@@ -562,18 +546,15 @@ class Dome extends Controller
     /**
      * @Author pizepei
      * @Created 2019/3/30 21:33
-     *
      * @param \pizepei\staging\Request $Request
-     *      get [object] get
-     *          jwtStr [string required] jwt
      * @return array [json]
-     *
      * @title  验证jwt
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 修改密码
      * @authGroup admin.del:删除管理员账号操作,user.del:删除账号操作,user.add:添加账号操作
      * @authExtend UserExtend.list:删除账号操作
      * @throws \Exception
+     * @baseAuth UserAuth:test
      * @router get decodeLogonJwt
      */
     public function decodeLogonJwt( Request $Request)
@@ -581,7 +562,8 @@ class Dome extends Controller
         // *方法路由：注册到不同操作权限资源里面用authGroup【admin.bbx:user.bbx】中文名字、注册扩展扩展authExtend  控制器：方法（方法里面有返回数据、）
         $AccountService = new AccountService();
         $Redis = Redis::init();
-        return $AccountService->decodeLogonJwt('common',$Request->input('jwtStr'),$Redis);
+        return $_SERVER;
+        return $AccountService->decodeLogonJwt('common',$Request->input('access_token'),$Redis);
     }
 
 

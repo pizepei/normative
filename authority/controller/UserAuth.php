@@ -9,7 +9,17 @@
 namespace authority\controller;
 
 
-class UserAuth
-{
 
+use pizepei\staging\Authority;
+
+class UserAuth extends Authority
+{
+    /**
+     * 模式
+     * @param $pattern
+     */
+    public function test()
+    {
+        $this->WhetherTheLogin();
+    }
 }
