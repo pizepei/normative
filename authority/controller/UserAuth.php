@@ -50,7 +50,7 @@ class UserAuth extends Authority
          * 路由信息
          */
         $this->jurisdictionTidy($jurisdictionData);
-
+        var_dump($this->authExtend);
         return  ['authExtend'=>$this->authExtend,'Payload'=>$this->Payload];
     }
 }
