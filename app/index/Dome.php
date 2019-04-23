@@ -562,8 +562,8 @@ class Dome extends Controller
         // *方法路由：注册到不同操作权限资源里面用authGroup【admin.bbx:user.bbx】中文名字、注册扩展扩展authExtend  控制器：方法（方法里面有返回数据、）
         $AccountService = new AccountService();
         $Redis = Redis::init();
-        return $_SERVER;
-        return $AccountService->decodeLogonJwt('common',$Request->input('access_token'),$Redis);
+        return ['authExtend'=>$this->authExtend,'Payload'=>$this->Payload];
+        //return $AccountService->decodeLogonJwt('common',$Request->input('access_token'),$Redis);
     }
 
 
