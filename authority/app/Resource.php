@@ -6,7 +6,7 @@
  * @title 资源定义
  */
 
-namespace authority;
+namespace authority\app;
 
 
 class Resource
@@ -25,7 +25,7 @@ class Resource
     }
 
     /**
-     * 注册主模块
+     * 注册主模块(一级菜单)
      */
     const mainResource = [
             'admin'=>'管理员管理',
@@ -34,14 +34,17 @@ class Resource
 
 
     /**
-     * 管理员管理
+     * 管理员管理（一级的 二级菜单以及三级菜单）
      * @var array
      */
     protected  static $admin=[
-        'del'=>'删除管理员',
-        'list'=>'获取管理员列表',
-        'info'=>'获取管理员信息信息',
-        'menu'=>'后台菜单'
+        'menu'=>[
+            'title'=>'后台菜单管理',
+            'list'=>[
+                    'getMenu'=>['获取后台菜单'],
+            ],
+        ],
+
     ];
 
     /**

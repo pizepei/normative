@@ -6,7 +6,7 @@
  * @title 用户权限控制器
  */
 
-namespace authority\controller;
+namespace authority\app\controller;
 
 
 

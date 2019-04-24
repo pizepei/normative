@@ -88,7 +88,6 @@ class Dome extends Controller
      *      id [int] 年级id
      * @title  演示请求参数与数据返回
      * @explain  测试路由的参数过滤，返回数据过滤
-     * @authExpand [staff:员工权限,admin:管理员权限]  权限拓展在选择接口级别的权限时可选，进入控制器后可使用控制器方法获取到当前用户角色的权限
      * @router get param/:id[string]/:name[string]
      * @throws \Exception
      */
@@ -453,8 +452,6 @@ class Dome extends Controller
      * @title  登录验证
      * @explain 登录验证
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup admin.del:删除账号操作,user.del:删除账英国号操作,user.add:添加账号操作
-     * @authExtend UserExtend.list:删除账号操作,UserExtend.add:删除账号操作
      * @router post logon
      */
     public function logon(Request $Request)
@@ -552,8 +549,6 @@ class Dome extends Controller
      * @title  验证jwt
      * @explain 一般是方法功能说明、逻辑说明、注意事项等。
      * @authTiny 修改密码
-     * @authGroup admin.del:删除管理员账号操作,user.del:删除账号操作,user.add:添加账号操作
-     * @authExtend UserExtend.list:删除账号操作
      * @throws \Exception
      * @baseAuth UserAuth:test
      * @router get decodeLogonJwt

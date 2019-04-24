@@ -8,7 +8,6 @@
 
 define('__INIT_MEMORY_GET_USAGE__',memory_get_usage()/1024);//系统初始化内存
 define('__INIT_MICROTIME__',microtime(true));//系统初始化时间
-$init_microtime = microtime(true);
 
 define('__APP__','app');//定义应用目录
 

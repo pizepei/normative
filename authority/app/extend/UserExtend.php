@@ -6,7 +6,7 @@
  * @title 用户相关的扩展
  */
 
-namespace authority\extend;
+namespace authority\app\extend;
 
 
 class UserExtend
