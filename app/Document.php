@@ -12,6 +12,7 @@
  */
 
 namespace app;
+use authority\app\Resource;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
@@ -21,15 +22,33 @@ use service\document\DocumentService;
 class Document extends Controller
 {
     protected $path  = '';
+
+    ///**
+    // * @return array [html]
+    // * @title  文档入口（开发助手）
+    // * @explain 文档入口（API文档、权限文档、公共资源文档）
+    // * @router get index debug:true
+    // * @throws \Exception
+    // */
+    //public function index()
+    //{
+    //    //$Request->path();
+    //    $this->view('Document');
+    //}
+
     /**
+     * @param \pizepei\staging\Request $Request
+     *      path [object] 路径参数
+     *          type [string] 路径
      * @return array [html]
      * @title  文档入口（开发助手）
      * @explain 文档入口（API文档、权限文档、公共资源文档）
      * @router get index debug:true
      * @throws \Exception
      */
-    public function index()
+    public function index(Request $Request)
     {
+        //$Request->path();
         $this->view('Document');
     }
 
@@ -164,5 +183,43 @@ class Document extends Controller
         }
         return $this->succeed($infoData??[],'获取'.$input['index'].'成功',0);
     }
+
+
+
+
+
+
+
+    /**
+     * @Author pizepei
+     * @Created 2019/4/25 14:01
+     *
+     * @param \pizepei\staging\Request $Request
+     *      get [object] get参数
+     *          father [string required] 父路径
+     *          index [string required] 当前路径
+     *          type [string required] 参数类型
+     * @return array [json]
+     *      data [objectList] 数据
+     *          field [string] 参数名字
+     *          type [string] 参数数据类型
+     *          fieldExplain [string] 参数说明
+     *          fieldRestrain [string] 参数约束
+     * @title  获取权限
+     * @explain  根据点击侧边导航获取对应的获取API文档信息
+     * @router get jurisdiction-list debug:true
+     * @throws \Exception
+     */
+    public function jurisdictionList(Request $Request)
+    {
+        $Route = Route::init();
+        return $this->succeed([
+            'Permissions'=>$Route->Permissions,
+            'initJurisdictionList'=>Resource::initJurisdictionList($Route->Permissions)
+        ]);
+    }
+
+
+
 
 }

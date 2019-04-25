@@ -26,7 +26,7 @@ class Menu extends Controller
      * @title  获取菜单列表
      * @explain 获取菜单列表（权限不同内容不同）
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup admin.menu.getMenu:获取后台菜单,user.del.setMenu:设置后台菜单
+     * @authGroup basics.menu.getMenu:获取后台菜单,basics.index.menu:获取首页导航,system.admin.getAdmin:获取首页导航
      * @authExtend UserExtend.list:删除账号操作
      * @baseAuth UserAuth:test
      * @router get menu-list
@@ -54,8 +54,7 @@ class Menu extends Controller
      *
      * @title  用户信息
      * @explain 简单用户信息
-     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @baseAuth UserAuth:test
+     * @authGroup basics.index.user:获取后台菜单
      * @router get session
      */
     public function session(Request $Request)
@@ -74,7 +73,7 @@ class Menu extends Controller
      * @title  用户信息
      * @explain 简单用户信息
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     *
+     * @authGroup basics.index.message:控制台新信息
      * @router get message/new
      */
     public function messageNew(Request $Request)

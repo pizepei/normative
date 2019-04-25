@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>开发助手</title>
-    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">开发助手</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
+        <ul class="layui-nav layui-layout-left" lay-filter="nav-filter2">
             <li class="layui-nav-item"><a href="">API文档</a></li>
             <li class="layui-nav-item"><a href="">权限文档</a></li>
             <li class="layui-nav-item"><a href="">状态码文档</a></li>
@@ -137,12 +137,20 @@
         © pizepei.com - 框架
     </div>
 </div>
-<script src="../layui/layui.js"></script>
+<script src="/layui/layui.js"></script>
 <script>
+
+    layui.config({
+        base: '/extends/',
+    }).extend({
+        authtree: 'authtree',
+    });
+
     //JavaScript代码区域
-    layui.use(['element','table','laytpl','jquery','laytpl'], function(){
+    layui.use(['element','table','laytpl','jquery','laytpl', 'authtree',], function(){
         var element = layui.element,
-        laytpl = layui.laytpl, $ =layui.jquery,laytpl=layui.laytpl,
+        laytpl = layui.laytpl, $ =layui.jquery,laytpl=layui.laytpl, authtree = layui.authtree,
+
         table = layui.table;
         // 菜单点击事件
         element.on('nav(nav-filter)', function(elem){
@@ -463,6 +471,54 @@
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+<script id="authtree" type="text/html">
+
+
+<div class="layui-col-md6 layui-col-md-offset1">
+    <fieldset class="layui-elem-field layui-field-title"><legend>权限树扩展分享</legend></fieldset>
+    <!-- 此扩展能递归渲染一个权限树，点击深层次节点，父级节点中没有被选中的节点会被自动选中，单独点击父节点，子节点会全部 选中/去选中 -->
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input class="layui-input" type="text" name="name" placeholder="请输入角色名称" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择权限</label>
+            <div class="layui-input-block">
+                <div id="LAY-auth-tree-index"></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit" lay-submit lay-filter="LAY-auth-tree-submit">提交</button>
+                <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</script>
+
+
+
+
+
+
+
+
 
 
 
