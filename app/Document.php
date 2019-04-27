@@ -43,15 +43,15 @@ class Document extends Controller
      * @return array [html]
      * @title  文档入口（开发助手）
      * @explain 文档入口（API文档、权限文档、公共资源文档）
-     * @router get index debug:true
+     * @router get index/:type[int]/ debug:true
      * @throws \Exception
      */
     public function index(Request $Request)
     {
-        //$Request->path();
-        $this->view('Document');
+        $Request->path();
+        //var_dump($Request->path());
+        //return $this->view('Document');
     }
-
     /**
      * @return array [json]
      * @title  API文档 侧边导航
@@ -183,11 +183,6 @@ class Document extends Controller
         }
         return $this->succeed($infoData??[],'获取'.$input['index'].'成功',0);
     }
-
-
-
-
-
 
 
     /**

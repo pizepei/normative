@@ -159,7 +159,7 @@
             // console.log(elem.context.innerText); //得到当前点击的DOM对象
 
             $.ajax({//异步请求返回给后台
-                url:'index-nav',
+                url:'/document/index-nav',
                 type:'GET',
                 data:{father:elem.context.rel,index:elem.context.name},
                 dataType:'json',
@@ -183,7 +183,7 @@
         });
         element.render('nav')
         $.ajax({//异步请求返回给后台
-            url:'nav-list',
+            url:'/document/nav-list',
             type:'GET',
             data:{},
             dataType:'json',
@@ -225,7 +225,7 @@
             //这里获取到数据执行显示
             table.render({
                 elem: '#request-table-get'
-                ,url:'request-param'
+                ,url:'/document/request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'get'}
                 // ,toolbar: '#toolbarDemo-get'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
@@ -246,7 +246,7 @@
             //这里获取到数据执行显示
             table.render({
                 elem: '#request-table-post'
-                ,url:'request-param'
+                ,url:'/document/request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'post'}
                 // ,toolbar: '#toolbarDemo-post'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
@@ -267,7 +267,7 @@
             //这里获取到数据执行显示
             table.render({
                 elem: '#request-table-rule'
-                ,url:'request-param'
+                ,url:'/document/request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
                 // ,toolbar: '#toolbarDemo-rule'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'rule'
@@ -288,7 +288,7 @@
             //这里获取到数据执行显示
             table.render({
                 elem: '#request-table-path'
-                ,url:'request-param'
+                ,url:'/document/request-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'path'}
                 // ,toolbar: '#toolbarDemo-path'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
@@ -309,7 +309,7 @@
 
             table.render({
                 elem: '#return-table-json'
-                ,url:'return-param'
+                ,url:'/document/return-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'json'}
                 // ,toolbar: '#toolbarDemo-path'
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
@@ -330,7 +330,7 @@
 
             table.render({
                 elem: '#return-table-xml'
-                ,url:'return-param'
+                ,url:'/document/return-param'
                 ,where:{father:elem.context.rel,index:elem.context.name,type:'xml'}
                 ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
                 ,cols: [
