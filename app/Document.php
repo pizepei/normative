@@ -22,20 +22,6 @@ use service\document\DocumentService;
 class Document extends Controller
 {
     protected $path  = '';
-
-    ///**
-    // * @return array [html]
-    // * @title  文档入口（开发助手）
-    // * @explain 文档入口（API文档、权限文档、公共资源文档）
-    // * @router get index debug:true
-    // * @throws \Exception
-    // */
-    //public function index()
-    //{
-    //    //$Request->path();
-    //    $this->view('Document');
-    //}
-
     /**
      * @param \pizepei\staging\Request $Request
      *      path [object] 路径参数
@@ -43,14 +29,13 @@ class Document extends Controller
      * @return array [html]
      * @title  文档入口（开发助手）
      * @explain 文档入口（API文档、权限文档、公共资源文档）
-     * @router get index/:type[int]/ debug:true
+     * @router get index/:type[string].html debug:true
      * @throws \Exception
      */
     public function index(Request $Request)
     {
-        $Request->path();
-        //var_dump($Request->path());
-        //return $this->view('Document');
+        $Request->path('type');
+        return $this->view($Request->path('type'));
     }
     /**
      * @return array [json]
