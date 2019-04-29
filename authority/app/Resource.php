@@ -71,7 +71,7 @@ class Resource
                 $atDataList[] = $data;
             }
         }
-        $atData[] = $atDataList;
+        $atData = $atDataList;
 
     }
 
@@ -86,7 +86,7 @@ class Resource
     {
         foreach($valueData as  $key=>$value)
         {
-            $data['checked'] = false;//是否选中
+            $data['checked'] = true;//是否选中
             $data['name'] = $value['explain'];//名字
             $data['value'] = $value['tag'];//代码
             $data['return'] = ['return'];//路由上配置的返回信息（规划中）

@@ -193,10 +193,28 @@ class Document extends Controller
     public function jurisdictionList(Request $Request)
     {
         $Route = Route::init();
-        return $this->succeed([
-            'Permissions'=>$Route->Permissions,
-            'initJurisdictionList'=>Resource::initJurisdictionList($Route->Permissions)
-        ]);
+        return $this->succeed(json_decode('{
+            "list": [
+      { "id": 1, "name": "用户管理", "pid": 0,"disabled":true },
+      { "id": 2, "name": "用户组管理", "pid": 0 },
+      { "id": 3, "name": "角色管理", "pid": 2 },
+      { "id": 4, "name": "添加角色", "pid":  3},
+      { "id": 5, "name": "角色列表", "pid": 3 },
+      { "id": 6, "name": "管理员管理", "pid": 0 },
+      { "id": 7, "name": "添加管理员", "pid": 6 },
+      { "id": 8, "name": "管理员列表", "pid": 6 ,"disabled":true}
+    ],
+    "checkedId": [ 1,  2, 3, 4 ]
+  }',true));
+
+
+
+
+
+        //return $this->succeed([
+        //    'Permissions'=>$Route->Permissions,
+        //    'initJurisdictionList'=>Resource::initJurisdictionList($Route->Permissions)
+        //]);
     }
 
 

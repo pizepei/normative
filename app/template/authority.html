@@ -125,8 +125,19 @@
             url: '/document/jurisdiction-list',
             dataType: 'json',
             success: function(data){
-                // 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
-                authtree.render('#LAY-auth-tree-index', data.data.initJurisdictionList, {
+
+                var trees = authtree.listConvert(data.data.list, {
+                    primaryKey: 'id'
+                    ,startPid: 0
+                    ,parentKey: 'pid'
+                    ,nameKey: 'name'
+                    ,valueKey: 'id'
+                    ,checkedKey: data.data.checkedId
+                });
+
+
+                // // 渲染时传入渲染目标ID，树形结构数据（具体结构看样例，checked表示默认选中），以及input表单的名字
+                authtree.render('#LAY-auth-tree-index', trees, {
                     inputname: 'ids[]'
                     ,layfilter: 'lay-check-auth'
                     // ,dblshow: true
