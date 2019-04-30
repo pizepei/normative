@@ -26,7 +26,7 @@ class Menu extends Controller
      * @title  获取菜单列表
      * @explain 获取菜单列表（权限不同内容不同）
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
-     * @authGroup basics.menu.getMenu:获取后台菜单,basics.index.menu:获取首页导航,system.admin.getAdmin:获取首页导航
+     * @authGroup basics.menu.getMenu:获取后台菜单1,basics.index.menu:获取首页导航2,system.admin.getAdmin:获取首页导航3,system.admin.getAdmin:获取首页导航4
      * @authExtend UserExtend.list:删除账号操作
      * @baseAuth UserAuth:test
      * @router get menu-list
