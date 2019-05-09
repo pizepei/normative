@@ -20,7 +20,40 @@
         "pizepei/wechat":"dev-master",
         "pizepei/normative-addons":"dev-master"
     },
-
+    "repositories": {
+        "0": {
+            "type": "git",
+            "url": "git@github.com:pizepei/config-gm.git"
+        },
+        "1": {
+            "type": "git",
+            "url": "git@github.com:pizepei/model.git"
+        },
+        "2": {
+            "type": "git",
+            "url": "git@github.com:pizepei/func.git"
+        },
+        "4": {
+            "type": "git",
+            "url": "git@github.com:pizepei/staging.git"
+        },
+        "5": {
+            "type": "git",
+            "url": "git@github.com:pizepei/TerminalInfo.git"
+        },
+        "6": {
+            "type": "git",
+            "url": "git@github.com:pizepei/wechat.git"
+        },
+        "7": {
+            "type": "git",
+            "url": "git@github.com:pizepei/normative-addons.git"
+        },
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    },
     "autoload": {
         "psr-4": {
             "app\\": "app/",
