@@ -11,14 +11,14 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.0.0",
         "pizepei/config-ng": "dev-master",
         "pizepei/model": "dev-master",
         "pizepei/func": "dev-master",
         "pizepei/staging":"dev-master",
         "pizepei/terminal-info":"dev-master",
         "pizepei/wechat":"dev-master",
-        "pizepei/normative-addons":"dev-master"
+        "pizepei/normative-addons":"dev-master",
+        "php": ">=7.0.0"
     },
     "repositories": {
         "0": {
