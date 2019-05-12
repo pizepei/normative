@@ -18,7 +18,9 @@
         "pizepei/terminal-info":"dev-master",
         "pizepei/wechat":"dev-master",
         "pizepei/normative-addons":"dev-master",
-        "php": ">=7.0.0"
+        "php": ">=7.0.0",
+        "ext-pdo": "*",
+        "ext-json": "*"
     },
     "repositories": {
         "0": {
