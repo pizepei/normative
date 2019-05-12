@@ -34,8 +34,9 @@ class Document extends Controller
      */
     public function index(Request $Request)
     {
-        $Request->path('type');
-        return $this->view($Request->path('type'));
+
+        $type = $Request->path('type')==='index'?'document':$Request->path('type');
+        return $this->view($type);
     }
     /**
      * @return array [json]
@@ -153,13 +154,6 @@ class Document extends Controller
         if(isset($info['Return']) && !empty($info['Return'])){
             $info = $info['Return']??[];
             if(!empty($info)){
-
-                /**
-                 * 加入默认状态信息
-                 */
-                $info[__INIT__['SuccessReturnJsonMsg']['name']] = ['fieldRestrain'=>['string'],'fieldExplain'=>'状态说明'];
-                $info[__INIT__['SuccessReturnsJsonCode']['name']] = ['fieldRestrain'=>['string','int'],'fieldExplain'=>'状态码'];
-
                 $Document = new DocumentService;
                 $infoData = $Document ->getParamInit($info);
             }
