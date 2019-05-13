@@ -170,16 +170,16 @@ class Document extends Controller
      *
      * @param \pizepei\staging\Request $Request
      *      get [object] get参数
-     *          father [string required] 父路径
-     *          index [string required] 当前路径
-     *          type [string required] 参数类型
+     *          projectId [string required] 项目id
      * @return array [json]
-     *      data [objectList] 数据
-     *          field [string] 参数名字
-     *          type [string] 参数数据类型
-     *          fieldExplain [string] 参数说明
-     *          fieldRestrain [string] 参数约束
-     * @title  获取权限
+     *      list [objectList] 数据
+     *          id [string] 权限id
+     *          name [string] 权限名
+     *          pid [string] 父id
+     *          value [string] 参数
+     *          checked [string] 选中
+     *      checkedId [raw] 被选中的id
+     * @title  获取权限树
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get jurisdiction-list debug:true
      * @throws \Exception
@@ -187,43 +187,12 @@ class Document extends Controller
     public function jurisdictionList(Request $Request)
     {
         $Route = Route::init();
-  //      return $this->succeed(json_decode('{
-  //          "list": [
-  //    { "id": 1, "name": "用户管理", "pid": 0,"disabled":true },
-  //    { "id": 2, "name": "用户组管理", "pid": 0 },
-  //    { "id": 3, "name": "角色管理", "pid": 2 },
-  //    { "id": 4, "name": "添加角色", "pid":  3},
-  //    { "id": 5, "name": "角色列表", "pid": 3 },
-  //    { "id": 6, "name": "管理员管理", "pid": 0 },
-  //    { "id": 7, "name": "添加管理员", "pid": 6 },
-  //    { "id": 8, "name": "管理员列表", "pid": 6 ,"disabled":true}
-  //  ],
-  //  "checkedId": [ 1,  2, 3, 4 ]
-  //}',true));
-
-
         return $this->succeed([
             'list'=>Resource::initJurisdictionList($Route->Permissions),
-                               'checkedId'=>[],
-                               'list2'=>json_decode('{
-            "list": [
-      { "id": 1, "name": "用户管理", "pid": 0,"disabled":true },
-      { "id": 2, "name": "用户组管理", "pid": 0 },
-      { "id": 3, "name": "角色管理", "pid": 2 },
-      { "id": 4, "name": "添加角色", "pid":  3},
-      { "id": 5, "name": "角色列表", "pid": 3 },
-      { "id": 6, "name": "管理员管理", "pid": 0 },
-      { "id": 7, "name": "添加管理员", "pid": 6 },
-      { "id": 8, "name": "管理员列表", "pid": 6 ,"disabled":true}
-    ],
-    "checkedId": [ 1,  2, 3, 4 ]
-  }',true)]);
+            'checkedId'=>['getMenu','409bfd433e7dd7af7d7530ad5fb7bc46'],
+        ]);
 
 
-        //return $this->succeed([
-        //    'Permissions'=>$Route->Permissions,
-        //    'initJurisdictionList'=>Resource::initJurisdictionList($Route->Permissions)
-        //]);
     }
 
 

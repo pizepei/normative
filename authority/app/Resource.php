@@ -42,21 +42,12 @@ class Resource
             $atData['id'] = $key;
             $atData['name'] = $ConstData['mainResource'][$key];
             $atData['pid'] = '0';
-            $atData['value'] = '';
-
-            $atData['checked'] = false;//是否选中
+            $atData['value'] = '111';
+            $atData['disabled'] = true;//是否禁止使用
+            $atData['checked'] = true;//是否选中
             $array [] = $atData;
 
             self::initList($array,$key,$value,$ConstData);
-
-
-            ////{ "id": 1, "name": "用户管理", "pid": 0,"disabled":true },
-            //$atData['checked'] = false;//是否选中
-            //$atData['name'] = $ConstData['mainResource'][$key];//名字
-            //$atData['value'] = $key;//代码
-            ////$atData['list'] = [];//下级
-            //self::initList($atData['list'],$key,$value,$ConstData);
-            //$array[] = $atData;
         }
         return $array;
     }
@@ -70,31 +61,20 @@ class Resource
      */
     protected static function  initList(&$atData,$keyData,$valueData,$ConstData)
     {
-        //$atDataList = [];
         foreach($valueData as  $key=>$value)
         {
             $data = [];
             foreach($value as $k=>$v)
             {
-
                 $data['id'] = $k;
                 $data['name'] = $ConstData[$keyData][$key]['list'][$k]['title'];
                 $data['pid'] = $keyData;
                 //$data['checked'] = false;//是否选中
                 $atData[]=$data;
                 self::initPort($atData,$k,$v,$ConstData);
-                /**
-                 *
-                 */
-                //$data['checked'] = false;//是否选中
-                //$data['name'] = $ConstData[$keyData][$key]['list'][$k]['title'];//名字
-                //$data['value'] = $k;//代码
-                //self::initPort($data['list'],$k,$v,$ConstData);
-                //$atDataList[] = $data;
+
             }
         }
-        //$atData = $atDataList;
-
     }
 
     /**
@@ -108,9 +88,6 @@ class Resource
     {
         foreach($valueData as  $key=>$value)
         {
-
-
-
             $data['id'] = $value['tag'];
             $data['name'] = $value['explain'];
             $data['pid'] = $keyData;
@@ -118,17 +95,6 @@ class Resource
             $data['extend'] = $value['extend'];//扩展（规划中）
             $data['return'] = ['return'];//路由上配置的返回信息（规划中）
             $atData[] = $data;
-
-            //$data['checked'] = true;//是否选中
-            //$data['name'] = $value['explain'];//名字
-            //$data['value'] = $value['tag'];//代码
-            //$data['return'] = ['return'];//路由上配置的返回信息（规划中）
-            //$data['extend'] = $value['extend'];//扩展（规划中）
-            /**
-             * 路由上配置的返回信息（规划中）
-             * 扩展（规划中）
-             */
-            //$atData[] = $data;
         }
     }
 
