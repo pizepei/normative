@@ -12,4 +12,5 @@ namespace authority\app\extend;
 class UserExtend
 {
 
+
 }
