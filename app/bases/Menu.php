@@ -21,7 +21,7 @@ class Menu extends Controller
      * @Author pizepei
      * @Created 2019/4/23 22:35
      *
-     * @param \pizepei\staging\Request $Request
+     * @param Request $Request
      * @return array [json]
      * @title  获取菜单列表
      * @explain 获取菜单列表（权限不同内容不同）

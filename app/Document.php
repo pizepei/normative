@@ -195,7 +195,30 @@ class Document extends Controller
 
     }
 
+    /**
+     * @Author 皮泽培
+     * @Created 2019/5/18 17:57
+     * @param Request $Request
+     *   path [object] 路径参数
+     *   get [object] 路径参数
+     *   post [object] post参数
+     *      name [string] 姓名
+     *   rule [object] 数据流参数
+     * @return array [json] 定义输出返回数据
+     *      id [uuid] uuid
+     *      name [object] 同学名字
+     * @title  路由标题
+     * @explain 路由功能说明
+     * @authGroup basics.menu.getMenu:权限分组1,basics.index.menu:权限分组2
+     * @authExtend UserExtend.list:拓展权限
+     * @baseAuth Resource:public
+     * @throws \Exception
+     * @router post
+     */
+    public function exportPhpStormSettings(Request $Request)
+    {
 
+    }
 
 
 }
