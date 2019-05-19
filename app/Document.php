@@ -17,6 +17,7 @@ use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\staging\Route;
 use service\document\DocumentService;
+use ZipArchive;
 
 
 class Document extends Controller
@@ -213,11 +214,20 @@ class Document extends Controller
      * @authExtend UserExtend.list:拓展权限
      * @baseAuth Resource:public
      * @throws \Exception
-     * @router post
+     * @router get exportPhpStormSettings
      */
     public function exportPhpStormSettings(Request $Request)
     {
+        $zip = new ZipArchive();
+        $route = "..".DIRECTORY_SEPARATOR.'tmp';
+        $file = '..'.DIRECTORY_SEPARATOR.'settings.zip';
+        if ($zip->open($file) === true){
 
+            $mcw = $zip->extractTo($route);//解压到$route这个目录中
+
+            $zip->close();
+        }
+        return $zip->open($file) ;
     }
 
 
