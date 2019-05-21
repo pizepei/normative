@@ -214,21 +214,37 @@ class Document extends Controller
      * @authExtend UserExtend.list:拓展权限
      * @baseAuth Resource:public
      * @throws \Exception
-     * @router get exportPhpStormSettings
+     * @router post exportPhpStormSettings
      */
     public function exportPhpStormSettings(Request $Request)
     {
+        if($Request->post('name') === 'settings.zip' || $Request->post('name') === 'settings')
+        {
+            throw new \Exception('不能为settings关键字');
+        }
         $zip = new ZipArchive();
-        $route = "..".DIRECTORY_SEPARATOR.'tmp';
-        $file = '..'.DIRECTORY_SEPARATOR.'settings.zip';
+        $path = "..".DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'PhpStormSettings'.DIRECTORY_SEPARATOR;
+        $route = $path.$Request->post('name');
+        $file = $path.'settings.zip';
+        /**
+         *
+         * 怎么下载？
+         */
         if ($zip->open($file) === true){
 
             $mcw = $zip->extractTo($route);//解压到$route这个目录中
 
             $zip->close();
         }
-        return $zip->open($file) ;
+        return self::fileTemplates_includes_PHP_Function_Doc_Comment['content'];
     }
 
-
+    const fileTemplates_includes_PHP_Function_Doc_Comment=[
+        'content'=><<<ABC
+这里可以是任合内容
+我是历的苛夺基
+本原则叶落归根在运
+输费艰难田￥￥&……
+ABC
+    ];
 }
