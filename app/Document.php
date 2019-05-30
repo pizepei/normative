@@ -239,6 +239,68 @@ class Document extends Controller
         return self::fileTemplates_includes_PHP_Function_Doc_Comment['content'];
     }
 
+
+
+
+
+    /**
+     * @Author pizepei
+     * @Created 2019/4/23 23:02
+     * @param \pizepei\staging\Request $Request
+     * @return array [json]
+     * @title  框架开发文档菜单
+     * @explain 临时框架开发文档菜单
+     * @authGroup basics.index.message:控制台新信息
+     * @router get normative/new
+     */
+    public function messageNew(Request $Request)
+    {
+        header('access-Control-Allow-Origin:*');
+        $data = [
+            "HelloWorld"=> [
+                'title'=>'Hello world',
+                'route'=>[
+                    'purpose'=>['title'=>'开发初衷'],
+                    'character'=>['title'=>'框架特性'],
+                    'standard'=>['title'=>'开发规范'],
+                    'environment'=>['title'=>'开发环境'],
+                    'saas'=>['title'=>'SAAS模式'],
+                    'Docker'=>['title'=>'Docker支持'],
+                    'production'=>['title'=>'生产环境'],
+                ]
+            ],
+            "note"=> [
+                'title'=>'注解路由',
+                'route'=>[
+                    'purpose'=>['title'=>'入门'],
+                    'character'=>['title'=>'控制器注解'],
+                    'standard'=>['title'=>'方法注解'],
+                    'environment'=>['title'=>'权限注解'],
+                    'saas'=>['title'=>'请求过滤'],
+                    'Docker'=>['title'=>'输出过滤'],
+                    'production'=>['title'=>'生产环境'],
+                ]
+            ],
+        ];
+
+        return $this->succeed($data);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const fileTemplates_includes_PHP_Function_Doc_Comment=[
         'content'=><<<ABC
 这里可以是任合内容
