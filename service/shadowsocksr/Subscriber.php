@@ -55,7 +55,16 @@ class Subscriber
         ];
 
         $ssurl = '';
+        $pattern = '\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b';
         foreach ($node as $k => $v) {
+
+            /**
+             * 判断是否是ip
+             */
+            preg_match($pattern,$v['node_server'],$result);
+            if(!isset($result[1])){
+                $v['node_server'] = gethostbyname($v['node_server']);
+            }
             /**
              *   host  port  协议   加密方式   混淆   密码  混淆参数 obfsparam   协议参数 protoparam   备注 remarks
              */
