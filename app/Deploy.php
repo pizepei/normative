@@ -4,11 +4,9 @@
  * User: pizepei
  * Date: 2019/4/22
  * Time: 14:40
- * @baseAuth 基础权限继承（加命名空间的类名称）
+ * @baseAuth DeployAuth:test
  * @title 部署控制器
- * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
- * @basePath /document/
- * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
+ * @basePath /deploy/
  */
 namespace app;
 
@@ -24,7 +22,7 @@ class Deploy extends Controller
      *      path [object] 路径参数
      *           domain [string] 域名
      * @return array [json]
-     * @title  同步所有model不结构
+     * @title  同步所有model的结构
      * @explain 建议生产发布新版本时执行
      * @router get cliDbInitStructure
      * @throws \Exception
@@ -37,4 +35,36 @@ class Deploy extends Controller
         $model = TableAlterLogModel::table();
         return $model->initStructure();
     }
+
+    /**
+     * @Author pizepei
+     * @Created 2019/6/12 22:39
+     * @param \pizepei\staging\Request $Request
+     *
+     * @title  删除本地配置接口
+     * @explain 当接口被触发时会删除本地所有Config配置，配置会在项目下次被请求时自动请求接口生成
+     * @router delete Config
+     */
+    public function deleteConfig(Request $Request)
+    {
+
+    }
+    /**
+     * @Author pizepei
+     * @Created 2019/6/12 22:43
+     * @param \pizepei\staging\Request $Request
+     *      path [object] 路径参数
+     *          path [string] 需要删除的runtime目录下的目录为空时删除runtime目录
+     * @title  删除本地runtime目录下的目录
+     * @explain 删除runtime目录下的目录或者runtime目录本身。配置会在项目下次被请求时自动请求接口生成runtime
+     * @router delete runtime/:path[string]
+     */
+    public function deleteCache(Request $Request)
+    {
+
+    }
+
+
+
+
 }
