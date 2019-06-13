@@ -41,6 +41,7 @@ class Document extends Controller
     }
     /**
      * @return array [json]
+     *      data [raw] 菜单数据
      * @title  API文档 侧边导航
      * @explain  侧边导航
      * @router get nav-list debug:true
@@ -60,6 +61,14 @@ class Document extends Controller
      *          father [string] 父路径
      *          index [string] 当前路径
      * @return array [json]
+     *      data [object] 控制器数据
+     *          fatherInfo [object] 控制器数据
+     *              title [string] 控制器标题
+     *              class [string] 控制器名
+     *              User [string] 创建者
+     *              basePath [string] 控制器根路由
+     *              authGroup [string] 控制器权限分组
+     *              baseAuth [string] 控制器根权限
      * @title  获取API文档信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get index-nav debug:true
