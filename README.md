@@ -24,3 +24,5 @@ normative致力于在框架层次强制规范开发人员的业务实现了确�
 ### 运行环境的简单介绍：
  + 1、推荐PHP7.0+版本+MySQL5.7+Nginx
  + 2、功能模块中大量运用到Redis
+### 单元测试：
+composer require --dev phpunit/phpunit:8
