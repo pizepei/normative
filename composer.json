@@ -17,7 +17,6 @@
         "pizepei/staging":"dev-master",
         "pizepei/terminal-info":"dev-master",
         "pizepei/wechat":"dev-master",
-        "pizepei/normative-addons":"dev-master",
         "php": ">=7.0.0",
         "ext-pdo": "*",
         "ext-json": "*",
@@ -47,10 +46,6 @@
         "6": {
             "type": "git",
             "url": "git@github.com:pizepei/wechat.git"
-        },
-        "7": {
-            "type": "git",
-            "url": "git@github.com:pizepei/normative-addons.git"
         },
         "packagist": {
             "type": "composer",
