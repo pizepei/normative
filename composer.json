@@ -47,6 +47,10 @@
             "type": "git",
             "url": "git@github.com:pizepei/wechat.git"
         },
+        "7": {
+            "type": "git",
+            "url": "git@github.com:pizepei/deploy.git"
+        },
         "packagist": {
             "type": "composer",
             "url": "https://packagist.phpcomposer.com"
