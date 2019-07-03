@@ -69,6 +69,7 @@ class Document extends Controller
      *              basePath [string] 控制器根路由
      *              authGroup [string] 控制器权限分组
      *              baseAuth [string] 控制器根权限
+     *          info [raw] 详细数据
      * @title  获取API文档信息
      * @explain  根据点击侧边导航获取对应的获取API文档信息
      * @router get index-nav debug:true
