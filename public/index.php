@@ -11,8 +11,6 @@ define('__INIT_MICROTIME__',microtime(true));//系统初始化时间
 
 define('__APP__','app');//定义应用目录
 
-define('__EXPLOIT__',TRUE);// 是否开发模式
-
 require('../vendor/autoload.php');
 
 $Start = new pizepei\staging\Start;
