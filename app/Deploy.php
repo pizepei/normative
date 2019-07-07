@@ -12,8 +12,10 @@ namespace app;
 
 
 
+use pizepei\config\InitializeConfig;
 use pizepei\deploy\DeployService;
 use pizepei\deploy\LocalDeployServic;
+use pizepei\deploy\model\MicroServiceConfigCenterModel;
 use pizepei\func\Func;
 use pizepei\model\db\TableAlterLogModel;
 use pizepei\staging\Controller;
@@ -153,27 +155,27 @@ class Deploy extends Controller
         /**
          * MicroServiceConfigCenterModel
          */
-        //$MicroServiceConfigCenter = MicroServiceConfigCenterModel::table();
-        //$InitializeConfig = new InitializeConfig();
-        //$Config = $InitializeConfig->get_config_const('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.__APP__.DIRECTORY_SEPARATOR);
-        //$dbtabase = $InitializeConfig->get_dbtabase_const('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.__APP__.DIRECTORY_SEPARATOR);
-        //$error_log = $InitializeConfig->get_error_log_const('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.__APP__.DIRECTORY_SEPARATOR);
-        //
-        //
-        //$deploy = $InitializeConfig->get_deploy_const('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR);
-        //$data = [
-        //    'name'              =>'测试',
-        //    'appid'             =>$deploy['INITIALIZE']['appid'],
-        //    'service_group'     =>'develop',
-        //    'ip_white_list'     =>['47.106.89.196'],
-        //    'config'            =>$Config,
-        //    'dbtabase'          =>$dbtabase,
-        //    'error_or_log'      =>$error_log,
-        //    'deploy'            =>$deploy,
-        //    'domain'            =>$_SERVER['HTTP_HOST'],
-        //];
-        //
-        //return $MicroServiceConfigCenter->add($data);
+//        $MicroServiceConfigCenter = MicroServiceConfigCenterModel::table();
+//        $InitializeConfig = new InitializeConfig();
+//        $Config = $InitializeConfig->get_const('config\app\SetConfig');
+//        $dbtabase = $InitializeConfig->get_const('config\app\SetDbtabase');
+//        $error_log = $InitializeConfig->get_const('config\app\SetErrorOrLog');
+//
+//
+//        $deploy = $InitializeConfig->get_deploy_const('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR);
+//        $data = [
+//            'name'              =>'测试',
+//            'appid'             =>$deploy['INITIALIZE']['appid'],
+//            'service_group'     =>'develop',
+//            'ip_white_list'     =>['47.106.89.196'],
+//            'config'            =>$Config,
+//            'dbtabase'          =>$dbtabase,
+//            'error_or_log'      =>$error_log,
+//            'deploy'            =>$deploy,
+//            'domain'            =>$_SERVER['HTTP_HOST'],
+//        ];
+//
+//        return $MicroServiceConfigCenter->add($data);
         $LocalDeployServic = new LocalDeployServic();
         $data=[
             'ProcurementType'=>'ErrorOrLogConfig',//获取类型   Config.php  Dbtabase.php  ErrorOrLogConfig.php
@@ -209,7 +211,7 @@ class Deploy extends Controller
     {
 
         $LocalDeploy = new LocalDeployServic();
-        return $LocalDeploy->initConfigCenter($Request->post(),$Request->path('appid'));
+        return $this->succeed($LocalDeploy->initConfigCenter($Request->post(),$Request->path('appid')));
     }
 
 }
