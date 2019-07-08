@@ -13,6 +13,7 @@
 
 namespace app\index;
 
+use model\basics\account\AccountModel;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use service\basics\account\AccountService;
@@ -63,6 +64,100 @@ class Account extends Controller
             return $this->error('',$res['msg']);
         }
     }
+    /**
+     * @Author pizepei
+     * @Created 2019/3/23 16:23
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          code [string required] 验证码
+     *          codeFA [string] 2FA双因子认证code
+     * @return array [json]
+     *      data [object] 数据
+     *          result [raw] 结果
+     *          access_token [string] access_token
+     * @throws \Exception
+     * @title  登录验证
+     * @explain 登录验证
+     * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
+     * @router post logon
+     */
+    public function logon(Request $Request)
+    {
+        /**
+         * 图形验证码系统
+         */
 
+        /**
+         * 查询账号是否存在（可能会是邮箱  或者用户名）
+         * 用户编码 为用户唯一标准     不同的用户编码  可以是同一个手机号码、或者邮箱   ？
+         */
+        $Account = AccountModel::table()
+            ->where(['phone'=>$Request->post('phone')])
+            ->fetch();
+        if(empty($Account)){
+            return $this->error($Request->post('phone'),'用户名或密码错误');
+        }
+        $AccountService = new AccountService();
 
+        $result =  $AccountService->logon(\Config::ACCOUNT,$Request->post(),$Account,$this);
+        if(isset($result['jwtArray']['str']) && $result['jwtArray']){
+            return $this->succeed([
+                'result'=>$result,
+                'access_token'=>$result['jwtArray']['str']
+            ],'登录成功');
+        }
+        return $result;
+    }
+    /**
+     * @Author pizepei
+     * @Created 2019/3/30 21:33
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          repass [string required] 确认密码
+     *          code [string required] 验证码
+     * @return array [json]
+     *
+     * @title  修改密码
+     * @explain 通过手机验证码修改密码
+     * @authTiny 修改密码
+     * @throws \Exception
+     * @router put password
+     */
+    public function changePassword(Request $Request)
+    {
+        $Account = AccountModel::table()
+            ->where(['phone'=>$Request->post('phone')])
+            ->replaceField('fetch',['type','status']);
+        if(empty($Account)){
+            $this->error($Request->post(),'用户不存在');
+        }
+        $AccountService = new AccountService();
+        return $AccountService->changePassword(\Config::ACCOUNT,$Request->post(),$Account,$this);
+    }
+    /**
+     * @Author pizepei
+     * @Created 2019/3/30 21:33
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          password [string required] 密码
+     *          repass [string required] 确认密码
+     *          code [string required] 短信验证码
+     * @return array [json]
+     * @title  短信验证码结果验证
+     * @explain 验证结果并且返回一个唯一的参数以进行后面的配置
+     * @throws \Exception
+     * @router post smsCodeVerification
+     */
+    public function smsCodeVerification(Request $Request)
+    {
+        return $this->succeed('','成功');
+    }
 }

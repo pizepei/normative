@@ -31,6 +31,20 @@ class AccountService
     public function register(array $config,array $Request)
     {
         /**
+         * 判断两次密码是否一致
+         */
+        if($Request['password'] !== $Request['repass'])
+        {
+            return ['result'=>false,'msg'=>'两次密码不一致'];
+        }
+        /**
+         * 可以选择保存当前用户协议版本
+         */
+        if($Request['agreement'] !== 'on')
+        {
+            return ['result'=>false,'msg'=>'阅读并同意用户协议才能成为我们的一员'];
+        }
+        /**
          * 实例化密码类
          */
         $PasswordHash = new PasswordHash();
@@ -45,8 +59,12 @@ class AccountService
          */
         $AccountModel = AccountModel::table();
 
+        /**
+         * 验证验证码
+         */
         if($AccountModel->where(['phone'=>$Request['phone']])->fetch(['id'])){ return ['result'=>false,'msg'=>'手机号码已经注册']; }
         if($AccountModel->where(['email'=>$Request['email']])->fetch(['id'])){ return ['result'=>false,'msg'=>'email已经注册']; }
+
 
         //获取密码hash
         $password_hash = $PasswordHash->password_hash($Request['password'],$config['algo'],$config['options']);
@@ -214,6 +232,14 @@ class AccountService
      */
     public function changePassword(array $config,array $Request,array $userData,Controller $Controller)
     {
+
+        /**
+         * 判断两次密码是否一致
+         */
+        if($Request['password'] !== $Request['repass'])
+        {
+            return ['result'=>false,'msg'=>'两次密码不一致'];
+        }
         /**
          * 实例化密码类
          */
