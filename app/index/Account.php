@@ -14,6 +14,7 @@
 namespace app\index;
 
 use model\basics\account\AccountModel;
+use pizepei\service\verifyCode\GifverifyCode;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use service\basics\account\AccountService;
@@ -158,6 +159,37 @@ class Account extends Controller
      */
     public function smsCodeVerification(Request $Request)
     {
+        //
         return $this->succeed('','成功');
     }
+
+    /**
+     * @Author pizepei
+     * @Created 2019/7/5 22:40
+     * @param \pizepei\staging\Request $Request
+     *      path [object] post
+     *          code [int] 数字
+     * @title  获取gif验证码
+     * @explain 获取gif验证码
+     * @throws \Exception
+     * @return array [gif]
+     * @router get gif-verify-code/:code[int]
+     */
+    public function serviceConfig(Request $Request)
+    {
+        /**
+        生成GIF图片验证
+        @param int $L 验证码长度
+        @param int $F 生成Gif图的帧数
+        @param int $W 宽度
+        @param int $H 高度
+        @param int $MixCnt 干扰线数
+        @param int $lineGap 网格线间隔
+        @param int $noisyCnt 澡点数
+        @param int $sessionName 验证码Session名称
+         */
+        echo GifverifyCode::Draw(4, 2, 100, 31, 4, 1, 70, "secode");
+    }
+
+
 }
