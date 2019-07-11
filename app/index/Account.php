@@ -14,6 +14,7 @@
 namespace app\index;
 
 use model\basics\account\AccountModel;
+use pizepei\randomInformation\RandomUserInfo;
 use pizepei\service\verifyCode\GifverifyCode;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
@@ -179,17 +180,36 @@ class Account extends Controller
     {
         /**
         生成GIF图片验证
-        @param int $L 验证码长度
-        @param int $F 生成Gif图的帧数
-        @param int $W 宽度
-        @param int $H 高度
-        @param int $MixCnt 干扰线数
-        @param int $lineGap 网格线间隔
-        @param int $noisyCnt 澡点数
-        @param int $sessionName 验证码Session名称
+        @$L 验证码长度
+        @$F 生成Gif图的帧数
+        @$W 宽度
+        @$H 高度
+        @$MixCnt 干扰线数
+        @$lineGap 网格线间隔
+        @$noisyCnt 澡点数
+        @$sessionName 验证码Session名称
          */
         echo GifverifyCode::Draw(4, 2, 100, 31, 4, 1, 70, "secode");
     }
-
+    /**
+     * @Author pizepei
+     * @Created 2019/7/5 22:40
+     * @param \pizepei\staging\Request $Request
+     *      path [object] post
+     *          count [int] 数字
+     * @title  获取gif验证码
+     * @explain 获取gif验证码
+     * @throws \Exception
+     * @return array [json]
+     * @router get random-user-info/:count[int]
+     */
+    public function getRandomUserInfo(Request $Request)
+    {
+        /**
+         * random-user-info/:count[int] 为0时无法识别的问题
+         */
+        $count = $Request->path('count')?$Request->path('count'):'rand';
+        return ['Nickname'=>RandomUserInfo::getNickname(),'Compellation'=>RandomUserInfo::getCompellation($count)];
+    }
 
 }
