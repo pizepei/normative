@@ -13,13 +13,15 @@
 
 namespace app;
 
-
-use model\wechat\OpenAccreditInformLogModel;
-use model\wechat\OpenAuthorizerUserInfoModel;
+use pizepei\wechat\basics\ReplyApi;
+use pizepei\wechat\model\OpenAccreditInformLogModel;
 use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
-use pizepei\wechat\basics\AccessToken;
+use pizepei\wechat\model\OpenMessageLogModel;
+use pizepei\wechat\model\PreAuthCodeModel;
+use pizepei\wechat\model\WechatKeywordModel;
+use pizepei\wechat\service\Config;
 use pizepei\wechat\service\Open;
 
 class WeChatCommon extends Controller
@@ -56,7 +58,7 @@ class WeChatCommon extends Controller
      *          appid [string]
      *      raw [xml] 数据流
      *          ToUserName [string] 开发者ai
-     * @return array [html]
+     * @return array [json]
      * @title  第三方服务消息与事件接收
      * @explain 消息与事件接收http://oauth.heil.top/wechat/common/$APPID$/message
      * @router post :appid[string]/message debug:false
@@ -64,10 +66,33 @@ class WeChatCommon extends Controller
      */
     public function openMessage(Request $Request)
     {
+        OpenMessageLogModel::table()->add([
+            'title'=>'init数据',
+            'request'=>$Request->input(),
+            'input'=>file_get_contents("php://input"),
+            'appid'=>$Request->path('appid'),
+        ]);
 
-        var_dump($Request->input('','raw'));
+        $Config = new Config(Redis::init());
+        $AloneConfig = $Config->getAloneConfig(true,$Request->path('appid'));
 
-        return $Request->path()['appid'];
+        if (!isset($AloneConfig['component_appid']) || empty($AloneConfig['component_appid'])){
+            throw new \Exception('Alone null');
+        }
+        $OpenConfig= $Config->getOpenConfig(false,$AloneConfig['component_appid']);
+        if (!isset($OpenConfig['appid']) && empty($OpenConfig['appid'])){
+            throw new \Exception('Open null');
+        }
+        $AloneConfig['EncodingAESKey'] = $OpenConfig['EncodingAESKey'];
+        $AloneConfig['token'] = $OpenConfig['token'];
+        return WechatKeywordModel::table()->fetch();
+        if (empty($OpenConfig['transpond_url'])){
+            echo new ReplyApi($Request->input(),$AloneConfig,$Request->path('appid'));
+        }else{
+            //转发
+        }
+
+
     }
     /**
      * @param \pizepei\staging\Request $Request [xml]
@@ -79,6 +104,9 @@ class WeChatCommon extends Controller
      *          openid [string] 消息接口token验证参数
      *          encrypt_type [string] 消息接口token验证参数
      *          msg_signature [string] 消息接口token验证参数
+     *      raw [raw] 数据流
+     *          AppId [string] 第三方平台appid
+     *          Encrypt [string] 密文
      * @return array [json]
      * @title  第三方服务授权接口
      * @explain 用于接收取消授权通知、授权成功通知、授权更新通知，也用于接收ticket，ticket是验证平台方的重要凭据。
@@ -87,93 +115,31 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
-        Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
-
-        //file_put_contents('request.txt',json_encode($Request->input('','get')));
-        //file_put_contents('input.txt',file_get_contents("php://input"));
-
+        OpenAccreditInformLogModel::table()->add([
+            'raw_input'=>file_get_contents("php://input"),
+            'request'=>$Request->input('','get'),
+            'xmlToArray'=>$Request->input('','raw')
+        ]);
+        /**
+         * 获取配置
+         */
+        $Config = new Config(Redis::init());
+        $Config = $Config->getOpenConfig(false,$Request->input('AppId','raw'));
+        /**
+         * 初始化类
+         */
+        Open::init($Config,Redis::init());
+        /**
+         * 授权信息解析
+         */
         $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
-
-        OpenAccreditInformLogModel::table()->add([[
-                                                 'input'=>file_get_contents("php://input"),
+        OpenAccreditInformLogModel::table()->add([
+                                                 'raw_input'=>file_get_contents("php://input"),
                                                  'request'=>$Request->input('','get'),
                                                  'InfoType'=>$result['InfoType'],
                                                  'msg'=>$result,
-                                             ]]);
-
-        /**
-         * 授权authorized
-         * 取消授权unauthorized
-         */
-        switch ($result['InfoType'])
-        {
-            case "component_verify_ticket":
-
-                break;
-            case "unauthorized"://取消授权
-                /**
-                 * 修改为未授权
-                 */
-                $resultData = OpenAuthorizerUserInfoModel::table()->where([
-                    'authorizer_appid'=>$result['postObj']['AuthorizerAppid'],
-                ])->fetch();
-                if(!empty($resultData)){
-                    return OpenAuthorizerUserInfoModel::table()->insert(
-                        [
-                            'id'=>$resultData['id'],
-                            'status'=>3,
-                        ]);
-                }
-
-                break;
-
-            case "authorized"://进行授权（可能是重复授权）authorization_code
-                /**
-                 * 保存或者修改信息配置
-                 */
-                $resultData = OpenAuthorizerUserInfoModel::table()->where([
-                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
-                ])->fetch();
-
-                if($resultData)
-                {
-                    $result['authorizerAccessInfo']['id'] =$resultData['id'];
-                    $result['authorizerAccessInfo']['status'] =2;
-
-
-                    return OpenAuthorizerUserInfoModel::table()
-                        ->insert($result['authorizerAccessInfo']);
-
-                }else{
-                    OpenAuthorizerUserInfoModel::table()->add($result['authorizerAccessInfo']);
-                }
-
-                break;
-            case "updateauthorized"://进行授权（可能是重复授权）authorization_code
-                /**
-                 * 保存或者修改信息配置
-                 */
-                $resultData = OpenAuthorizerUserInfoModel::table()->where([
-                    'authorizer_appid'=>$result['authorizerAccessInfo']['authorizer_appid'],
-                ])->fetch();
-                if($resultData)
-                {
-                    $result['authorizerAccessInfo']['id'] =$resultData['id'];
-                    $result['authorizerAccessInfo']['status'] =2;
-
-                    return OpenAuthorizerUserInfoModel::table()
-                        ->insert($result['authorizerAccessInfo']);
-                }else{
-                    OpenAuthorizerUserInfoModel::table()->add($result['authorizerAccessInfo']);
-                }
-
-                break;
-
-
-            default:
-
-                break;
-        }
+                                                 'xmlToArray'=>$Request->input('','raw')
+                                             ]);
         return $result;
     }
 
@@ -189,11 +155,59 @@ class WeChatCommon extends Controller
      */
     public function test (Request $Request)
     {
-
         Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
         return Open::authorizerInfo('wx3260515a4514ec94');
-
     }
 
+    /**
+     * @Author 皮泽培
+     * @Created 2019/7/13 14:33
+     * @param Request $Request
+     *   path [object] 路径参数
+     *      AppId [string] appid
+     *   get [object] 路径参数
+     *   post [object] post参数
+     *   rule [object] 数据流参数
+     * @return array [html] 定义输出返回数据
+     * @title  获取授权连接
+     * @explain 路由功能说明
+     * @authGroup basics.menu.getMenu:权限分组1,basics.index.menu:权限分组2
+     * @authExtend UserExtend.list:拓展权限
+     * @baseAuth Resource:public
+     * @throws \Exception
+     * @router get open/accredit/AccreditUrl/:AppId[string]
+     */
+    public function getAccreditUrl(Request $Request)
+    {
+        $Config = new Config(Redis::init());
+        $Config = $Config->getOpenConfig(false,$Request->path('AppId'));
+        Open::init($Config,Redis::init());
+        $AccreditUrl = Open::getAccreditUrl('','http://'.$_SERVER['HTTP_HOST'].'/wechat/common/open/accredit/RedirectUri/'.__REQUEST_ID__);
+        PreAuthCodeModel::table()->add(['url'=>$AccreditUrl['url'],'PreAuthCode'=>$AccreditUrl['pre_auth_code'],'uuid'=>__REQUEST_ID__]);
+
+        echo '<html><head></head><body><a  href="'.$AccreditUrl['url'].'">去授权</a></body></html>';
+    }
+
+    /**
+     * @Author 皮泽培
+     * @Created 2019/7/13 14:45
+     *   path [object] 路径参数
+     *      uuid [uuid] uuid
+     *   get [object] 路径参数
+     *      expires_in [int] 有效期
+     *      auth_code [string] 授权码
+     *   post [object] post参数
+     *   rule [object] 数据流参数
+     * @return array [json] 定义输出返回数据
+     *      data [raw] 数据
+     * @title  授权RedirectUri地址
+     * @explain 暂时不处理
+     * @throws \Exception
+     * @router get open/accredit/RedirectUri/:uuid[uuid]
+     */
+    public function accreditRedirectUri(Request $Request)
+    {
+        return $Request->path();
+    }
 
 }
