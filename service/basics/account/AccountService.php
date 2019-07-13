@@ -25,12 +25,25 @@ class AccountService
      * 注册账号
      * @param array                       $config
      * @param array                       $Request  邮箱、手机
-     * @param \pizepei\staging\Controller $Controller
      * @return array
      * @throws \Exception
      */
-    public function register(array $config,array $Request,Controller $Controller)
+    public function register(array $config,array $Request)
     {
+        /**
+         * 判断两次密码是否一致
+         */
+        if($Request['password'] !== $Request['repass'])
+        {
+            return ['result'=>false,'msg'=>'两次密码不一致'];
+        }
+        /**
+         * 可以选择保存当前用户协议版本
+         */
+        if($Request['agreement'] !== 'on')
+        {
+            return ['result'=>false,'msg'=>'阅读并同意用户协议才能成为我们的一员'];
+        }
         /**
          * 实例化密码类
          */
@@ -39,15 +52,19 @@ class AccountService
          * 判断密码格式
          */
         if(empty($PasswordHash->password_match($config['password_regular'][0],$Request['password']))){
-            return $Controller->error($Request['password'],$config['password_regular'][1]);
+            return ['result'=>false,'msg'=>$config['password_regular'][1]];
         }
         /**
          * 查询是否有对应的账号存在
          */
         $AccountModel = AccountModel::table();
 
-        if($AccountModel->where(['phone'=>$Request['phone']])->fetch(['id'])){ return$Controller->error($Request['phone'],'手机号码已经注册');}
-        if($AccountModel->where(['email'=>$Request['email']])->fetch(['id'])){ return$Controller->error($Request['email'],'email已经注册');}
+        /**
+         * 验证验证码
+         */
+        if($AccountModel->where(['phone'=>$Request['phone']])->fetch(['id'])){ return ['result'=>false,'msg'=>'手机号码已经注册']; }
+        if($AccountModel->where(['email'=>$Request['email']])->fetch(['id'])){ return ['result'=>false,'msg'=>'email已经注册']; }
+
 
         //获取密码hash
         $password_hash = $PasswordHash->password_hash($Request['password'],$config['algo'],$config['options']);
@@ -59,14 +76,17 @@ class AccountService
         $Data['email'] = $Request['email'];
         $Data['logon_token_salt'] = Func::M('str')::str_rand($config['user_logon_token_salt_count']);//建议user_logon_token_salt
         $AccountData = AccountModel::table()->add($Data);
+        if (empty($AccountData))
+        {
+            return ['result'=>false,'msg'=>'注册失败'];
+        }
         if(is_array($AccountData)){
             $id = array_keys($AccountData)[0]??null;
         }
-
         /**
          * 注册账号
          */
-        return $Controller->succeed($AccountData);
+        return ['result'=>true,'msg'=>'注册成功','data'=>$AccountData];
 
     }
 
@@ -212,6 +232,14 @@ class AccountService
      */
     public function changePassword(array $config,array $Request,array $userData,Controller $Controller)
     {
+
+        /**
+         * 判断两次密码是否一致
+         */
+        if($Request['password'] !== $Request['repass'])
+        {
+            return ['result'=>false,'msg'=>'两次密码不一致'];
+        }
         /**
          * 实例化密码类
          */
