@@ -14,8 +14,6 @@
 namespace app\wechat;
 
 
-use model\wechat\OpenAuthorizerUserInfoModel;
-use model\wechat\PreAuthCodeModel;
 use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
 use pizepei\wechat\basics\AccessToken;
