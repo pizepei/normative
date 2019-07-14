@@ -10,9 +10,8 @@
  * @basePath /wechat/common/
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
-
 namespace app;
-
+use pizepei\randomInformation\RandomUserInfo;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
 use pizepei\model\redis\Redis;
@@ -20,10 +19,9 @@ use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\wechat\model\OpenMessageLogModel;
 use pizepei\wechat\model\PreAuthCodeModel;
-use pizepei\wechat\model\WechatKeywordModel;
+use pizepei\wechat\model\OpenWechatKeywordModel;
 use pizepei\wechat\service\Config;
 use pizepei\wechat\service\Open;
-
 class WeChatCommon extends Controller
 {
     /**
@@ -40,7 +38,6 @@ class WeChatCommon extends Controller
     {
         return $Request->path()['verify'];
     }
-
     /**
      * @return array [html]
      * @title  微信开放平台域名验证
@@ -58,7 +55,7 @@ class WeChatCommon extends Controller
      *          appid [string]
      *      raw [xml] 数据流
      *          ToUserName [string] 开发者ai
-     * @return array [json]
+     * @return array [xml]
      * @title  第三方服务消息与事件接收
      * @explain 消息与事件接收http://oauth.heil.top/wechat/common/$APPID$/message
      * @router post :appid[string]/message debug:false
@@ -72,10 +69,8 @@ class WeChatCommon extends Controller
             'input'=>file_get_contents("php://input"),
             'appid'=>$Request->path('appid'),
         ]);
-
         $Config = new Config(Redis::init());
         $AloneConfig = $Config->getAloneConfig(true,$Request->path('appid'));
-
         if (!isset($AloneConfig['component_appid']) || empty($AloneConfig['component_appid'])){
             throw new \Exception('Alone null');
         }
@@ -85,14 +80,32 @@ class WeChatCommon extends Controller
         }
         $AloneConfig['EncodingAESKey'] = $OpenConfig['EncodingAESKey'];
         $AloneConfig['token'] = $OpenConfig['token'];
-        return WechatKeywordModel::table()->fetch();
+//        return OpenWechatKeywordModel::table()->add([
+//            'authorizer_appid'=>'wx3260515a4514ec94',
+//            'component_appid'=>'wx309126e884ba220b',
+//            'title'=>'测试openid',
+//            'name'=>RandomUserInfo::getNickname(),
+//            'match_type'=>'10',
+//            'model'=>'keyword',
+//            'method'=>'index',
+//            'type'=>'text',
+//            'status'=>'10',
+//            'content'=>'开始',
+//        ]);
+
         if (empty($OpenConfig['transpond_url'])){
-            echo new ReplyApi($Request->input(),$AloneConfig,$Request->path('appid'));
+            $ReplyApi = new ReplyApi($Request->input(),$AloneConfig,$Request->path('appid'));
+            echo $content =  $ReplyApi->content_type();
+            OpenMessageLogModel::table()->add([
+                'title'=>'content',
+                'request'=>$Request->input(),
+                'input'=>file_get_contents("php://input"),
+                'appid'=>$Request->path('appid'),
+                'msg'=>[$content],
+            ]);
         }else{
             //转发
         }
-
-
     }
     /**
      * @param \pizepei\staging\Request $Request [xml]
@@ -115,9 +128,12 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
+        ignore_user_abort(true);
+        set_time_limit(60);
         OpenAccreditInformLogModel::table()->add([
             'raw_input'=>file_get_contents("php://input"),
-            'request'=>$Request->input('','get'),
+            'request'=>$Request->input(),
+            'msg'=>$_SERVER,
             'xmlToArray'=>$Request->input('','raw')
         ]);
         /**
@@ -133,16 +149,16 @@ class WeChatCommon extends Controller
          * 授权信息解析
          */
         $result = Open::accredit($Request->input('','get'),file_get_contents("php://input"));
+
         OpenAccreditInformLogModel::table()->add([
-                                                 'raw_input'=>file_get_contents("php://input"),
-                                                 'request'=>$Request->input('','get'),
-                                                 'InfoType'=>$result['InfoType'],
-                                                 'msg'=>$result,
-                                                 'xmlToArray'=>$Request->input('','raw')
-                                             ]);
+            'raw_input'=>file_get_contents("php://input"),
+            'request'=>$Request->input('','get'),
+            'InfoType'=>$result['InfoType'],
+            'msg'=>$result,
+            'xmlToArray'=>$Request->input('','raw')
+        ]);
         return $result;
     }
-
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      raw [xml] 数据流
@@ -158,7 +174,6 @@ class WeChatCommon extends Controller
         Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
         return Open::authorizerInfo('wx3260515a4514ec94');
     }
-
     /**
      * @Author 皮泽培
      * @Created 2019/7/13 14:33
@@ -184,10 +199,8 @@ class WeChatCommon extends Controller
         Open::init($Config,Redis::init());
         $AccreditUrl = Open::getAccreditUrl('','http://'.$_SERVER['HTTP_HOST'].'/wechat/common/open/accredit/RedirectUri/'.__REQUEST_ID__);
         PreAuthCodeModel::table()->add(['url'=>$AccreditUrl['url'],'PreAuthCode'=>$AccreditUrl['pre_auth_code'],'uuid'=>__REQUEST_ID__]);
-
         echo '<html><head></head><body><a  href="'.$AccreditUrl['url'].'">去授权</a></body></html>';
     }
-
     /**
      * @Author 皮泽培
      * @Created 2019/7/13 14:45
@@ -209,5 +222,4 @@ class WeChatCommon extends Controller
     {
         return $Request->path();
     }
-
 }
