@@ -80,18 +80,6 @@ class WeChatCommon extends Controller
         }
         $AloneConfig['EncodingAESKey'] = $OpenConfig['EncodingAESKey'];
         $AloneConfig['token'] = $OpenConfig['token'];
-//        return OpenWechatKeywordModel::table()->add([
-//            'authorizer_appid'=>'wx3260515a4514ec94',
-//            'component_appid'=>'wx309126e884ba220b',
-//            'title'=>'测试openid',
-//            'name'=>RandomUserInfo::getNickname(),
-//            'match_type'=>'10',
-//            'model'=>'keyword',
-//            'method'=>'index',
-//            'type'=>'text',
-//            'status'=>'10',
-//            'content'=>'开始',
-//        ]);
 
         if (empty($OpenConfig['transpond_url'])){
             $ReplyApi = new ReplyApi($Request->input(),$AloneConfig,$Request->path('appid'));
