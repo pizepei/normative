@@ -20,7 +20,8 @@
         "php": ">=7.0.0",
         "ext-pdo": "*",
         "ext-json": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "pizepei/helper": "dev-master"
     },
     "repositories": {
         "0": {

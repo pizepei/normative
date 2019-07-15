@@ -11,8 +11,7 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
-use pizepei\func\Func;
-use pizepei\randomInformation\RandomUserInfo;
+use pizepei\wechat\basics\AccessToken;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
 use pizepei\model\redis\Redis;
@@ -20,11 +19,32 @@ use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\wechat\model\OpenMessageLogModel;
 use pizepei\wechat\model\PreAuthCodeModel;
-use pizepei\wechat\model\OpenWechatKeywordModel;
 use pizepei\wechat\service\Config;
 use pizepei\wechat\service\Open;
 class WeChatCommon extends Controller
 {
+
+    /**
+     * @param \pizepei\staging\Request $Request [json]
+     *      path [object] 路径参数
+     *          verify [string] 获取的微信域名切割参数
+     * @return array [json]
+     *      data [raw]
+     * @title  微信域名验证
+     * @explain 微信配置时需要使用文件验证此方法可自动验证
+     * @router get test debug:false
+     * @throws \Exception
+     */
+    public function test(Request $Request)
+    {
+        $config = new Config(Redis::init());
+        return $config->access_token('wx3260515a4514ec94',false);
+
+    }
+
+
+
+
     /**
      * @param \pizepei\staging\Request $Request [json]
      *      path [object] 路径参数
@@ -64,8 +84,6 @@ class WeChatCommon extends Controller
      */
     public function openMessage(Request $Request)
     {
-        var_dump(Func::file());
-        exit();
         OpenMessageLogModel::table()->add([
             'title'=>'init数据',
             'request'=>$Request->input(),
@@ -111,7 +129,7 @@ class WeChatCommon extends Controller
      *      raw [raw] 数据流
      *          AppId [string] 第三方平台appid
      *          Encrypt [string] 密文
-     * @return array [json]
+     * @return array [xml]
      * @title  第三方服务授权接口
      * @explain 用于接收取消授权通知、授权成功通知、授权更新通知，也用于接收ticket，ticket是验证平台方的重要凭据。
      * @router post open/accredit/inform debug:false
@@ -150,21 +168,6 @@ class WeChatCommon extends Controller
             'xmlToArray'=>$Request->input('','raw')
         ]);
         return $result;
-    }
-    /**
-     * @param \pizepei\staging\Request $Request [xml]
-     *      raw [xml] 数据流
-     *          ToUserName [string] 开发者ai
-     * @return array [json]
-     * @title  测试接口
-     * @explain 测试接口
-     * @router get open/test debug:false
-     * @throws \Exception
-     */
-    public function test (Request $Request)
-    {
-        Open::init(\Config::OPEN_WECHAT_CONFIG,Redis::init());
-        return Open::authorizerInfo('wx3260515a4514ec94');
     }
     /**
      * @Author 皮泽培
