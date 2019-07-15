@@ -11,6 +11,7 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
+use pizepei\func\Func;
 use pizepei\randomInformation\RandomUserInfo;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
@@ -63,6 +64,8 @@ class WeChatCommon extends Controller
      */
     public function openMessage(Request $Request)
     {
+        var_dump(Func::file());
+        exit();
         OpenMessageLogModel::table()->add([
             'title'=>'init数据',
             'request'=>$Request->input(),
@@ -116,6 +119,7 @@ class WeChatCommon extends Controller
      */
     public function openAccreditInform (Request $Request)
     {
+
         ignore_user_abort(true);
         set_time_limit(60);
         OpenAccreditInformLogModel::table()->add([
