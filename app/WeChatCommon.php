@@ -11,7 +11,7 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
-use pizepei\wechat\basics\AccessToken;
+use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
 use pizepei\model\redis\Redis;
@@ -37,6 +37,9 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+        $QrCode = new QrCode('wx3260515a4514ec94');
+        return $QrCode->get_ticket(1234,10);
+
         $config = new Config(Redis::init());
         return $config->access_token('wx3260515a4514ec94',false);
 
