@@ -11,6 +11,7 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
+use pizepei\func\Func;
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
@@ -28,7 +29,7 @@ class WeChatCommon extends Controller
      * @param \pizepei\staging\Request $Request [json]
      *      path [object] 路径参数
      *          verify [string] 获取的微信域名切割参数
-     * @return array [json]
+     * @return array|bool [json]
      *      data [raw]
      * @title  微信域名验证
      * @explain 微信配置时需要使用文件验证此方法可自动验证
@@ -37,6 +38,9 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+//        return false;
+        return Helper::init()->getUuid(true);
+
         $QrCode = new QrCode('wx3260515a4514ec94');
         return $QrCode->get_ticket(1234,10);
 
