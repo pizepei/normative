@@ -53,8 +53,8 @@ class Deploy extends Controller
      */
     public function deleteConfig(Request $Request)
     {
-
-        Func::M('file')::deldir();
+//        Helper::file()->deldir();
+//        Func::M('file')::deldir();
 
     }
 
@@ -90,7 +90,7 @@ class Deploy extends Controller
         }else{
             $path = '..'.DIRECTORY_SEPARATOR.'runtime'.DIRECTORY_SEPARATOR.$path.DIRECTORY_SEPARATOR;
         }
-        Func::M('file')::deldir($path);
+        Helper::file()->deldir($path);
     }
 
     /**

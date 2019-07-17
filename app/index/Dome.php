@@ -30,6 +30,7 @@ namespace app\index;
  *
  */
 
+use app\Helper;
 use model\basics\account\AccountModel;
 use model\TerminalInfoModel;
 use model\TestModel;
@@ -351,7 +352,7 @@ class Dome extends Controller
      */
     public function int_rand()
     {
-        return Func::M('str')::int_rand(10);
+        return Helper::str()->int_rand(10);
 
     }
 
@@ -370,7 +371,7 @@ class Dome extends Controller
      */
     public function str_rand()
     {
-        return Func::M('str')::str_rand(10);
+        return Helper::str()->int_rand(10);
     }
 
     /**

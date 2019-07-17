@@ -4,12 +4,7 @@
 namespace app;
 
 
-class Helper
+class Helper extends \pizepei\helper\Helper
 {
-    public static function test()
-    {
-        echo 'ssss';
 
-
-    }
 }

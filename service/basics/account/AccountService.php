@@ -10,6 +10,7 @@
 namespace service\basics\account;
 
 
+use app\Helper;
 use model\basics\account\AccountMilestoneModel;
 use model\basics\account\AccountModel;
 use pizepei\encryption\google\GoogleAuthenticator;
@@ -71,10 +72,11 @@ class AccountService
         if(!empty($password_hash)){
             $Data['password_hash'] = $password_hash;
         }
-        $Data['number'] = 'common_'.Func::M('str')::int_rand($config['number_count']);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
+
+        $Data['number'] = 'common_'.Helper::str()->int_rand($config['number_count']);//编号固定开头的账号编码(common,tourist,app,appAdmin,appSuperAdmin,Administrators)
         $Data['phone'] = $Request['phone'];
         $Data['email'] = $Request['email'];
-        $Data['logon_token_salt'] = Func::M('str')::str_rand($config['user_logon_token_salt_count']);//建议user_logon_token_salt
+        $Data['logon_token_salt'] = Helper::str()->str_rand($config['user_logon_token_salt_count']);//建议user_logon_token_salt
         $AccountData = AccountModel::table()->add($Data);
         if (empty($AccountData))
         {
