@@ -20,9 +20,17 @@ normative致力于在框架层次强制规范开发人员的业务实现了确�
         * 文件微服务。
         * 异步队列业务处理微服务（与websocket配合）。
         * websocket服务。
-        * 业务微服务。
+        * 各业务微服务。      
 ### 运行环境的简单介绍：
  + 1、推荐PHP7.0+版本+MySQL5.7+Nginx
  + 2、功能模块中大量运用到Redis
+### 安装方式：
+    方式一：  composer create-project pizepei/normative 项目名称   版本：dev-master为最新  不写为最新稳定版本
+    方式二：  git clone --branch [tags标签] git@github.com:pizepei/normative.git   
+             clone对应分支使用 git clone -b [分支]  git@github.com:pizepei/normative.git 
 ### 单元测试：
-composer require --dev phpunit/phpunit:8
+    composer require --dev phpunit/phpunit:8
+### 开发规范
+* 团队开发业务功能时可尽可能的以composer包形式开发方便代码维护和跨项目复用。
+    * composer包可使用本地git源详情这样项目代码就不公开[https://getcomposer.org/doc/04-schema.md#repositories]
+    * 本地源需要认证可创建auth.json文件[https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#authentication]当然团队成员在自己工作电脑上已经有SSH Keys 就不需要这个文件了
