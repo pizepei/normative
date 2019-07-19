@@ -11,7 +11,9 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
-use pizepei\func\Func;
+use pizepei\helper\Helper;
+use pizepei\staging\App;
+use pizepei\staging\AppTest;
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
@@ -29,7 +31,7 @@ class WeChatCommon extends Controller
      * @param \pizepei\staging\Request $Request [json]
      *      path [object] 路径参数
      *          verify [string] 获取的微信域名切割参数
-     * @return array|bool [json]
+     * @return array|bool|string [json]
      *      data [raw]
      * @title  微信域名验证
      * @explain 微信配置时需要使用文件验证此方法可自动验证
@@ -38,6 +40,24 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+//        $App = new App();
+//        return $App->Request->post();
+//        $config = new Config(Redis::init());
+//        $access_token =  $config->access_token('wx3260515a4514ec94');
+//        \pizepei\helper\Helper::google('sss')->deldir();
+        $ddd = 'sss';
+        Helper::init()::google('SSS');
+        var_dump(Helper()::ddd($ddd,'2222'));
+//        (new Helper)->abb;
+        return '';
+//        $Data = Helper::init()->httpRequest('https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token='.$access_token['authorizer_access_token']);
+        $url = 'https://www.baidu.com';
+//        $url = 'http://deploy.pt.zsrnet.com/tenant/tenant-list?staffAccount=staff_admin_engineer&staffPassword=S55ssajgcgth6SDSssss454ewew%5E%40*jhaaxdsdjksdsd&__debug=1';
+        $Data = Helper::init()->httpRequest($url);
+        return Helper::arrayList()->array_explode_value($Data['header'],':',true);
+//        var_dump($access_token);
+//        https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token={%ACCESS_TOKEN%}
+        var_dump($Data);
 //        return false;
         return Helper::init()->getUuid(true);
 
