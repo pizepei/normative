@@ -211,7 +211,7 @@ class Deploy extends Controller
     {
 
         $LocalDeploy = new LocalDeployServic();
-        return $this->succeed($LocalDeploy->initConfigCenter($Request->post(),$Request->path('appid')));
+        return $this->succeed($LocalDeploy->initConfigCenter($Request->input('','raw'),$Request->path('appid')));
     }
 
 }
