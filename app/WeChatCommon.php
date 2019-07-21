@@ -46,10 +46,8 @@ class WeChatCommon extends Controller
 //        $access_token =  $config->access_token('wx3260515a4514ec94');
 //        \pizepei\helper\Helper::google('sss')->deldir();
         $ddd = 'sss';
-        Helper::init()::google('SSS');
-        var_dump(Helper()::ddd($ddd,'2222'));
 //        (new Helper)->abb;
-        return '';
+        return ['sss'];
 //        $Data = Helper::init()->httpRequest('https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token='.$access_token['authorizer_access_token']);
         $url = 'https://www.baidu.com';
 //        $url = 'http://deploy.pt.zsrnet.com/tenant/tenant-list?staffAccount=staff_admin_engineer&staffPassword=S55ssajgcgth6SDSssss454ewew%5E%40*jhaaxdsdjksdsd&__debug=1';
