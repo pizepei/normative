@@ -40,13 +40,15 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+//        var_dump(app()->get('sss'));
 //        $App = new App();
 //        return $App->Request->post();
 //        $config = new Config(Redis::init());
 //        $access_token =  $config->access_token('wx3260515a4514ec94');
-//        \pizepei\helper\Helper::google('sss')->deldir();
+
         $ddd = 'sss';
 //        (new Helper)->abb;
+        return $this->error(['dddd']);
         return ['sss'];
 //        $Data = Helper::init()->httpRequest('https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token='.$access_token['authorizer_access_token']);
         $url = 'https://www.baidu.com';

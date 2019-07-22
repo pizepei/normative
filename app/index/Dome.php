@@ -58,7 +58,7 @@ class Dome extends Controller
      */
     public function index()
     {
-        require(__INIT__['index-view']);
+        require($this->app->__INIT__['index-view']);
     }
 
     /**
