@@ -28,7 +28,7 @@ class WeChatCommon extends Controller
 {
 
     /**
-     * @param \pizepei\staging\Request $Request [json]
+     * @param \pizepei\staging\Request $Request [xml]
      *      path [object] 路径参数
      *          verify [string] 获取的微信域名切割参数
      * @return array|bool|string [json]
@@ -40,6 +40,7 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+        return Helper()->syncLock(Redis::init(),['test','1']);
 //        var_dump(app()->get('sss'));
 //        $App = new App();
 //        return $App->Request->post();
@@ -66,11 +67,20 @@ class WeChatCommon extends Controller
 
         $config = new Config(Redis::init());
         return $config->access_token('wx3260515a4514ec94',false);
-
     }
 
-
-
+    /**
+     * @return array|bool|string [json]
+     *      data [raw]
+     * @title  微信域名验证
+     * @explain 微信配置时需要使用文件验证此方法可自动验证
+     * @router get test2 debug:false
+     * @throws \Exception
+     */
+    public function test2()
+    {
+        return Helper()->syncLock(Redis::init(),['test','1'],false);
+    }
 
     /**
      * @param \pizepei\staging\Request $Request [json]
