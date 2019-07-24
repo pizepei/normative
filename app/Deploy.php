@@ -39,7 +39,7 @@ class Deploy extends Controller
          * 命令行没事 saas
          */
         $model = TableAlterLogModel::table();
-        return $model->initStructure();
+        return $model->initStructure('',true);
     }
 
     /**
