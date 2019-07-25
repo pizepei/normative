@@ -30,7 +30,7 @@ class Resource
      * @return array
      * @throws \ReflectionException
      */
-    public static function initJurisdictionList($data)
+    public static function initJurisdictionList($data,string $appPath)
     {
         $Resource = 'authority\\'.__APP__.'\\Resource';
 
