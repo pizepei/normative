@@ -211,12 +211,12 @@ class Dome extends Controller
      *
      * @return array [json]
      * @title 获取路由信息
-     * @explain 路由对象在框架初始化时就实例化了，同时该对象一直保留,在框架控制器、模型等框架初始化后的所有地方都可直接使用 Route::init()获取到该对象
+     * @explain 路由对象在框架初始化时就实例化了，同时该对象一直保留,在框架控制器、模型等框架初始化后的所有地方都可直接使用 $this->app->Route()获取到该对象
      * @router get route
      */
     public function getRoute()
     {
-        $Route = Route::init();
+        $Route = $this->app->Route();
 
         return [
             'controller' => $Route->controller,//控制器

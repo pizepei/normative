@@ -49,7 +49,7 @@ class Document extends Controller
      */
     public function navList()
     {
-        return Route::init()->noteBlock;
+        return $this->app->Route()->noteBlock;
     }
 
     /**
@@ -78,9 +78,9 @@ class Document extends Controller
     public function getNav(Request $Request)
     {
         $input = $Request->input();
-        $fatherInfo = Route::init()->noteBlock[$input['father']];
+        $fatherInfo = $this->app->Route()->noteBlock[$input['father']];
         $fatherInfo['index'] = $input['father'];
-        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        $info = $this->app->Route()->noteBlock[$input['father']]['route'][$input['index']]??null;
         if(!empty($info)){
             $info['index'] = $input['index'];
         }
@@ -114,7 +114,7 @@ class Document extends Controller
     {
         $input = $Request->input();
 
-        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        $info = $this->app->Route()->noteBlock[$input['father']]['route'][$input['index']]??null;
         if(!empty($info)){
             $info['index'] = $input['index'];
         }
@@ -155,7 +155,7 @@ class Document extends Controller
     public function ReturnParam(Request $Request)
     {
         $input = $Request->input();
-        $info = Route::init()->noteBlock[$input['father']]['route'][$input['index']]??null;
+        $info = $this->app->Route()->noteBlock[$input['father']]['route'][$input['index']]??null;
         if($info['ReturnType'] != $input['type']){
             return $this->succeed([],'获取1'.$input['index'].'成功',0);
         }
@@ -197,9 +197,8 @@ class Document extends Controller
      */
     public function jurisdictionList(Request $Request)
     {
-        $Route = Route::init();
         return $this->succeed([
-            'list'=>Resource::initJurisdictionList($Route->Permissions),
+            'list'=>Resource::initJurisdictionList($this->app->Route()->Permissions,$this->app),
             'checkedId'=>['getMenu','409bfd433e7dd7af7d7530ad5fb7bc46'],
         ]);
 

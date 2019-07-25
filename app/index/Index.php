@@ -104,7 +104,7 @@ class Index extends Controller
 
         var_dump(ltrim("/router/routers/ssss","/router"));
 
-        $Route = Route::init();
+        $Route = $this->app->Route();
 
         return $Request->path();
 
@@ -249,12 +249,12 @@ class Index extends Controller
         /**
          * 路由类
          */
-//        $Route = Route::init();
+//        $Route = $this->app->Route();
         /**
          * 请求类
          */
 //        var_dump($dsdsds);
-//        $Request = Request::init();
+//        $Request = $this->app->Request();
 //        return ['code'=>001,'msg'=>'比如这样','data'=>['获取请求控制器'=>$Route->controller,'获取请求控制器方法'=>$Route->method]];
 //        return $Request->input('a');
     }
@@ -356,7 +356,7 @@ class Index extends Controller
 
     public function test1()
     {
-        $Request = Request::init();
+        $Request = $this->app->Request();
         /**
          * 重定向
          */
@@ -366,7 +366,7 @@ class Index extends Controller
 
     public function test2()
     {
-        $Request = Request::init();
+        $Request = $this->app->Request();
         /**
          * 重定向
          */
@@ -375,7 +375,7 @@ class Index extends Controller
     }
     public function test3()
     {
-        $Request = Request::init();
+        $Request = $this->app->Request();
         /**
          * 重定向
          */
@@ -385,7 +385,7 @@ class Index extends Controller
 
     public function test4()
     {
-        $Request = Request::init();
+        $Request = $this->app->Request();
         /**
          * 重定向
          */

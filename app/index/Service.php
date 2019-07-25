@@ -37,7 +37,7 @@ class Service
 
         return Time::solar(date('Y'),date('m'),date('d'),date('H'));
 
-        //Request::init()
+        //$this->app->Request()
         //Request
     }
 }
