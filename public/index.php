@@ -10,6 +10,4 @@ require('../vendor/autoload.php');
 
 (new pizepei\staging\App(false, 'app','ORIGINAL'))->start();
 
-//$Start = new pizepei\staging\Start;
-//$Start->start();
 

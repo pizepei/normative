@@ -42,3 +42,12 @@ normative致力于在框架层次强制规范开发人员的业务实现来确�
 ###资源分享
 #### 软件
 * 官方免费Xftp和Xshell [https://www.netsarang.com/en/free-for-home-school/]（这个是官方免费的只需要填写姓名和邮箱就可以收到一封带有下载地址的官方邮件）
+#### PHP扩展安装
+* PHP 扩展下载[http://pecl.php.net/]
+* sql server 拓展安装（注意细节）
+    * 下载地址：[http://pecl.php.net/package/pdo_sqlsrv]
+    * 避免出现make: *** No rule to make target `install'. Stop.错误（因为缺少依赖包的原因）
+        * 执行  yum -y install gcc gcc-c++ autoconf libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel bzip2 bzip2-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5-devel libidn libidn-devel openssl openssl-devel nss_ldap openldap openldap-devel  openldap-clients openldap-servers libxslt-devel libevent-devel ntp  libtool-ltdl bison libtool vim-enhanced  
+    * 为了避免make 时出现【fatal error: sql.h: No such file or directory】错误 
+        * 执行  yum install unixODBC-devel    安装unixodbc的工具包即可
+    * 与mysql不同 的dbh  new PDO("sqlsrv:Server=localhost;Database=test", $username , $password);
