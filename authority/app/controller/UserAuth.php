@@ -35,21 +35,21 @@ class UserAuth extends Authority
                 'name'=>'添加账号操作',
                 'extend'=>[
                     'organization'=>Model::UUID_ZERO,
-                    'request'=>__REQUEST_ID__,
+                    'request'=>$this->app->__REQUEST_ID__,
                 ]
             ],
             '282e641f4e6d57d537506b39c44d3b3c'=>[
                 'name'=>'添加账号操作',
                 'extend'=>[
                     'organization'=>Model::UUID_ZERO,
-                    'request'=>__REQUEST_ID__,
+                    'request'=>$this->app->__REQUEST_ID__,
                 ]
             ],
             '5096329358d51606876178c77d940bb4'=>[
                 'name'=>'添加账号操作',
                 'extend'=>[
                     'organization'=>Model::UUID_ZERO,
-                    'request'=>__REQUEST_ID__,
+                    'request'=>$this->app->__REQUEST_ID__,
                 ]
             ]
         ];

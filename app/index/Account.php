@@ -18,6 +18,7 @@ use pizepei\randomInformation\RandomUserInfo;
 use pizepei\service\verifyCode\GifverifyCode;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
+use pizepei\wechat\basics\QrCode;
 use service\basics\account\AccountService;
 
 class Account extends Controller
@@ -212,4 +213,37 @@ class Account extends Controller
         return ['Nickname'=>RandomUserInfo::getNickname(),'Compellation'=>RandomUserInfo::getCompellation($count)];
     }
 
+    /**
+     * @Author 皮泽培
+     * @Created 2019/7/27 14:52
+     * @param \pizepei\staging\Request $Request
+     *   path [object] 路径参数
+     *      phone [int number] 手机号码
+     *      type [string required] 验证类型
+     * @return array [json] 定义输出返回数据
+     *      data [object]
+     *          src [string] 显示二维码
+     *          scene_id [uuid] 唯一标识
+     *          url [string] 二维码内容
+     *          type [string] 类型
+     *          number [int number] 手机号码
+     *          expire_seconds [int] 二维码有效期
+     * @title  获取微信二维码验证码
+     * @explain 获取微信二维码验证码
+     * @throws \Exception
+     * @router get wecht-qr-code/:type[string]/:phone[number]
+     */
+    public function getWechtQr(Request $Request)
+    {
+        $data = $Request->path();
+        # 查询上次获取的验证码时间判断是否重复获取
+        # 获取uuid
+        # 使用uuid获取微信二维码
+        # 写入记录
+        # 返回二维码和手机信息
+
+
+        $QrCode = new QrCode('wx3260515a4514ec94');
+        return $this->succeed($QrCode->numberVerificationCode(13266579753,1,1,2));
+    }
 }

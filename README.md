@@ -45,9 +45,13 @@ normative致力于在框架层次强制规范开发人员的业务实现来确�
 #### PHP扩展安装
 * PHP 扩展下载[http://pecl.php.net/]
 * sql server 拓展安装（注意细节）
-    * 下载地址：[http://pecl.php.net/package/pdo_sqlsrv]
-    * 避免出现make: *** No rule to make target `install'. Stop.错误（因为缺少依赖包的原因）
-        * 执行  yum -y install gcc gcc-c++ autoconf libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel bzip2 bzip2-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5-devel libidn libidn-devel openssl openssl-devel nss_ldap openldap openldap-devel  openldap-clients openldap-servers libxslt-devel libevent-devel ntp  libtool-ltdl bison libtool vim-enhanced  
-    * 为了避免make 时出现【fatal error: sql.h: No such file or directory】错误 
-        * 执行  yum install unixODBC-devel    安装unixodbc的工具包即可
-    * 与mysql不同 的dbh  new PDO("sqlsrv:Server=localhost;Database=test", $username , $password);
+    * 准备工作:
+        * 下载地址：[http://pecl.php.net/package/pdo_sqlsrv]
+        * 加入微软的源 curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssqlrelease.repo
+        * 或者一次性 安装所有依赖包
+            * 防止冲突先卸载原有版本(可选)  yum remove unixODBC 
+            * yum -y install gcc gcc-c++ autoconf libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glibc glibc-devel glib2 glib2-devel bzip2 bzip2-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5-devel libidn libidn-devel openssl openssl-devel nss_ldap openldap openldap-devel  openldap-clients openldap-servers libxslt-devel libevent-devel ntp  libtool-ltdl bison libtool vim-enhanced  msodbcsql mssql-tools unixODBC-devel    
+    * 编译安装pdo_sqlsrv驱动
+        * 避免出现make: *** No rule to make target `install'. Stop.错误（因为缺少依赖包的原因，请执行上面的依赖安装命令）
+        * 为了避免make 时出现【fatal error: sql.h: No such file or directory】错误 （ 安装unixodbc的工具包即可  yum install unixODBC-devel ）
+        * 与mysql不同 的dbh  new PDO("sqlsrv:Server=localhost,端口号;Database=数据库", 用户名 , 密码); 

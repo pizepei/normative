@@ -12,6 +12,7 @@
  */
 namespace app;
 use pizepei\helper\Helper;
+use pizepei\model\db\Db;
 use pizepei\staging\App;
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
@@ -40,48 +41,11 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
-
-        $db = new \PDO("sqlsrv:Server=39.108.92.110;Database=dsds","myUserName","Powerthink@123");
-        $sql = "select count(*) count from testTable";
-        $res = $db->query($sql);
-        while ($row = $res->fetch()){
-            print_r($row);
-        }
-
-
-//        $Template = new  Template('wx3260515a4514ec94','oodTXv1fC88aC08dWmWoCHSGo1kY','OPENTM407734422');
-//        return $Template->send([
-//            'ssss','dddddd','ddffff','ssss','dddddd','ddffff'
-//
-//        ]);
-//
-//        return Helper()->syncLock(Redis::init(),['test','1'],false);
-////        var_dump(app()->get('sss'));
-////        $App = new App();
-////        return $App->Request->post();
-////        $config = new Config(Redis::init());
-////        $access_token =  $config->access_token('wx3260515a4514ec94');
-//
-//        $ddd = 'sss';
-////        (new Helper)->abb;
-//        return $this->error(['dddd']);
-//        return ['sss'];
-////        $Data = Helper::init()->httpRequest('https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token='.$access_token['authorizer_access_token']);
-//        $url = 'https://www.baidu.com';
-////        $url = 'http://deploy.pt.zsrnet.com/tenant/tenant-list?staffAccount=staff_admin_engineer&staffPassword=S55ssajgcgth6SDSssss454ewew%5E%40*jhaaxdsdjksdsd&__debug=1';
-//        $Data = Helper::init()->httpRequest($url);
-//        return Helper::arrayList()->array_explode_value($Data['header'],':',true);
-////        var_dump($access_token);
-////        https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token={%ACCESS_TOKEN%}
-//        var_dump($Data);
-////        return false;
-//        return Helper::init()->getUuid(true);
-
         $QrCode = new QrCode('wx3260515a4514ec94');
         return $QrCode->get_ticket(1234,10);
 
-        $config = new Config(Redis::init());
-        return $config->access_token('wx3260515a4514ec94',false);
+//        $config = new Config(Redis::init());
+//        return $config->access_token('wx3260515a4514ec94',false);
     }
 
     /**

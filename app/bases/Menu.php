@@ -51,7 +51,10 @@ class Menu extends Controller
      * @Created 2019/4/23 23:02
      * @param \pizepei\staging\Request $Request
      * @return array [json]
-     *
+     *      data [object]
+     *          username [string]
+     *          sex [string]
+     *          role [int]
      * @title  用户信息
      * @explain 简单用户信息
      * @authGroup basics.index.user:获取后台菜单
@@ -69,7 +72,8 @@ class Menu extends Controller
      * @Created 2019/4/23 23:02
      * @param \pizepei\staging\Request $Request
      * @return array [json]
-     *
+     *     data [object]
+     *      newmsg [int] 新信息
      * @title  用户信息
      * @explain 简单用户信息
      * @authTiny 微权限提供权限分配 [获取店铺所有  获取所有店铺  获取一个]
