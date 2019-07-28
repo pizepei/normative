@@ -244,6 +244,6 @@ class Account extends Controller
 
 
         $QrCode = new QrCode('wx3260515a4514ec94');
-        return $this->succeed($QrCode->numberVerificationCode(13266579753,1,1,2));
+        return $this->succeed($QrCode->numberVerificationCode(13266579753,1,60,2));
     }
 }
