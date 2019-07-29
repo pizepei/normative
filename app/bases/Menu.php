@@ -16,14 +16,13 @@ use model\basics\backstage\AdminMenuModel;
 use model\basics\backstage\MenuModel;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
+use service\basics\MenuService;
 
 class Menu extends Controller
 {
     /**
      * @Author pizepei
      * @Created 2019/4/23 22:35
-     *
-     * @param \pizepei\staging\Request $Request
      * @return array [json]
      *      data [objectList]
      *          name [string] 一级菜单名称（与视图的文件夹名称和路由路径对应）
@@ -48,52 +47,9 @@ class Menu extends Controller
      * @router get menu-list
      * @throws \Exception
      */
-    public function index(Request $Request)
+    public function index()
     {
-        AdminMenuModel::table()->fetchAll();
-        return $this->succeed([
-            [
-                "name"=>"component",//一级菜单名称（与视图的文件夹名称和路由路径对应）
-                'title'=>'工作台',//一级菜单标题
-                'icon'=>"layui-icon-home",//一级菜单图标样式
-                "spread"=>true,//是否默认展子菜单（1.0.0-beta9 新增）
-                'list'=>[[
-                    "name"=> "grid", //二级菜单名称（与视图的文件夹名称和路由路径对应）
-                    'title'=>'导航',//二级菜单标题
-                    'jump'=>'/',//自定义一级菜单路由地址，默认按照 name 解析。一旦设置，将优先按照 jump 设定的路由跳转
-                    'list'=>null,
-                ]]
-            ],
-            [
-            'title'=>'微信应用',
-            'icon'=>"layui-icon-home",
-                "name"=>"wechat",//一级菜单名称（与视图的文件夹名称和路由路径对应）
-                'list'=>[
-                    [
-                        "name"=> "Tencent", //二级菜单名称（与视图的文件夹名称和路由路径对应）
-                        'title'=>'微信公众号管理',//二级菜单标题
-                        'list'=>[
-                                    [
-                                    "name"=> "lsit", //二级菜单名称（与视图的文件夹名称和路由路径对应）
-                                    'title'=>'公众号列表',//二级菜单标题
-                                    'jump'=>'/',//自定义一级菜单路由地址，默认按照 name 解析。一旦设置，将优先按照 jump 设定的路由跳转
-                                    ],
-                                ]
-                    ],
-                    [
-                        "name"=> "codeAppManage", //二级菜单名称（与视图的文件夹名称和路由路径对应）
-                        'title'=>'微信验证应用管理',//二级菜单标题
-                        'list'=>[
-                                [
-                                "name"=> "applsit", //二级菜单名称（与视图的文件夹名称和路由路径对应）
-                                'title'=>'导航',//二级菜单标题
-                                'jump'=>'/',//自定义一级菜单路由地址，默认按照 name 解析。一旦设置，将优先按照 jump 设定的路由跳转
-                                ],
-                        ]
-                    ]
-                ]
-        ]
-        ]);
+        return $this->succeed((new  MenuService())->getAdminMenu());
 
     }
 
