@@ -45,7 +45,6 @@ class OpenCommon extends Controller
         PreAuthCodeModel::table()->add(['url'=>$data['url'],'PreAuthCode'=>$data['pre_auth_code'],'uuid'=>$Request->path('id')]);
         return  '<a href="'.$data['url'].'">去授权</a>';
     }
-
     /**
      * @param \pizepei\staging\Request $Request [json]
      *      path [object] 路径参数

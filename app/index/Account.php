@@ -14,11 +14,14 @@
 namespace app\index;
 
 use model\basics\account\AccountModel;
+use pizepei\helper\Helper;
 use pizepei\randomInformation\RandomUserInfo;
 use pizepei\service\verifyCode\GifverifyCode;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\wechat\basics\QrCode;
+use pizepei\wechat\model\OpenWechatCodeAppModel;
+use pizepei\wechatClient\Client;
 use service\basics\account\AccountService;
 
 class Account extends Controller
@@ -241,9 +244,33 @@ class Account extends Controller
         # 使用uuid获取微信二维码
         # 写入记录
         # 返回二维码和手机信息
+        $CodeApp = OpenWechatCodeAppModel::table()
+            ->where(['id'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'])
+            ->fetch();
+        $CodeApp['appid'] = $CodeApp['id'];
+        $CodeApp['url'] = 'http://oauth.heil.top/wechat/common/code-app/qr/'.$CodeApp['id'];
+        $client = new Client($CodeApp);
+        $qr= $client->getQr(Helper::str()->int_rand(6), $Request->path('type'));
+        var_dump($qr);
 
-
-        $QrCode = new QrCode('wx3260515a4514ec94');
+        $QrCode = new QrCode($CodeApp['authorizer_appid']);
         return $this->succeed($QrCode->numberVerificationCode(13266579753,1,60,2));
+    }
+
+    /**
+     * @Author 皮泽培
+     * @Created 2019/8/2 14:20
+     *   path [object] 路径参数
+     *   post [object] post参数
+     * @return array [json] 定义输出返回数据
+     * @title  微信验证回调地址
+     * @explain 微信验证回调地址
+     * @baseAuth Resource:public
+     * @throws \Exception
+     * @router get wecht-qr-target
+     */
+    public function wechtQrTarget()
+    {
+
     }
 }

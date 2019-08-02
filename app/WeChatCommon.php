@@ -22,6 +22,7 @@ use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
 use pizepei\wechat\model\OpenMessageLogModel;
+use pizepei\wechat\model\OpenWechatCodeAppModel;
 use pizepei\wechat\model\PreAuthCodeModel;
 use pizepei\wechat\service\Config;
 use pizepei\wechat\service\Open;
@@ -232,4 +233,38 @@ class WeChatCommon extends Controller
     {
         return $Request->path();
     }
+
+    /**
+     * @Author 皮泽培
+     * @Created 2019/8/2 16:49
+     * @param Request $Request
+     *   path [object] 路径参数
+     *      appid [uuid] 应用appid
+     *   rule [object] rule参数
+     *      nonce [string required]
+     *      timestamp [int required]
+     *      signature [string required]
+     *      encrypt_msg [string required]
+     * @return array [json] 定义输出返回数据
+     *      data [raw] uuid
+     * @title  验证应用二维码获取
+     * @explain 验证应用二维码获取
+     * @baseAuth Resource:public
+     * @throws \Exception
+     * @router post code-app/qr/:appid[uuid]
+     */
+    public function getQr(Request $Request)
+    {
+        $App = OpenWechatCodeAppModel::table()
+            ->where(['id'=>$Request->path('appid'),'status'=>2])
+            ->cache(['OpenWechatCodeApp','config'],60)
+            ->fetch();
+        if (empty($App)){
+            return $this->error($Request->path('appid'),'非法请求');
+        }
+        $QrCode = new QrCode($App['authorizer_appid']);
+        return $QrCode->responseQr($App,$Request->raw());
+
+    }
+
 }
