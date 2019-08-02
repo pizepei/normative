@@ -20,7 +20,8 @@
         "ext-pdo": "*",
         "ext-json": "*",
         "ext-zip": "*",
-        "pizepei/helper": "dev-master"
+        "pizepei/helper": "dev-master",
+        "pizepei/wechat-client": "dev-master"
     },
     "repositories": {
         "0": {
