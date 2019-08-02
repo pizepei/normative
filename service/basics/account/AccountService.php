@@ -10,11 +10,10 @@
 namespace service\basics\account;
 
 
-use app\Helper;
 use model\basics\account\AccountMilestoneModel;
 use model\basics\account\AccountModel;
 use pizepei\encryption\google\GoogleAuthenticator;
-use pizepei\func\Func;
+use pizepei\helper\Helper;
 use pizepei\model\redis\Redis;
 use pizepei\service\encryption\PasswordHash;
 use pizepei\service\jwt\JsonWebToken;
@@ -109,62 +108,46 @@ class AccountService
          * 判断可登录的用户
          */
 
-        /**
-         * 查询密码错误限制
-         */
+        # 查询密码错误限制（是否超过错误限制）
         $passwordWrongLock = $this->passwordWrongLock($userData);
         if($passwordWrongLock)
         {
-            return $Controller->error([],$passwordWrongLock);
+            return ['result'=>false,'msg'=>$passwordWrongLock];
         }
         /**
          * 注意为了保证安全
          *      登录需要使用的logon_token_salt 解密进行如下处理
          *          1、实际进行操作是是使用项目全局的logon_token_salt拼接用户logon_token_salt
-         *          2、在强制用户下线时：项目全局强制可通过修改项目logon_token_salt，单一用户相关用户logon_token_salt
-         *          3、由于是jwt方式用户logon_token_salt要注意缓存存在和数据安全
+         *          2、在强制用户下线时：项目全局强制可通过修改项目logon_token_salt，单一用户修改用户logon_token_salt
+         *          3、由于是jwt方式缓存用户logon_token_salt要注意缓存存和数据安全
          */
-
-        /**
-         * 实例化密码类
-         * 验证是否密码正确
-         */
+        # 实例化密码类 验证是否密码正确
         $PasswordHash = new PasswordHash();
-
         $hashResult = $PasswordHash->password_verify($Request['password'],$userData['password_hash'],$config['algo'],$config['options']);
-
         if(!$hashResult['result']){
-            $this->passwordWrongLock($userData,false);
-            return $Controller->error($Request,'账号或者密码错误');
+            $this->passwordWrongLock($userData,false);# 设置一次密码错误记录
+            return ['result'=>false,'msg'=>'账号或者密码错误'];
         }
-        /**
-         *A双因子认证secret
-         */
+        # 判断是否启用  A双因子认证secret
         if(!empty($userData['2fa_secret'])){
             $GoogleAuthenticator =  new GoogleAuthenticator();
             if(!$GoogleAuthenticator->verifyCode($userData['2fa_secret'],$Request['codeFA']??''))
             {
-                return $Controller->error($Request,'双因子认证错误');
+                return ['result'=>false,'msg'=>'双因子认证错误'];
             }
         }
-
+        # 如果配置文件或者用户的logon_token_salt有修改就存在 newHash 自动修改数据表中的 password_hash
         if($hashResult['newHash']){
-            /**
-             * 密码加密参数有修改
-             */
+            # 密码加密参数有修改
             $AccountModel = AccountModel::table()->insert([ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']]);
             if($AccountModel === 1){
-                /**
-                 * 写入里程碑事件
-                 */
+                # 写入里程碑事件
                 if(empty(AccountMilestoneModel::table()->add(['account_id'=>$userData['id'],'message'=> ['registerData'=>[ 'id'=>$userData['id'],'password_hash'=>$hashResult['newHash']],'requestId'=>__REQUEST_ID__], 'type'=>7,]))){
-                    return $Controller->error('系统错误','系统错误','L002');
+                    return ['result'=>false,'msg'=>'系统错误L002'];
                 }
             }
         }
-        /**
-         * 登录数量限制
-         */
+        # 判断登录数量限制
         if($this->logonCount($userData['id']) > $userData['logon_online_count']){ return $Controller->error([],'在线设备数量：当前在线'.$userData['logon_online_count']); }
 
         $Payload= [
@@ -234,21 +217,14 @@ class AccountService
      */
     public function changePassword(array $config,array $Request,array $userData,Controller $Controller)
     {
-
-        /**
-         * 判断两次密码是否一致
-         */
+        # 判断两次密码是否一致
         if($Request['password'] !== $Request['repass'])
         {
             return ['result'=>false,'msg'=>'两次密码不一致'];
         }
-        /**
-         * 实例化密码类
-         */
+        # 实例化密码类
         $PasswordHash = new PasswordHash();
-        /**
-         * 判断密码格式
-         */
+        # 判断密码格式
         if(empty($PasswordHash->password_match($config['password_regular'][0],$Request['password']))){
             return $Controller->error($Request['password'],$config['password_regular'][1]);
         }
@@ -257,9 +233,7 @@ class AccountService
          *      如：上次修改  是否是原密码
          */
 
-        /**
-         *生成新密码 获取密码hash
-         */
+        # 生成新密码 获取密码hash
         $password_hash = $PasswordHash->password_hash($Request['password'],$config['algo'],$config['options']);
         if(empty($password_hash)){
             return $Controller->error('系统错误','系统错误','L003');
@@ -396,6 +370,7 @@ class AccountService
                          */
                         $Redis->hset('user-logon-wrong:'.$userData['id'],'logonRestrict_wrong_count',0);
                     }else{
+
                         return '密码错误超限:'.round(($userData['password_wrong_lock']-((time()-$password_wrong_time)/60))).'分钟后解除限制';
                     }
                 }
