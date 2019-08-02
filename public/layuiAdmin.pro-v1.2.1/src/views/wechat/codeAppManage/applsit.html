@@ -1,10 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+
+<!--<title>自定义分页 - 数据表格</title>-->
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>微信应用</cite></a>
+        <a><cite>微信验证应用</cite></a>
+        <a><cite>应用列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">应用列表</div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="test-table-resetPage"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['admin', 'table'], function(){
+        var admin = layui.admin
+            ,table = layui.table;
+
+        table.render({
+            elem: '#test-table-resetPage'
+            ,url: '/wechat/official/list'
+            ,response: {
+                statusCode: 200 //规定成功的状态码，默认：0
+            }
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                ,groups: 1 //只显示 1 个连续页码
+                ,first: false //不显示首页
+                ,last: false //不显示尾页
+            }
+            ,cols: [[
+                ,{field:'nick_name', title: '公众号昵称', sort: true}
+                ,{field:'head_img',  title: '头像'}
+                ,{field:'head_img', title: '头像'
+                    ,templet: function(d){
+                        return '<img src='+ d.head_img +'">'
+                    }
+                }
+                ,{field:'service_type_info',  title: '类型',templet:function (d) {
+                        // 授权方公众号类型，0代表订阅号，1代表由历史老帐号升级后的订阅号，2代表服务号
+                        if (JSON.parse(d.service_type_info).id == 0){
+                            return str = '订阅号';
+                        }else if (JSON.parse(d.service_type_info).id == 1){
+                            return str = '升级的订阅号';
+                        }else if (JSON.parse(d.service_type_info).id == 2){
+                            return str = '服务号';
+                        }
+                    }}
+                ,{field:'verify_type_info',  title: '认证类型',templet:function (d) {
+                        //授权方认证类型，-1代表未认证，0代表微信认证，1代表新浪微博认证，2代表腾讯微博认证，3代表已资质认证通过但还未通过名称认证，4代表已资质认证通过、还未通过名称认证，但通过了新浪微博认证，5代表已资质认证通过、还未通过名称认证，但通过了腾讯微博认证
+                        if (JSON.parse(d.verify_type_info).id == 0){
+                            return '微信认证';
+                        }else if (JSON.parse(d.verify_type_info).id == -1){
+                            return '未认证';
+                        }else{
+                            return '其他认证';
+                        }
+                    }}
+                ,{field:'qrcode_url',  title: '二维码'
+                    ,templet: function(d){
+                        return '<img src='+ d.qrcode_url +'">'
+                    }
+                }
+                ,{field:'signature',  title: '帐号介绍'}
+                ,{field:'authorizer_appid',  title: 'appid'}
+                ,{field:'status',  title: '授权状态'
+                    ,templet: function(d){
+
+                        if (d.status == 1){
+                            return '未授权';
+                        }else if (d.status == 2){
+                            return '授权';
+                        }else{
+                            return '取消授权';
+                        }
+                    }
+                }
+
+            ]]
+        });
+
+    });
+</script>

@@ -44,10 +44,8 @@
                 ,last: false //不显示尾页
             }
             ,cols: [[
-                // ,{field:'component_appid',  title: '第三方平台id'}
                 ,{field:'nick_name', title: '公众号昵称', sort: true}
                 ,{field:'head_img',  title: '头像'}
-
                 ,{field:'head_img', title: '头像'
                     ,templet: function(d){
                         return '<img src='+ d.head_img +'">'
