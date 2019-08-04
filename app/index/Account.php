@@ -221,10 +221,10 @@ class Account extends Controller
      * @Created 2019/7/27 14:52
      * @param \pizepei\staging\Request $Request
      *   path [object] 路径参数
-     *      phone [int number] 手机号码
+     *      number [int number] 手机号码
      *      type [string required] 验证类型
      * @return array [json] 定义输出返回数据
-     *      data [object]
+     *      data [raw]
      *          src [string] 显示二维码
      *          scene_id [uuid] 唯一标识
      *          url [string] 二维码内容
@@ -234,11 +234,10 @@ class Account extends Controller
      * @title  获取微信二维码验证码
      * @explain 获取微信二维码验证码
      * @throws \Exception
-     * @router get wecht-qr-code/:type[string]/:phone[number]
+     * @router get wecht-qr-code/:type[string]/:number[number]
      */
     public function getWechtQr(Request $Request)
     {
-        $data = $Request->path();
         # 查询上次获取的验证码时间判断是否重复获取
         # 获取uuid
         # 使用uuid获取微信二维码
@@ -250,11 +249,10 @@ class Account extends Controller
         $CodeApp['appid'] = $CodeApp['id'];
         $CodeApp['url'] = 'http://oauth.heil.top/wechat/common/code-app/qr/'.$CodeApp['id'];
         $client = new Client($CodeApp);
-        $qr= $client->getQr(Helper::str()->int_rand(6), $Request->path('type'));
-        var_dump($qr);
-
-        $QrCode = new QrCode($CodeApp['authorizer_appid']);
-        return $this->succeed($QrCode->numberVerificationCode(13266579753,1,60,2));
+        $qr= $client->getQr(Helper::str()->int_rand(6), $Request->path('type'),200);
+        # 获取到二维码
+        $qr['number'] = $Request->path('number');
+        return $this->succeed($qr);
     }
 
     /**
@@ -271,6 +269,12 @@ class Account extends Controller
      */
     public function wechtQrTarget()
     {
+        $Client = new \pizepei\service\websocket\Client(['data'=>['uid'=>Helper::init()->getUuid()]]);
+        $Client->connect();
+        var_dump($Client->connectContent);
 
+        var_dump($Client->sendUser('bb8e8e8e-361c-c245-d71e-3311d35535ac',
+            ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],
+            true));
     }
 }

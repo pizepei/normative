@@ -91,7 +91,15 @@ class WeChatCommon extends Controller
      * @param \pizepei\staging\Request $Request [xml]
      *      path [object] 路径参数
      *          appid [string]
-     *      raw [xml] 数据流
+     *      get [object] 参数
+     *          timestamp [int]    时间戳
+     *          nonce [int]    随机数
+     *          echostr [int]  消息接口token验证参数
+     *          signature [string] 签名
+     *          openid [string] appid
+     *          encrypt_type [string] 加密方式
+     *          msg_signature [string] 消息接口token验证参数
+     *      rule [xml] 数据流
      *          ToUserName [string] 开发者ai
      * @return array [xml]
      * @title  第三方服务消息与事件接收
@@ -136,14 +144,14 @@ class WeChatCommon extends Controller
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      get [object] 参数
-     *          timestamp [int]    消息接口token验证参数
-     *          nonce [int]    消息接口token验证参数
-     *          echostr [int]  消息接口token验证参数
-     *          signature [string] 消息接口token验证参数
+     *          timestamp [int required]    消息接口token验证参数
+     *          nonce [int required]    消息接口token验证参数
+     *          echostr [int required]  消息接口token验证参数
+     *          signature [string required] 消息接口token验证参数
      *          openid [string] 消息接口token验证参数
-     *          encrypt_type [string] 消息接口token验证参数
-     *          msg_signature [string] 消息接口token验证参数
-     *      raw [raw] 数据流
+     *          encrypt_type [string required] 消息接口token验证参数
+     *          msg_signature [string required] 消息接口token验证参数
+     *      rule [raw] 数据流
      *          AppId [string] 第三方平台appid
      *          Encrypt [string] 密文
      * @return array [xml]
