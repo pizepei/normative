@@ -78,11 +78,33 @@
 
   $url = 'ws://47.106.89.196:9501/?token=eyJhbGciOiJtZDUiLCJ0eXAiOiJKV1QifQ==.eyJpc3MiOiJzZXJ2ZXIiLCJleHAiOjcyMDAsInN1YiI6InBocFNlcnZlci0tc29ja2V0U2VydmVyIiwiYXVkIjoic29ja2V0U2VydmVyIiwibmJmIjoxNTY0ODg5MjIxLCJpYXQiOjE1NjQ4ODkyMjEsImp0aSI6IjE1NjQ4ODkyMjE5OTAyNzMiLCJkYXRhIjp7InVpZCI6ImJiOGU4ZThlLTM2MWMtYzI0NS1kNzFlLTMzMTFkMzU1MzVhYyJ9fQ==.d8351e3905f9ba2455c0ba4c45d1fbba'
 
-  function socket_onmessage($url,$uuid)
+  function socket_onmessage($url)
   {
     var ws = new WebSocket($url);
-    return ws;
 
+      ws.onopen = function(evt)
+      {
+          console.log(evt);
+
+          // Web Socket 已连接上，使用 send() 方法发送数据
+          ws.send("发送数据");
+      };
+
+      ws.onmessage = function (evt)
+      {
+          var received_msg = evt.data;
+          console.log(received_msg);
+
+      };
+
+      ws.onclose = function()
+      {
+          // 关闭 websocket
+          alert("连接已关闭...");
+      };
+
+
+    return ws;
   }
 
 
@@ -93,36 +115,6 @@ layui.use(['admin', 'form', 'user'], function(){
   ,admin = layui.admin
   ,form = layui.form
   ,router = layui.router();
-
-
-  var ws = new WebSocket('ws://47.106.89.196:9501/?token=eyJhbGciOiJtZDUiLCJ0eXAiOiJKV1QifQ==.eyJpc3MiOiJzZXJ2ZXIiLCJleHAiOjcyMDAsInN1YiI6InBocFNlcnZlci0tc29ja2V0U2VydmVyIiwiYXVkIjoic29ja2V0U2VydmVyIiwibmJmIjoxNTY0ODg5MjIxLCJpYXQiOjE1NjQ4ODkyMjEsImp0aSI6IjE1NjQ4ODkyMjE5OTAyNzMiLCJkYXRhIjp7InVpZCI6ImJiOGU4ZThlLTM2MWMtYzI0NS1kNzFlLTMzMTFkMzU1MzVhYyJ9fQ==.d8351e3905f9ba2455c0ba4c45d1fbba');
-  ws.onopen = function(evt)
-  {
-    console.log(evt);
-
-    // Web Socket 已连接上，使用 send() 方法发送数据
-    ws.send("发送数据");
-    alert("数据发送中...");
-  };
-
-  ws.onmessage = function (evt)
-  {
-    var received_msg = evt.data;
-    console.log(received_msg);
-
-    alert("数据已接收...");
-  };
-
-  ws.onclose = function()
-  {
-    // 关闭 websocket
-    alert("连接已关闭...");
-  };
-
-
-
-
-
   form.render();
 
 // class="layui-btn layui-btn-primary layui-btn-fluid" id="LAY-user-reg-getsmscode"
@@ -141,6 +133,15 @@ layui.use(['admin', 'form', 'user'], function(){
       url: '/account/wecht-qr-code/register/'+phone //实际使用请改成服务端真实接口
       ,type:'get'
       ,done: function(res){
+          //获取二维码
+            if(res.data.jwt_url){
+                socket_onmessage(res.data.jwt_url);
+            }
+
+
+
+
+
         layer.msg('获取二维码成功', {
           offset: '15px'
           ,icon: 1

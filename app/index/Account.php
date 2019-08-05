@@ -271,10 +271,7 @@ class Account extends Controller
     {
         $Client = new \pizepei\service\websocket\Client(['data'=>['uid'=>Helper::init()->getUuid()]]);
         $Client->connect();
-        var_dump($Client->connectContent);
-
-        var_dump($Client->sendUser('bb8e8e8e-361c-c245-d71e-3311d35535ac',
-            ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],
-            true));
+        var_dump($Client->sendUser('661846A0-FF37-F459-93C1-462EC854456D',
+            ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],true));
     }
 }
