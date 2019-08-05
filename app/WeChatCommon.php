@@ -11,12 +11,9 @@
  * @baseParam [$Request:pizepei\staging\Request] 注册依赖注入对象
  */
 namespace app;
-use pizepei\helper\Helper;
-use pizepei\model\db\Db;
-use pizepei\staging\App;
+
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
-use pizepei\wechat\basics\Template;
 use pizepei\wechat\model\OpenAccreditInformLogModel;
 use pizepei\model\redis\Redis;
 use pizepei\staging\Controller;
@@ -144,13 +141,13 @@ class WeChatCommon extends Controller
     /**
      * @param \pizepei\staging\Request $Request [xml]
      *      get [object] 参数
-     *          timestamp [int required]    消息接口token验证参数
-     *          nonce [int required]    消息接口token验证参数
-     *          echostr [int required]  消息接口token验证参数
-     *          signature [string required] 消息接口token验证参数
-     *          openid [string] 消息接口token验证参数
-     *          encrypt_type [string required] 消息接口token验证参数
-     *          msg_signature [string required] 消息接口token验证参数
+     *          timestamp [int required]   时间戳
+     *          nonce [int required]   随机数
+     *          echostr [string]
+     *          signature [string required] 签名
+     *          openid [string]  openid
+     *          encrypt_type [string required] 加密类型
+     *          msg_signature [string required] 签名
      *      rule [raw] 数据流
      *          AppId [string] 第三方平台appid
      *          Encrypt [string] 密文
