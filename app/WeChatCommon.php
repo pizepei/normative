@@ -272,4 +272,36 @@ class WeChatCommon extends Controller
 
     }
 
+    /**
+     * @Author 皮泽培
+     * @Created 2019/8/2 16:49
+     * @param Request $Request
+     *   path [object] 路径参数
+     *      appid [uuid] 应用appid
+     *      id [uuid] 日志id
+     *   get [object] rule参数
+     *      nonce [string required] 随机数
+     *      ticketNonce [string required] ticket随机数
+     *      timestamp [int required]  时间戳
+     *      signature [string required] 签名
+     *      ticketSignature [string required] ticket签名
+     * @return array|string [html] 定义输出返回数据
+     * @title  验证应用二维码验证页面
+     * @explain 验证页面
+     * @baseAuth Resource:public
+     * @throws \Exception
+     * @router get code-app/verify/:appid[uuid]/:id[uuid].html
+     */
+    public function urlVerifyHtml(Request $Request)
+    {
+        # 1 验证signature确认appid下的qrLogId 合法
+        # 2 通过appid和qrLogId获取二维码信息
+        # 3 合法输出确认授权html 不合法输出错误提示 （使用参数绑定直接转入是否合法信息）
+
+        # 4 通过API请求确认
+        # 5 在API中判断ticketSignature签名是否合法
+        var_dump($Request->input(),$Request->path());
+        return $this->view('VerifyMode');
+    }
+
 }
