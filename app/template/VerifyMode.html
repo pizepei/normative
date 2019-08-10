@@ -1,1 +1,113 @@
-确认授权
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>微信验证</title>
+    <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+</head>
+<style>
+    .content-div{
+        padding: 3%;
+        height:90%;
+        line-height: 22px;
+        background-color: #F8F8F8;
+        color:#393D49;
+        font-weight: 300;
+
+    }
+    .app-info-div {
+        border-bottom: .02rem solid #ededed;
+
+    }
+    .app-info-div-img{
+        margin: 4px 7px 5px 7px;
+        width:20%
+    }
+    .app-info-div-hint{
+        font-size: 14px;
+        margin: 9px 7px 9px 7px;
+    }
+    .app-info-div-risk{
+        font-size: 11px;
+        line-height: 14px;
+        margin: 4px 7px 5px 7px;
+    }
+</style>
+<body>
+
+<!-- 你的HTML代码 -->
+
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script>
+
+
+    // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    //     // 通过下面这个API隐藏右上角按钮
+    //     WeixinJSBridge.call('hideOptionMenu');
+    // });
+    // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    //     // 通过下面这个API显示右上角按钮
+    //     WeixinJSBridge.call('showOptionMenu');
+    // });
+
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer
+            ,form = layui.form;
+        var content = '<div class="content-div" >'
+            +'<div class="app-info-div"><img class="app-info-div-img" align="center" src="{{icon}}">{{appName}}</div>'
+            +'<div class="app-info-div-hint"  >{{hint}}</div>'
+            +'<div  class="app-info-div-risk" >{{risk}}</div>'
+            +'</div>';
+        var result = "'{{result}}'";
+        if (result == 'ok'){
+            //示范一个公告层
+            layer.open({
+                type: 1
+                ,title: "'{{title}}'" //标题栏
+                ,closeBtn: false
+                ,area: ['256px', '252px']
+                ,shade: [0.5, '#393D49']
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btn: [' 允许 ', ' 拒绝 ']
+                ,btnAlign: 'i'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,anim: 2
+                ,content: content
+                ,yes: function(index, layero){
+                    //按钮【按钮一】的回调
+                    layer.msg('验证成功', {
+                        icon: 1,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+                    });
+                }
+                ,btn2: function(index, layero){
+                    //请求接口确认授权，根据接口数据返回 确认授权提示
+                    layer.msg('已拒绝', {
+                        icon: 4,
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+                        //do something
+                    });
+                }
+
+            });
+        }else{
+            var msg = "'{{msg}}'";
+            layer.msg(msg, {
+                icon: 5,
+                time: 7000 //2秒关闭（如果不配置，默认是3秒）
+            }, function(){
+                WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+            });
+
+        }
+
+    });
+</script>
+</body>
+</html>

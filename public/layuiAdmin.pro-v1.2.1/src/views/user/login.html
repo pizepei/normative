@@ -77,11 +77,12 @@
 </div>
 
 <script>
-layui.use(['admin', 'form', 'user'], function(){
+layui.use(['admin', 'form', 'user','table'], function(){
   var $ = layui.$
   ,setter = layui.setter
   ,admin = layui.admin
   ,form = layui.form
+  ,table=layui.table
   ,router = layui.router()
   ,search = router.search;
 
@@ -96,19 +97,30 @@ layui.use(['admin', 'form', 'user'], function(){
       ,type:'post'
       ,data: obj.field
       ,done: function(res){
-      
         //请求成功后，写入 access_token
         layui.data(setter.tableName, {
           key: setter.request.tokenName
           ,value: res.data.access_token
         });
-        
+        layui.data(setter.tableName, {
+          key: 'request_tokenName'
+          ,value: res.data.access_token
+        });
+        var tokenName = setter.request.tokenName;
+        var arr = {};
+        arr[setter.request.tokenName] = res.data.access_token;
+        //设置全局 table 实例的 token（这样一来，所有 table 实例均会有效）
+        table.set({
+          headers: arr
+          ,where: arr //通过参数传递
+        });
         //登入成功的提示与跳转
         layer.msg('登入成功', {
           offset: '15px'
           ,icon: 1
           ,time: 1000
         }, function(){
+
           location.hash = search.redirect ? decodeURIComponent(search.redirect) : '/';
         });
       }

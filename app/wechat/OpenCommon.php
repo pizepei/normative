@@ -4,7 +4,7 @@
  * User: pizepei
  * Date: 2019/3/1
  * Time: 15:00
- * @baseAuth 基础权限继承（加命名空间的类名称）
+ * @baseAuth UserAuth:test
  * @title 微信开放平台
  * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
  * @basePath /wechat/official/

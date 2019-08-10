@@ -26,7 +26,6 @@ class UserAuth extends Authority
          * 判断是否登录（如果无效状态会直接异常处理）
          */
         $this->WhetherTheLogin();
-
         /**
          * 获取当前用户的信息（权限）$jurisdictionData
          */
@@ -56,7 +55,7 @@ class UserAuth extends Authority
         /**
          * 路由信息
          */
-        $this->jurisdictionTidy($jurisdictionData);
+//        $this->jurisdictionTidy($jurisdictionData);
         //var_dump($this->authExtend);
         return  ['authExtend'=>$this->authExtend,'Payload'=>$this->Payload];
     }

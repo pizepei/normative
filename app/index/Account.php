@@ -19,7 +19,6 @@ use pizepei\randomInformation\RandomUserInfo;
 use pizepei\service\verifyCode\GifverifyCode;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
-use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\model\OpenWechatCodeAppModel;
 use pizepei\wechatClient\Client;
 use service\basics\account\AccountService;
@@ -273,5 +272,19 @@ class Account extends Controller
         $Client->connect();
         var_dump($Client->sendUser('661846A0-FF37-F459-93C1-462EC854456D',
             ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],true));
+    }
+    /**
+     * @Author 皮泽培
+     * @Created 2019/8/2 14:20
+     * @return array [json] 定义输出返回数据
+     * @title  退出登录
+     * @explain 退出登录
+     * @baseAuth UserAuth:test
+     * @throws \Exception
+     * @router get admin-user/logout
+     */
+    public function logout()
+    {
+        return $this->succeed(['cs'],'退出成功');
     }
 }
