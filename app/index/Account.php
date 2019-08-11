@@ -268,10 +268,10 @@ class Account extends Controller
      */
     public function wechtQrTarget()
     {
-        $Client = new \pizepei\service\websocket\Client(['data'=>['uid'=>Helper::init()->getUuid()]]);
-        $Client->connect();
-        var_dump($Client->sendUser('661846A0-FF37-F459-93C1-462EC854456D',
-            ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],true));
+//        $Client = new \pizepei\service\websocket\Client(['data'=>['uid'=>Helper::init()->getUuid()]]);
+//        $Client->connect();
+//        var_dump($Client->sendUser('661846A0-FF37-F459-93C1-462EC854456D',
+//            ['type'=>'init','content'=>'您好','appid'=>'00663B8F-D021-373C-8330-E1DD3440FF3C'],true));
     }
     /**
      * @Author 皮泽培

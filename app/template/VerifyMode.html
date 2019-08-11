@@ -41,7 +41,7 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script>
 
-
+    console.log(document.location.href);
     // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
     //     // 通过下面这个API隐藏右上角按钮
     //     WeixinJSBridge.call('hideOptionMenu');
@@ -52,8 +52,9 @@
     // });
 
     //一般直接写在一个js文件中
-    layui.use(['layer', 'form'], function(){
+    layui.use(['layer', 'form','jquery'], function(){
         var layer = layui.layer
+            ,$ = layui.jquery
             ,form = layui.form;
         var content = '<div class="content-div" >'
             +'<div class="app-info-div"><img class="app-info-div-img" align="center" src="{{icon}}">{{appName}}</div>'
@@ -76,25 +77,48 @@
                 ,anim: 2
                 ,content: content
                 ,yes: function(index, layero){
-                    //按钮【按钮一】的回调
-                    layer.msg('验证成功', {
-                        icon: 1,
-                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                    }, function(){
-                        WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+
+                    $.ajax({
+                        type: "GET",    //请求类型
+                        url: document.location.href+"&event=10",    //请求地址和参数GET请求才把参数写在这里
+                        success: function (res) {//请求成功后执行的函数res是返回的值
+                            if (res.code == 200){
+                                var icon = 1
+                            }else{
+                                var icon = 2
+                            }
+                            //按钮【按钮一】的回调
+                            layer.msg(res.msg, {
+                                icon: icon,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function(){
+                                WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+                            });
+                        }
                     });
                 }
                 ,btn2: function(index, layero){
-                    //请求接口确认授权，根据接口数据返回 确认授权提示
-                    layer.msg('已拒绝', {
-                        icon: 4,
-                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
-                    }, function(){
-                        WeixinJSBridge.call('closeWindow');//关闭微信浏览器
-                        //do something
+
+                    $.ajax({
+                        type: "GET",    //请求类型
+                        url: document.location.href+"&event=20",    //请求地址和参数GET请求才把参数写在这里
+                        success: function (res) {//请求成功后执行的函数res是返回的值
+                            console.log(res)
+                            if (res.code == 200){
+                                var icon = 4
+                            }else{
+                                var icon = 4
+                            }
+                            //请求接口确认授权，根据接口数据返回 确认授权提示
+                            layer.msg(res.msg, {
+                                icon: 4,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function(){
+                                WeixinJSBridge.call('closeWindow');//关闭微信浏览器
+                            });
+                        }
                     });
                 }
-
             });
         }else{
             var msg = "'{{msg}}'";

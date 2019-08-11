@@ -299,13 +299,11 @@ class WeChatCommon extends Controller
     {
         # 验证
         $data = (new CodeApp())->getUrlVerifyOAuth20($Request->path(),$Request->input());
-        var_dump($data);
         if (isset($data['result'])){
-            if ($data['result'] == 'on'){         return $this->view('VerifyMode',$data);}
+            if ($data['result'] == 'on'){ return $this->view('VerifyMode',$data);}
         }
-
-
-        return $this->view('VerifyMode');
+        header('Location:'.$data,301);
+        return '';
     }
     /**
      * @Author 皮泽培
@@ -322,7 +320,11 @@ class WeChatCommon extends Controller
      *      openid [string required] 粉丝openid
      *      signature [string required] 签名
      *      authorizer_appid [string required] 微信公众号appid
+     *      appid [string required ] OAuth20返回的微信公众号appid
      *      ticketSignature [string required] ticket签名
+     *      code [string required] ode作为换取access_token的票据
+     *      state [string required] 自定义state参数
+     *      event [string] 事件 空为渲染选择框  10 接受  20 拒绝
      * @return array|string [html] 定义输出返回数据
      * @title  验证应用二维码验证页面
      * @explain 验证页面
@@ -332,10 +334,17 @@ class WeChatCommon extends Controller
      */
     public function urlVerifyHtml(Request $Request)
     {
-        $data = (new CodeApp())->initialUrlVerifyHtml($Request->path(),$Request->input());
-        # 4 通过API请求确认
-        # 5 在API中判断ticketSignature签名是否合法
-        return $this->view('VerifyMode',$data);
+        if (empty($Request->input('event')))
+        {
+            $data = (new CodeApp())->initialUrlVerifyHtml($Request->path(),$Request->input());
+            # 4 通过API请求确认
+            # 5 在API中判断ticketSignature签名是否合法
+            return $this->view('VerifyMode',$data);
+        }else{
+            $res = (new CodeApp())->urlVerifyHtmlConfirm($Request->path(),$Request->input());
+            return $this->succeed('',$res['msg']);
+        }
+
     }
 
 }
