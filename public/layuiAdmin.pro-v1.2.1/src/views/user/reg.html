@@ -84,29 +84,53 @@
 
       ws.onopen = function(evt)
       {
-          console.log(evt);
-
-          // Web Socket 已连接上，使用 send() 方法发送数据
-          ws.send("发送数据");
+        console.log(evt);
       };
-
       ws.onmessage = function (evt)
       {
-          var received_msg = evt.data;
-          console.log(received_msg);
-
+        var received_msg = JSON.parse(evt.data)
+        if (received_msg.success == 2001){
+          return;
+        }
+        console.log(received_msg);
+        if (received_msg.success !== 2000 && received_msg.success !== 2001){
+          layer.msg(received_msg.msg, {
+            icon: 2,
+            time: 7000 //2秒关闭（如果不配置，默认是3秒）
+          });
+        }
+        if (received_msg.success == 2000 ){
+          if (received_msg.data.confirm.behavior == 'accept'){//验证成功 确认授权
+            close_qr(received_msg.data);
+            ws.close();//关闭ws
+            layer.msg('验证成功', {
+              icon: 1,
+              time: 7000 //2秒关闭（如果不配置，默认是3秒）
+            });
+          }else if (received_msg.data.confirm.behavior == 'refuse'){//拒绝授权
+            close_qr(received_msg.data);
+            ws.close();//关闭ws
+            layer.msg('您已拒绝验证', {
+              icon: 2,
+              time: 7000 //2秒关闭（如果不配置，默认是3秒）
+            });
+          }
+        }
       };
-
       ws.onclose = function()
       {
-          // 关闭 websocket
-          alert("连接已关闭...");
+          // alert("连接已关闭...");
       };
-
-
     return ws;
   }
+  function close_qr()
+  {
+    //初始化数据
 
+
+    layer.close(reg_layerDemo_qr_index);//关闭二维码
+
+  }
 
 
 layui.use(['admin', 'form', 'user'], function(){
@@ -138,21 +162,17 @@ layui.use(['admin', 'form', 'user'], function(){
                 socket_onmessage(res.data.jwt_url);
             }
 
-
-
-
-
         layer.msg('获取二维码成功', {
           offset: '15px'
           ,icon: 1
           ,time: 1000
         }, function(){
           //获取到二维码 窗口
-          layer.open({
+          reg_layerDemo_qr_index  = layer.open({
             type: 1
             ,offset: 'auto'
             ,title:'<p align="center">微信扫描获取验证码</p>'
-            ,id: 'layerDemo'
+            ,id: 'reg-layerDemo-qr'
             ,area: ['250px', '350px']
             ,content: '<img  style="width:100%" align="center" src="'+ res.data.src +'" >'
             ,btn: '完成验证'
@@ -170,8 +190,6 @@ layui.use(['admin', 'form', 'user'], function(){
       }
     });
   });
-
-
 
 
 

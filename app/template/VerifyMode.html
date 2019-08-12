@@ -41,11 +41,11 @@
 <script src="https://www.layuicdn.com/layui/layui.js"></script>
 <script>
 
-    console.log(document.location.href);
-    // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-    //     // 通过下面这个API隐藏右上角按钮
-    //     WeixinJSBridge.call('hideOptionMenu');
-    // });
+    // console.log(document.location.href);
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        // 通过下面这个API隐藏右上角按钮
+        WeixinJSBridge.call('hideOptionMenu');
+    });
     // document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
     //     // 通过下面这个API显示右上角按钮
     //     WeixinJSBridge.call('showOptionMenu');
