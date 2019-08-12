@@ -12,6 +12,8 @@
  */
 namespace app;
 
+use pizepei\helper\Helper;
+use pizepei\service\websocket\Client;
 use pizepei\wechat\basics\CodeApp;
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
@@ -40,8 +42,18 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
-        $QrCode = new QrCode('wx3260515a4514ec94');
-        return $QrCode->get_ticket(1234,10);
+        $Client = new Client([
+            'data'=>[
+                'uid'=>Helper::init()->getUuid(),
+                'app'=>'codeApp',
+            ],
+        ]);
+        $Client->connect();
+        var_dump($Client->exist('F362673C-6066-2C9A-AD60-E24E5706AE7D'));
+
+
+//        $QrCode = new QrCode('wx3260515a4514ec94');
+//        return $QrCode->get_ticket(1234,10);
 
 //        $config = new Config(Redis::init());
 //        return $config->access_token('wx3260515a4514ec94',false);

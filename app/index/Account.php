@@ -166,6 +166,33 @@ class Account extends Controller
         //
         return $this->succeed('','成功');
     }
+    /**
+     * @Author pizepei
+     * @Created 2019/3/30 21:33
+     *
+     * @param \pizepei\staging\Request $Request
+     *      post [object] post
+     *          phone [int number] 手机号码
+     *          signature [string required] 签名
+     *          timestamp [int required] 时间戳
+     *          signature [string required] 签名
+     *          appid [string required] 应用appid
+     *          nonce [string required] 随机数
+     *          code [string required] 短信验证码
+     *          encrypt_msg [string required] 密文
+     *          id [uuid required] 二维码日志id
+     * @return array [json]
+     * @title  短信验证码结果验证
+     * @explain 验证结果并且返回一个唯一的参数以进行后面的配置
+     * @throws \Exception
+     * @router post sms-code-send
+     */
+    public function smsCodeSend(Request $Request)
+    {
+
+    }
+
+
 
     /**
      * @Author pizepei

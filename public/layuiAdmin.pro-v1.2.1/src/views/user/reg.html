@@ -76,8 +76,6 @@
 
 <script>
 
-  $url = 'ws://47.106.89.196:9501/?token=eyJhbGciOiJtZDUiLCJ0eXAiOiJKV1QifQ==.eyJpc3MiOiJzZXJ2ZXIiLCJleHAiOjcyMDAsInN1YiI6InBocFNlcnZlci0tc29ja2V0U2VydmVyIiwiYXVkIjoic29ja2V0U2VydmVyIiwibmJmIjoxNTY0ODg5MjIxLCJpYXQiOjE1NjQ4ODkyMjEsImp0aSI6IjE1NjQ4ODkyMjE5OTAyNzMiLCJkYXRhIjp7InVpZCI6ImJiOGU4ZThlLTM2MWMtYzI0NS1kNzFlLTMzMTFkMzU1MzVhYyJ9fQ==.d8351e3905f9ba2455c0ba4c45d1fbba'
-
   function socket_onmessage($url)
   {
     var ws = new WebSocket($url);
@@ -88,7 +86,7 @@
       };
       ws.onmessage = function (evt)
       {
-        var received_msg = JSON.parse(evt.data)
+        received_msg = JSON.parse(evt.data)
         if (received_msg.success == 2001){
           return;
         }
@@ -123,24 +121,34 @@
       };
     return ws;
   }
-  function close_qr()
+  function close_qr(data)
   {
+    console.log(data);
+
+
     //初始化数据
+    //获取短信验证码
+    $.ajax({
+      type: "post",    //请求类型
+      data:data.encrypted,
+      url: "/account/sms-code-send",    //请求地址和参数GET请求才把参数写在这里
+      success: function (res) {//请求成功后执行的函数res是返回的值
+        console.log(res);
 
-
+      }
+    });
     layer.close(reg_layerDemo_qr_index);//关闭二维码
 
   }
 
 
 layui.use(['admin', 'form', 'user'], function(){
-  var $ = layui.$
-  ,setter = layui.setter
+  var setter = layui.setter
   ,admin = layui.admin
   ,form = layui.form
   ,router = layui.router();
   form.render();
-
+  $ = layui.$
 // class="layui-btn layui-btn-primary layui-btn-fluid" id="LAY-user-reg-getsmscode"
   $('#LAY-user-reg-getsmscode').on('click', function(){
     var cellphone = $('#LAY-user-login-cellphone'),phone = cellphone.val();
@@ -216,12 +224,17 @@ layui.use(['admin', 'form', 'user'], function(){
     if(!field.agreement){
       return layer.msg('你必须同意用户协议才能注册');
     }
-    
+    if(typeof received_msg!="undefined"){
+      var fieldData = Object.assign(field, received_msg.data.encrypted);
+    }else{
+      return layer.msg('请先验证微信');
+    }
+    // encrypted
     //请求接口
     admin.req({
       url: './account/account' //实际使用请改成服务端真实接口
       ,type:'post'
-      ,data: field
+      ,data: fieldData
       ,done: function(res){        
         layer.msg('注册成功', {
           offset: '15px'
