@@ -12,8 +12,6 @@
  */
 namespace app;
 
-use pizepei\helper\Helper;
-use pizepei\service\websocket\Client;
 use pizepei\terminalInfo\TerminalInfo;
 use pizepei\wechat\basics\CodeApp;
 use pizepei\wechat\basics\QrCode;
