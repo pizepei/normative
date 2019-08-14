@@ -14,6 +14,7 @@ namespace app;
 
 use pizepei\helper\Helper;
 use pizepei\service\websocket\Client;
+use pizepei\terminalInfo\TerminalInfo;
 use pizepei\wechat\basics\CodeApp;
 use pizepei\wechat\basics\QrCode;
 use pizepei\wechat\basics\ReplyApi;
@@ -42,23 +43,11 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
-        $Client = new Client([
-            'data'=>[
-                'uid'=>Helper::init()->getUuid(),
-                'app'=>'codeApp',
-            ],
-        ]);
-        $Client->connect();
-        var_dump($Client->exist('F362673C-6066-2C9A-AD60-E24E5706AE7D'));
-
-
-//        $QrCode = new QrCode('wx3260515a4514ec94');
-//        return $QrCode->get_ticket(1234,10);
-
-//        $config = new Config(Redis::init());
-//        return $config->access_token('wx3260515a4514ec94',false);
+        terminalInfo::$redis= Redis::init();
+        $terminalInfo = terminalInfo::getInfo(true);
+        $terminalInfo['AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+        return $this->succeed($terminalInfo);
     }
-
     /**
      * @return array|bool|string [json]
      *      data [raw]
@@ -71,7 +60,6 @@ class WeChatCommon extends Controller
     {
         return Helper()->syncLock(Redis::init(),['test','1'],false);
     }
-
     /**
      * @param \pizepei\staging\Request $Request [json]
      *      path [object] 路径参数
