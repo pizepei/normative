@@ -42,8 +42,13 @@ class WeChatCommon extends Controller
     public function test(Request $Request)
     {
         terminalInfo::$redis= Redis::init();
-        $terminalInfo = terminalInfo::getInfo(true);
-        $terminalInfo['AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+        TerminalInfo::$pattern  = \Config::TERMINAL_INFO_PATTERN;
+        TerminalInfo::$ipPattern  = \Config::TERMINAL_IP_PATTERN;
+        TerminalInfo::$apiConfig = \Config::TERMINAL_INFO_API_CONFIG;
+        TerminalInfo::delCache();
+
+        $terminalInfo = TerminalInfo::getInfo(true);
+//        $terminalInfo['AGENT'] = $_SERVER['HTTP_USER_AGENT'];
         return $this->succeed($terminalInfo);
     }
     /**
