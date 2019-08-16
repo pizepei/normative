@@ -41,6 +41,7 @@ class WeChatCommon extends Controller
      */
     public function test(Request $Request)
     {
+        return [];
         terminalInfo::$redis= Redis::init();
         TerminalInfo::$pattern  = \Config::TERMINAL_INFO_PATTERN;
         TerminalInfo::$ipPattern  = \Config::TERMINAL_IP_PATTERN;
