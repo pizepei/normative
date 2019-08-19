@@ -4,7 +4,8 @@
  * User: pizepei
  * Date: 2019/2/3
  * Time: 16:24
- * @baseAuth 基础权限继承（加命名空间的类名称）
+ * @baseControl 基础控制器路径（和项目的相对路径）
+ * @baseAuth UserAuth:test
  * @title 文档控制器
  * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
  * @basePath /document/
