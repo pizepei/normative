@@ -101,8 +101,8 @@
                                 <table id="request-table-get" lay-filter="test"></table>
                             </div>
 
-                            <div id="request-table-rule-div">
-                                <table id="request-table-rule" lay-filter="test"></table>
+                            <div id="request-table-raw-div">
+                                <table id="request-table-raw" lay-filter="test"></table>
                             </div>
 
                             <div id="request-table-post-div">
@@ -267,14 +267,14 @@
 
             //这里获取到数据执行显示
             table.render({
-                elem: '#request-table-rule'
+                elem: '#request-table-raw'
                 ,url:'/document/request-param'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'rule'}
-                // ,toolbar: '#toolbarDemo-rule'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'rule'
+                ,where:{father:elem.context.rel,index:elem.context.name,type:'raw'}
+                // ,toolbar: '#toolbarDemo-raw'
+                ,title: elem.context.rel+'-'+elem.context.name+'-'+'raw'
                 ,cols: [
                     [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">RULE请求参数</span>',width:'100%', colspan: 4}
+                        {align: 'center', title: '<span class="layui-badge layui-bg-green">RAW请求参数</span>',width:'100%', colspan: 4}
                     ],
                     [
                     {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
@@ -381,10 +381,10 @@
             }else{
                 $('#request-table-path-div').show();
             }
-            if(data.data.info.Param.rule === undefined){
-                $('#request-table-rule-div').hide();
+            if(data.data.info.Param.raw === undefined){
+                $('#request-table-raw-div').hide();
             }else{
-                $('#request-table-rule-div').show();
+                $('#request-table-raw-div').show();
             }
             if(data.data.info.Param.post === undefined){
                 $('#request-table-post-div').hide();

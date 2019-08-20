@@ -4,7 +4,7 @@
  * User: pizepei
  * Date: 2019/2/3
  * Time: 16:24
- * @baseControl pizepei\deploy\src\controller\BasicsDeploy
+ * @baseControl pizepei\staging\src\controller\BasicsDocument
  * @baseAuth UserAuth:public
  * @title 文档控制器
  * @authGroup [user:用户相关,admin:管理员相关] 权限组列表
@@ -13,9 +13,9 @@
  */
 
 namespace app;
-use pizepei\deploy\controller\BasicsDeploy;
+use pizepei\staging\controller\BasicsDocument;
 
-class Document extends BasicsDeploy
+class Document extends BasicsDocument
 {
 
 }
