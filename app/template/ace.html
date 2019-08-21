@@ -1,68 +1,366 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>ACE in Action</title>
-    <style type="text/css" media="screen">
-        #editor {
-            position: absolute;
+<html><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referer" content="never">
+    <meta name="renderer" content="webkit">
+    <title>宝塔Linux面板</title>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/site.css?date=6.9.8" rel="stylesheet">
+    <link href="/static/codemirror/lib/codemirror.css" rel="stylesheet">
+    <!--[if lte IE 9]>
+    <script src="/static/js/requestAnimationFrame.js"></script>
+    <![endif]-->
+    <style>
+        .top-tips {
+            height: 50px;
+            width: 100%;
+            color: red;
+            position: fixed;
             top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-        }
-        #editor2 {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            z-index: 999;
+            background-color: white;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: bold;
+            display: none;
         }
     </style>
-</head>
-<body>
-
-<div id="editor"></div>
-<div>sss</div>
-<div id="editor2"></div>
-<script src="https://pagecdn.io/lib/ace/1.4.5/ace.js" integrity="sha256-5Xkhn3k/1rbXB+Q/DX/2RuAtaB4dRRyQvMs83prFjpM=" crossorigin="anonymous"></script>
-<!--<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>-->
-<script>
-    // var editor = ace.edit("editor",{
-    //         theme: "ace/theme/monokai",
-    //         mode: "ace/mode/php",
-    //         wrap: true,
-    //         autoScrollEditorIntoView: true,
-    //         enableBasicAutocompletion: true,
-    //         enableSnippets: true,
-    //         enableLiveAutocompletion: true
-    //         // maxLines: 30,
-    //         // wrap: true,
-    //         // autoScrollEditorIntoView: true
-    // });
-    // document.getElementById('editor').style.fontSize='15px';
-    // document.getElementById('editor').style.height='20%';
-    // document.getElementById('editor').style.width='100%';
-    // editor.getSession().on("change", function(e) {
-    //     console.log(e);
-    // });
-    var editor = ace.edit("editor");
-    editor.setValue("<?php     "); // or session.setValue
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/php");
-    document.getElementById('editor').style.fontSize='15px';
-    document.getElementById('editor').style.height='20%';
-    document.getElementById('editor').style.width='100%';
-    // var editor2 = ace.edit("editor2");
-    // editor2.setValue("<?php    >"); // or session.setValue
-    // editor2.setTheme("ace/theme/monokai");
-    // editor2.session.setMode("ace/mode/php");
-    // document.getElementById('editor2').style.fontSize='15px';
-    // document.getElementById('editor2').style.height='20%';
-    // document.getElementById('editor2').style.width='100%';
-    // document.getElementById("editor").style.top="21%";
+    <link rel="stylesheet" href="http://oauth.heil.top:8888/static/layer/skin/default/layer.css?v=3.0.11110" id="layuicss-skinlayercss"><link rel="stylesheet" href="http://oauth.heil.top:8888/static/laydate/theme/default/laydate.css?v=5.0.9" id="layuicss-laydate"></head>
+<body style="">
+<div class="bt-warp bge6">
+    <div class="top-tips">当前IE浏览器版本过低,部分功能无法展示,请更换至其他浏览器，国产浏览器请使用极速模式！</div>
+    <a style="display:none;" id="request_token_head" token="VwvsnkHvzsrVixcgeWpZlc0tNujDS9mWqOsQtmIxOfy3RmTw"></a>
+    <div id="container" class="container-fluid ">
+        <div class="sidebar-scroll">
+            <div class="sidebar-auto">
+                <div id="task" class="task cw" onclick="messagebox()">0</div>
+                <h3 class="mypcip"><span class="f14 cw">oauth.heil.top</span></h3>
+                <ul class="menu">
 
 
+
+                    <li id="memuA"> <a class="menu_home" href="/">首页</a></li>
+
+
+
+
+
+
+                    <li id="memuAsite"> <a class="menu_web" href="/site">网站</a></li>
+
+
+
+
+
+
+                    <li id="memuAftp"> <a class="menu_ftp" href="/ftp">FTP</a></li>
+
+
+
+
+
+
+                    <li id="memuAdatabase"> <a class="menu_data" href="/database">数据库</a></li>
+
+
+
+
+
+
+                    <li id="memuAcontrol"> <a class="menu_control" href="/control">监控</a></li>
+
+
+
+
+
+
+                    <li id="memuAfirewall"> <a class="menu_firewall" href="/firewall">安全</a></li>
+
+
+
+
+
+
+                    <li id="memuAfiles"> <a class="menu_folder" href="/files">文件</a></li>
+
+
+
+
+
+
+                    <li id="memuAcrontab"> <a class="menu_day" href="/crontab">计划任务</a></li>
+
+
+
+
+
+
+                    <li id="memuAsoft" class="current"> <a class="menu_soft" href="/soft">软件商店</a></li>
+
+
+
+
+
+
+                    <li id="memuAconfig"> <a class="menu_set" href="/config">面板设置</a></li>
+
+
+
+
+
+
+
+                    <li id="dologin"> <a class="menu_exit" href="/login?dologin=True">退出</a></li>
+
+
+
+
+
+                </ul>
+                <div id="newbtpc"></div>
+                <div class="btpc-plus" onclick="bindBTPanel(0,'b')">+</div>
+            </div>
+        </div>
+        <button style="display: none;" id="bt_copys" class="bt_copy" data-clipboard-text=""></button>
+        <a style="display: none;" id="defaultPath">/www/wwwroot</a>
+        <script src="/static/js/jquery-1.10.2.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="/static/language/Simplified_Chinese/lan.js?date=6.9.8"></script>
+        <script src="/static/layer/layer.js?date=6.9.8"></script>
+        <script type="text/javascript" src="/static/laydate/laydate.js?date=20180301"></script>
+        <script src="/static/js/jquery.fly.min.js"></script>
+        <script src="/static/codemirror/lib/codemirror.js"></script>
+        <script src="/static/codemirror/addon/edit/editAll.js"></script>
+        <script src="/static/codemirror/mode/modeAll.js"></script>
+        <script src="/static/codemirror/addon/dialog/dialog.js"></script>
+        <script src="/static/codemirror/addon/search/search.js"></script>
+        <script src="/static/codemirror/addon/scroll/annotatescrollbar.js"></script>
+        <script src="/static/js/jquery.qrcode.min.js"></script>
+        <script src="/static/js/socket.io.min.js"></script>
+        <link rel="stylesheet" href="/static/build/xterm.css">
+        <link rel="stylesheet" href="/static/build/addons/fullscreen/fullscreen.css">
+        <script src="/static/build/xterm.js"></script>
+        <script src="/static/build/addons/attach/attach.js"></script>
+        <script src="/static/build/addons/fit/fit.js"></script>
+        <script src="/static/build/addons/fullscreen/fullscreen.js"></script>
+        <script src="/static/build/addons/search/search.js"></script>
+        <script src="/static/build/addons/winptyCompat/winptyCompat.js"></script>
+        <script type="text/javascript" src="/static/js/clipboard.min.js"></script>
+        <script src="/static/js/public.js?v3=6.9.8"></script>
+        <script src="/static/js/public_backup.js?version=6.9.8"></script>
+        <script src="/static/js/bt_upload.js?version=6.9.8"></script>
+
+        <div class="main-content" style="min-height: 887px;">
+            <div class="container-fluid" style="padding-bottom:54px">
+                <div class="pos-box bgw mtb15">
+                    <div class="position f14 c9 pull-left">
+                        <a class="plr10 c4" href="/">首页</a>/<span class="plr10 c4">软件商店</span>
+                    </div>
+                    <div class="search pull-right">
+
+                    </div>
+                </div>
+                <div class="softbox bgw mtb15">
+                    <div class="softlist">
+                        <div class="soft-filter pd15">
+                            <div class="row soft-filter-box">
+                                <div class="col-md-12">
+                                    <span class="filter-title f14 c4">应用搜索</span>
+                                    <div class="soft-search">
+                                        <form target="hid" onsubmit="soft.get_list(1,0,$(&quot;#SearchValue&quot;).val())">
+                                            <input type="text" id="SearchValue" class="ser-text pull-left" placeholder="search" style="width:232px">
+                                            <button type="button" class="ser-sub pull-left" onclick="soft.get_list(1,0,$(&quot;#SearchValue&quot;).val())"></button>
+                                        </form>
+                                        <iframe name="hid" id="hid" style="display:none"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row soft-filter-box"><div class="col-md-12"><span class="filter-title f14 c4">应用分类</span><div class="menu-sub softtype"><span typeid="0">全部</span><span typeid="5">运行环境</span><span typeid="6">系统工具</span><span typeid="7" class="on">宝塔插件</span><span typeid="8">付费插件</span><span typeid="10">第三方应用</span><span typeid="11">一键部署</span></div></div></div>
+                        </div>
+                        <div class="divtable pd15 relative">
+                            <button class="btn btn-default btn-sm" onclick="soft.flush_cache()" title="从云端更新列表" style="position:absolute;top:-49px;right:15px">更新软件列表</button>
+                            <div id="updata_pro_info"><div class="alert alert-success" style="margin-bottom:15px"><strong> 升级专业版，所有插件，免费使用。</strong><button class="btn btn-success btn-xs va0 updata_pro" onclick="bt.soft.updata_pro()" title="立即升级专业版" style="margin-left:8px">立即升级</button></div></div>
+                            <table id="softList" class="table table-hover" width="100%" cellspacing="0" cellpadding="0" border="0"><thead><tr><th width="165">软件名称</th><th width="92">开发商</th><th>说明</th><th width="92">价格</th><th width="120">到期时间</th><th width="40">位置</th><th width="40">状态</th><th width="64">首页显示</th><th width="120" style="text-align:right;">操作</th></tr></thead><tbody><tr><td><span onclick="bt.soft.set_lib_config('phpguard','PHP守护')" style="cursor:pointer"><img src="/static/img/soft_ico/ico-phpguard.png">PHP守护 1.2</span></td><td>官方</td><td><span>监控PHP-FPM运行状态，防止大批量出现502错误!</span></td><td>免费</td><td>--</td><td><span class="glyphicon glyphicon-folder-open" onclick="openPath('/www/server/panel/plugin/phpguard')"></span></td><td><span style="color:#20a53a" class="glyphicon glyphicon-play"></span></td><td><div class="index-item"><input class="btswitch btswitch-ios" id="index_phpguard" type="checkbox"><label class="btswitch-btn" for="index_phpguard" onclick="bt.soft.to_index('phpguard')"></label></div></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.set_lib_config('phpguard','PHP守护')">设置</a> | <a class="btlink" onclick="bt.soft.un_install('phpguard')">卸载</a></td></tr><tr><td><span><img src="/static/img/soft_ico/ico-txcos.png">腾讯云COS </span></td><td>官方</td><td><span>将网站或数据库打包备份到腾讯云COS对象存储空间</span></td><td>免费</td><td>--</td><td></td><td></td><td></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.install('txcos')">安装</a></td></tr><tr><td><span onclick="bt.soft.set_lib_config('webssh','宝塔SSH终端')" style="cursor:pointer"><img src="/static/img/soft_ico/ico-webssh.png">宝塔SSH终端 1.0</span></td><td>官方</td><td><span>完整功能的SSH客户端，仅用于连接本服务器</span></td><td>免费</td><td>--</td><td><span class="glyphicon glyphicon-folder-open" onclick="openPath('/www/server/panel/plugin/webssh')"></span></td><td><span style="color:#20a53a" class="glyphicon glyphicon-play"></span></td><td><div class="index-item"><input class="btswitch btswitch-ios" id="index_webssh" type="checkbox" checked=""><label class="btswitch-btn" for="index_webssh" onclick="bt.soft.to_index('webssh')"></label></div></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.set_lib_config('webssh','宝塔SSH终端')">设置</a> | <a class="btlink" onclick="bt.soft.un_install('webssh')">卸载</a></td></tr><tr><td><span><img src="/static/img/soft_ico/ico-backup.png">宝塔配置备份 </span></td><td>官方</td><td><span>快速备份宝塔相关配置数据</span></td><td>免费</td><td>--</td><td></td><td></td><td></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.install('backup')">安装</a></td></tr><tr><td><span><img src="/static/img/soft_ico/ico-psync_api.png">宝塔一键迁移API版本 </span></td><td>官方</td><td><span>快速迁移面板数据，此版本仅在迁出机器（发送数据端）安装即可<a href="https://www.bt.cn/bbs/thread-33070-1-1.html" target="_blank" class="btlink">&gt;&gt;教程</a></span></td><td>免费</td><td>--</td><td></td><td></td><td></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.install('psync_api')">安装</a></td></tr><tr><td><span><img src="/static/img/soft_ico/ico-safeip.png">高防IP </span></td><td>官方</td><td><span>对备案域名提供10G~50G套餐防护，更高防护需求可联系客服定制。</span></td><td>免费</td><td>--</td><td></td><td></td><td></td><td style="text-align:right"><a class="btlink" onclick="bt.soft.install('safeip')">安装</a></td></tr></tbody></table>
+                            <div id="softPage" class="dataTables_paginate paging_bootstrap page"><div><a class="Pstart" onclick="soft.get_list(1)">首页</a><a class="Ppren" onclick="soft.get_list(1)">上一页</a><a class="Pnum" onclick="soft.get_list(1)">1</a><span class="Pcurrent">2</span><span class="Pnumber">2/2</span><span class="Pline">从16-30条</span><span class="Pcount">共21条数据</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="footer bgw">宝塔Linux面板 ©2014-2019 宝塔 (bt.cn)<a style="margin-left:20px;color:#20a53a;" href="http://www.bt.cn/bbs" target="_blank">问题求助|产品建议请上宝塔论坛</a><a style="margin-left:20px;color:#20a53a;" href="http://docs.bt.cn/424204" target="_blank">《使用手册》</a></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    if (navigator.appName == "Microsoft Internet Explorer" && parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE", "")) < 9) {
+        $(".main-content").css("margin-top", "50px");
+        $('.top-tips').show();
+    }
+
+    $("#setBox").click(function () {
+        if ($(this).prop("checked")) {
+            $("input[name=id]").prop("checked", true);
+        } else {
+            $("input[name=id]").prop("checked", false);
+        }
+    });
+    setCookie('order', 'id desc');
+    var is_files_html = false;
+    var task_open = 0;
+    var task_close = false;
+    if ($(".current").attr("id") == 'memuAfiles') {
+        is_files_html = true;
+    }
+    function task_stat(my_init) {
+        if (!my_init) {
+            my_init = 0;
+            if (task_open) return;
+        }
+        if (task_close) return;
+        $.post('/task?action=get_task_lists', { status: -3 }, function (task_list) {
+            if (task_list.length == 0) {
+                if (my_init && is_files_html) GetFiles(getCookie('Path'));
+                if (task_open) {
+                    layer.close(task_open);
+                    task_open = false;
+                }
+                return;
+            }
+
+            console.log(task_list.length)
+            var msg_body = '';
+            var is_add = false;
+            for (var i = 0; i < task_list.length; i++) {
+                if (task_list[i]['status'] == -1) {
+                    if (!task_open || !$(".message-list").attr("class")) {
+                        show_task();
+                    }
+
+                    if (task_list[i]['type'] == '1') {
+                        msg_body += '<div class="mw-con">\
+	                                <ul class="waiting-down-list">\
+		                                <li>\
+			                                <div class="down-filse-name"><span class="fname" style="width:80%;" title="正在下载: '+ task_list[i].other + '">正在下载: ' + task_list[i].other + '</span><span style="position: absolute;left: 84%;top: 25px;color: #999;">' + task_list[i].log.pre + '%</span><span class="btlink" onclick="remove_task(' + task_list[i].id + ')" style="position: absolute;top: 25px;right: 20px;">取消</span></div>\
+			                                <div class="down-progress"><div class="done-progress" style="width:'+ task_list[i].log.pre + '%"></div></div>\
+			                                <div class="down-info"><span class="total-size"> '+ ToSize(task_list[i].log.used) + '/' + ToSize(task_list[i].log.total) + '</span><span class="speed-size">' + (task_list[i].log.speed==0?'正在连接..':ToSize(task_list[i].log.speed)) +'/s</span></div>\
+		                                </li>\
+                                        </ul>\
+                                    </div>'
+                    } else {
+                        msg_body += '<div class="mw-title"><span style="max-width: 88%;display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">' + task_list[i].name + ': ' + task_list[i].shell + '</span><span class="btlink" onclick="remove_task(' + task_list[i].id + ')"  style="position: absolute;top: 10px;right: 15px;">取消</span></div>\
+                                    <div class="mw-con codebg">\
+	                                    <code>'+ task_list[i].log +'</code>\
+                                    </div>'
+
+                    }
+
+                } else {
+                    if (!is_add) {
+                        msg_body += '<div class="mw-title">等待执行任务</div><div class="mw-con"><ul class="waiting-list">';
+                        is_add = true;
+                    }
+                    msg_body += '<li><span class="wt-list-name" style="width: 90%;">' + task_list[i].name + ': ' + task_list[i].shell + '</span><span class="mw-cancel" onclick="remove_task(' + task_list[i].id + ')">X</span></li>';
+                }
+            }
+            if (task_open) {
+                if (is_add) {
+                    msg_body += '</ul></div>';
+                }
+                $(".message-list").html(msg_body);
+            }
+
+
+            if (my_init > 3) {
+                if (is_files_html) GetFiles(getCookie('Path'));
+                my_init = 1;
+            }
+            my_init +=1
+            setTimeout(function () { task_stat(my_init); }, 1000);
+        });
+    }
+
+    function show_task() {
+        task_open = layer.open({
+            type: 1,
+            title: "实时任务队列",
+            area: '500px',
+            closeBtn: 2,
+            shadeClose: false,
+            shade: false,
+            offset: 'auto',
+            content: '<div style="margin: 10px;" class="message-list"></div>',
+            cancel: function () {
+                task_close = true;
+            }
+        });
+    }
+
+    function remove_task(id) {
+        loadT = layer.msg('正在取消任务...', { time: 0, icon: 16, shade: [0.3, '#000'] });
+        $.post('/task?action=remove_task', { id: id }, function (rdata) {
+            layer.close(loadT)
+            layer.msg(rdata.msg);
+        });
+    }
+    task_stat();
 
 </script>
-</body>
-</html>
+<style type="text/css">
+    .contextmenu {
+        position: absolute;
+        width: 120px;
+        background: #FFFFFF;
+        border-radius: 5px;
+        overflow: hidden;
+        z-index: 99999999;
+    }
+
+    .contextmenu li {
+        border-left: 3px solid transparent;
+        transition: ease 0.3s;
+    }
+
+    .contextmenu li:hover {
+        background: #707070;
+        border-left: 3px solid #333;
+    }
+
+    .contextmenu li a {
+        display: block;
+        padding: 5px 10px;
+        color: #000000;
+        text-decoration: none;
+        transition: ease 0.3s;
+        cursor:default;
+    }
+
+    .contextmenu li:hover a {
+        color: #fff;
+    }
+</style>
+
+
+
+<script type="text/javascript" src="/static/js/jquery.dragsort-0.5.2.min.js"></script>
+<script type="text/javascript" src="/static/laydate/laydate.js?date=20180301"></script>
+<script type="text/javascript" src="/static/js/soft.js?version=6.9.8"></script>
+<script type="text/javascript">
+    bt.set_cookie('serverType', "nginx");
+    $(document).ready(function () {
+        soft.get_list();
+        setTimeout(function () {
+            soft_td_width_auto();
+        }, 500);
+    });
+    $(window).resize(function () {
+        soft_td_width_auto();
+    });
+
+</script>
+<div class="layui-layer-move"></div><div class="layui-layer-shade" id="layui-layer-shade12" times="12" style="z-index:19891025; background-color:#000; opacity:0.3; filter:alpha(opacity=30);"></div><div class="layui-layer layui-layer-page  layer-anim" id="layui-layer12" type="page" times="12" showtime="0" contype="string" style="z-index: 19891026; width: 920px; height: 640px; top: 148.5px; left: 215.5px;"><div class="layui-layer-title" style="cursor: move;">宝塔终端</div><div id="" class="layui-layer-content" style="height: 598px;"><div class="term-box"><div id="term"><div class="terminal xterm" tabindex="0"><div class="xterm-viewport" style="background-color: rgb(51, 51, 51); height: 493px;"><div class="xterm-scroll-area" style="height: 493px;"></div></div><div class="xterm-helpers"><textarea class="xterm-helper-textarea" autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0"></textarea><div class="composition-view"></div><style></style><span aria-hidden="true" style="position: absolute; top: 0px; left: -9999em; line-height: normal; font-family: courier-new, courier, monospace; font-size: 15px;">W</span></div><canvas id="xterm-text-layer" style="z-index: 0; width: 900px; height: 493px;" width="900" height="493"></canvas><canvas id="xterm-selection-layer" style="z-index: 1; width: 900px; height: 493px;" width="900" height="493"></canvas><canvas id="xterm-link-layer" style="z-index: 2; width: 900px; height: 493px;" width="900" height="493"></canvas><canvas id="xterm-cursor-layer" style="z-index: 3; width: 900px; height: 493px;" width="900" height="493"></canvas></div></div></div>					<div class="shell-text-input">                    <textarea type="text" class="bt-input-text-shell" placeholder="请将命令粘贴到此处.." value="" name="ssh_copy"></textarea>					<div class="shell-btn-group">                    <button class="shellbutton btn btn-success btn-sm pull-right shell_btn_1">发送(Ctrl+Enter)</button>					<button class="shellbutton btn btn-default btn-sm pull-right shell_btn_close">关闭</button>					</div>                </div></div><span class="layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close2" href="javascript:;"></a></span><span class="layui-layer-resize"></span></div></body></html>
