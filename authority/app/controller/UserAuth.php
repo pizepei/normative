@@ -10,11 +10,10 @@ namespace authority\app\controller;
 
 
 
+use pizepei\basics\authority\BasicsAuthority;
 use pizepei\model\db\Model;
-use pizepei\staging\Authority;
-use pizepei\staging\Route;
 
-class UserAuth extends Authority
+class UserAuth extends BasicsAuthority
 {
     /**
      * @return array

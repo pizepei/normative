@@ -9,9 +9,10 @@
 
 namespace authority\app\controller;
 
-use pizepei\staging\Authority;
 
-class DeployAuth extends Authority
+use pizepei\staging\AuthorityInterface;
+
+class DeployAuth implements AuthorityInterface
 {
     /**
      * @return array

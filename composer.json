@@ -21,7 +21,8 @@
         "ext-json": "*",
         "ext-zip": "*",
         "pizepei/helper": "dev-master",
-        "pizepei/wechat-client": "dev-master"
+        "pizepei/wechat-client": "dev-master",
+        "pizepei/basics": "dev-master"
     },
     "repositories": {
         "0": {
