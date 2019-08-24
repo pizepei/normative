@@ -9,10 +9,9 @@
 
 namespace authority\app\controller;
 
+use pizepei\basics\authority\BasicsAuthority;
 
-use pizepei\staging\AuthorityInterface;
-
-class DeployAuth implements AuthorityInterface
+class DeployAuth extends BasicsAuthority
 {
     /**
      * @return array
@@ -20,6 +19,7 @@ class DeployAuth implements AuthorityInterface
      */
     public function test()
     {
-        return[];
+        # 判断是否登录（如果无效状态会直接异常处理）
+        $this->WhetherTheLogin();
     }
 }

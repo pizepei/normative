@@ -63,7 +63,7 @@
             "config\\": "config/",
             "service\\": "service/",
             "authority\\": "authority/",
-            "Container\\": "container/"
+            "container\\": "container/"
         },
         "psr-0": {
             "": "extend/"

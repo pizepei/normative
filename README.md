@@ -55,3 +55,5 @@ normative致力于在框架层次强制规范开发人员的业务实现来确�
         * 避免出现make: *** No rule to make target `install'. Stop.错误（因为缺少依赖包的原因，请执行上面的依赖安装命令）
         * 为了避免make 时出现【fatal error: sql.h: No such file or directory】错误 （ 安装unixodbc的工具包即可  yum install unixODBC-devel ）
         * 与mysql不同 的dbh  new PDO("sqlsrv:Server=localhost,端口号;Database=数据库", 用户名 , 密码); 
+#### composer
+* 命令composer dumpautoload 更新命名空间

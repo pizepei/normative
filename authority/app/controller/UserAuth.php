@@ -8,8 +8,6 @@
 
 namespace authority\app\controller;
 
-
-
 use pizepei\basics\authority\BasicsAuthority;
 use pizepei\model\db\Model;
 
