@@ -62,7 +62,8 @@
             "manage\\":"manage/",
             "config\\": "config/",
             "service\\": "service/",
-            "authority\\": "authority/"
+            "authority\\": "authority/",
+            "Container\\": "container/"
         },
         "psr-0": {
             "": "extend/"
