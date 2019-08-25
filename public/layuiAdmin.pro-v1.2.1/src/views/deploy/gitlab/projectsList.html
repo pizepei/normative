@@ -15,7 +15,7 @@
                 <div class="layui-card-header">群组（groups）</div>
                 <div class="layui-card-body">
 
-                    <form class="layui-form" action="" lay-filter="component-form-group">
+                    <form class="layui-form" lay-filter="component-form-group">
 
                         <div class="layui-form-item">
                         <div class="layui-inline">
@@ -47,7 +47,7 @@
                 <div class="layui-card-header">项目列表</div>
                 <div class="layui-card-body">
 
-                    <table class="layui-hide" id="test-table-resetPage"></table>
+                    <table class="layui-hide" id="deploy-gitlab-projectsList-table-resetPage"></table>
                 </div>
             </div>
         </div>
@@ -79,9 +79,10 @@
         function getGroups(id='')
         {
             table.render({
-                elem: '#test-table-resetPage'
+                elem: '#deploy-gitlab-projectsList-table-resetPage'
                 ,url: '/gitlab/groups/'+id+'/projects.json'
                 ,type:'get'
+                ,size: 'lg' //小尺寸的表格
                 ,response: {
                     statusCode: 200 //规定成功的状态码，默认：0
                 }
@@ -110,6 +111,7 @@
                     ,{field:'web_url',  title: '首页'}
                 ]]
             });
+            table.reload('deploy-gitlab-projectsList-table-resetPage')
         }
 
 
