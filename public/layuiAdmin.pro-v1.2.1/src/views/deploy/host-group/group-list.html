@@ -126,17 +126,17 @@
                     ,{field:'name', title: '分组', sort: true, fixed: 'left'}
                     ,{field:'explain', title: '说明'}
                     ,{field:'status',  title: '状态',templet: function(d){
-                            if (d.status = 1) return '停用';
-                            if (d.status = 2) return '正常';
-                            if (d.status = 3) return '维护';
-                            if (d.status = 4) return '等待';
-                            if (d.status = 5) return '异常';
+                            if (d.status == 1) return '停用';
+                            if (d.status == 2) return '正常';
+                            if (d.status == 3) return '维护';
+                            if (d.status == 4) return '等待';
+                            if (d.status == 5) return '异常';
                         }}
                     ,{field:'serve_group',  title: '环境',templet: function(d){
-                            if (d.serve_group = 'develop') return '开发';
-                            if (d.serve_group = 'production') return '生产';
-                            if (d.serve_group = 'developTest') return '开发测试';
-                            if (d.serve_group = 'productionTest') return '生产测试';
+                            if (d.serve_group == 'develop') return '开发';
+                            if (d.serve_group == 'production') return '生产';
+                            if (d.serve_group == 'developTest') return '开发测试';
+                            if (d.serve_group == 'productionTest') return '生产测试';
                         }}
                     ,{  title: '操作' , align:'center', toolbar: '#deploy-group-list-table-toolbar'}
                 ]]
@@ -149,14 +149,36 @@
             setTpl(data);
         }
 
+        function del(data)
+        {
+            admin.req({
+                url: '/deploy/server/group-list/'+data.id+'.json' //实际使用请改成服务端真实接口
+                ,type:'delete'
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        layer.closeAll('page');
+                        getGroups();
+                    });
+                }
+            });
+        }
         table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除行么', function(index){
+                    del(data);
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
+
+                    // server/group-list/
+
                     //向服务端发送删除指令
                 });
             } else if(layEvent === 'edit'){ //编辑
@@ -206,11 +228,11 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">状态：</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="status" value="1" title="停用" {{# if(d.status == 1){ }}checked{{# } }}>
-                        <input type="radio" name="status" value="2" title="正常" {{# if(d.status == 2){ }}checked{{# } }}>
-                        <input type="radio" name="status" value="3" title="维护" {{# if(d.status == 3){ }}checked{{# } }}>
-                        <input type="radio" name="status" value="4" title="等待" {{# if(d.status == 4 || d.status == '' ){ }}checked{{# } }}>
-                        <input type="radio" name="status" value="5" title="异常" {{# if(d.status == 5){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="1" title="停用" {{# if(d.status == '1'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="2" title="正常" {{# if(d.status == '2'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="3" title="维护" {{# if(d.status == '3'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="4" title="等待" {{# if(d.status == '4' || d.status == '' ){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="5" title="异常" {{# if(d.status == '5'){ }}checked{{# } }}>
                     </div>
                 </div>
                 <div class="layui-form-item">

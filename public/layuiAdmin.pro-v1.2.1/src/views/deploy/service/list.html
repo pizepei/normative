@@ -185,7 +185,7 @@
                     ,{field:'server_ip', title: 'IP'}
                     ,{field:'ssh2_port', title: 'port'}
                     ,{field:'os', title: 'OS',templet: function(d){
-                        return d.os+'['+d.os_versions+']'
+                            return d.os+'['+d.os_versions+']'
                         }}
                     ,{field:'status',  title: '状态',templet: function(d){
                             if (d.status == 1) return '停用';
@@ -323,10 +323,10 @@
                         <label class="layui-form-label">WEB环境：</label>
                         <div class="layui-input-block">
 
-                                <select name="operation" lay-verify="">
-                                    <option value="bt"{{# if(d.os == 'bt'){ }}selected{{# } }}>bt</option>
-                                    <option value="lnmp" {{# if(d.os == 'lnmp'){ }}selected{{# } }}>lnmp</option>
-                                </select>
+                            <select name="operation" lay-verify="">
+                                <option value="bt"{{# if(d.os == 'bt'){ }}selected{{# } }}>bt</option>
+                                <option value="lnmp" {{# if(d.os == 'lnmp'){ }}selected{{# } }}>lnmp</option>
+                            </select>
                         </div>
                     </div>
 
@@ -334,19 +334,19 @@
                     <div class="layui-col-lg5">
                         <label class="layui-form-label">主机期限：</label>
                         <div class="layui-input-block">
-                                    <input type="text" class="layui-input"name="period" id="deploy-host-period" value={{d.period}}>
+                            <input type="text" class="layui-input"name="period" id="deploy-host-period" value={{d.period}}>
                         </div>
                     </div>
 
 
                     <div class="layui-col-lg5">
                         <label class="layui-form-label">验证方式：</label>
-                            <div class="layui-input-block">
-                                <select name="ssh2_auth" lay-verify="">
-                                    <option value="password"{{# if(d.ssh2_auth == 'password'){ }}selected{{# } }}>password</option>
-                                    <option value="pubkey" {{# if(d.ssh2_auth == 'pubkey'){ }}selected{{# } }}>pubkey</option>
-                                </select>
-                            </div>
+                        <div class="layui-input-block">
+                            <select name="ssh2_auth" lay-verify="">
+                                <option value="password"{{# if(d.ssh2_auth == 'password'){ }}selected{{# } }}>password</option>
+                                <option value="pubkey" {{# if(d.ssh2_auth == 'pubkey'){ }}selected{{# } }}>pubkey</option>
+                            </select>
+                        </div>
                     </div>
                     {{# if(d.id !==''){}}
                     <div class="layui-col-lg5">
