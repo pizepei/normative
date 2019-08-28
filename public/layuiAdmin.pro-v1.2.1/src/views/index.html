@@ -1,0 +1,154 @@
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+
+    <script type="text/html" template lay-url="/home/console/person/shortcut-list.json">
+
+      {{#  layui.each(d.data, function(index, item){ }}
+          <div class="layui-col-md4">
+            <div class="layui-card">
+              <div class="layui-card-header" lay-tips="{{item.explain }}">{{ item.name }}</div>
+              <div class="layui-card-body">
+                <div class="layuiadmin-card-link" >
+                  {{#  layui.each(item.list, function(listIndex, listItem){   }}
+                      {{# if(listItem.name !== undefined) {   }}
+                        <a href="{{listItem.url }}" target="_blank" lay-tips="{{listItem.explain }}">{{listItem.name }}</a>
+                      {{#  }  }}
+                  {{#});}}
+                  <button class="layui-btn layui-btn-primary layui-btn-xs" data-type="{{ item.id }}" onclick="homeConsolePersonShortcutList('{{item.id}}','{{item.name}}')" >
+                    <i class="layui-icon layui-icon-add-1"   style="position: relative; top: -1px;" ></i>添加
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      {{#  }); }}
+
+    </script>
+
+  </div>
+</div>
+
+
+<script>
+//加载 controller 目录下的对应模块
+/*
+
+  小贴士：
+    这里 console 模块对应 的 console.js 并不会重复加载，
+    然而该页面的视图则是重新插入到容器，那如何保证能重新来控制视图？有两种方式：
+      1): 借助 layui.factory 方法获取 console 模块的工厂（回调函数）给 layui.use
+      2): 直接在 layui.use 方法的回调中书写业务代码，即:
+          layui.use('console', function(){ 
+            //同 console.js 中的 layui.define 回调中的代码 
+          });
+          
+  这里我们采用的是方式1。其它很多视图中采用的其实都是方式2，因为更简单些，也减少了一个请求数。
+  
+*/
+layui.use('console', layui.factory('console'));
+/*
+  下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
+*/
+
+function homeConsolePersonShortcutList(id,name)
+{
+
+
+  layui.use(['admin', 'carousel'], function(){
+    var data = {
+      "typeId":id,
+      "typeName":name,
+      "name":'',
+      "url":'http://',
+      "explain":'',
+      "status":1,
+    };
+    console.log(data);
+
+    var $ = layui.$,admin = layui.admin,laytpl = layui.laytpl,form=layui.form
+    laytpl($('#home-console-person-shortcut-list').html()).render(data, function(html){
+      layer.open({
+        type: 1,
+        skin: 'layui-layer-rim',
+        // area: ['620px', '740px'],
+        content: html
+      });
+      form.render();//渲染动态表单
+    });
+    //点击添加编辑
+    form.on('submit(home-console-person-shortcut-list-add)', function(data){
+      console.log(data.field);
+      admin.req({
+        url: '/home/console/person/shortcut/'+data.field.typeId+'.json' //实际使用请改成服务端真实接口
+        ,type:'post'
+        ,data: data.field
+        ,done: function(res){
+          //登入成功的提示与跳转
+          layer.msg(res.msg, {
+            offset: '15px'
+            ,icon: 1
+            ,time: 1000
+          }, function(){
+            admin.events.refresh();
+            return false;
+          });
+        }
+      });
+      return false;
+    });
+  });
+}
+</script>
+<script id="home-console-person-shortcut-list" type="text/html">
+
+  <div class="layui-card">
+    <div class="layui-card-header">快捷方式[{{d.typeName}}]</div>
+    <div class="layui-card-body">
+      <form class="layui-form"  lay-filter="home-console-person-shortcut-list-form" >
+        <div class="layui-row layui-col-space10 layui-form-item">
+          <div class="layui-col-lg8">
+            <label class="layui-form-label">名称：</label>
+            <div class="layui-input-block">
+              <input type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.name}}>
+            </div>
+            {{# if(d.id !==''){ }}
+            <input type="hidden" name="typeId" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.typeId}}>
+            {{# } }}
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">URL：</label>
+          <div class="layui-input-block">
+            <input type="text" name="url" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.url}}>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">状态：</label>
+          <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="停用" {{# if(d.status == '1'){ }}checked{{# } }}>
+            <input type="radio" name="status" value="2" title="正常" {{# if(d.status == '2'){ }}checked{{# } }}>
+            <input type="radio" name="status" value="3" title="维护" {{# if(d.status == '3'){ }}checked{{# } }}>
+            <input type="radio" name="status" value="4" title="等待" {{# if(d.status == '4' || d.status == '' ){ }}checked{{# } }}>
+            <input type="radio" name="status" value="5" title="异常" {{# if(d.status == '5'){ }}checked{{# } }}>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">备注信息：</label>
+          <div class="layui-input-block">
+            <textarea name="explain" placeholder="" lay-verify="required"  class="layui-textarea">{{d.explain}}</textarea>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit  lay-filter="home-console-person-shortcut-list-add">确认添加</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</script>
+
