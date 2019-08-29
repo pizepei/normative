@@ -15,9 +15,13 @@
                         <a href="{{listItem.url }}" target="_blank" lay-tips="{{listItem.explain }}">{{listItem.name }}</a>
                       {{#  }  }}
                   {{#});}}
-                  <button class="layui-btn layui-btn-primary layui-btn-xs" data-type="{{ item.id }}" onclick="homeConsolePersonShortcutList('{{item.id}}','{{item.name}}')" >
-                    <i class="layui-icon layui-icon-add-1"   style="position: relative; top: -1px;" ></i>添加
+                  <button class="layui-btn layui-btn-primary layui-btn-xs" data-type="{{ item.id }}"  lay-tips="向[{{item.explain }}]添加一个快捷方式" onclick="homeConsolePersonShortcutList('{{item.id}}','{{item.name}}')" >
+                    <i class="layui-icon layui-icon-add-1"  style="position: relative; top: -1px;" ></i>添加
                   </button>
+                  <button class="layui-btn layui-btn-primary layui-btn-xs" data-type="{{ item.id }}"  lay-tips="管理[{{item.explain }}]中的快捷方式" onclick="homeConsolePersonShortcutListUpdate('{{item.id}}','{{item.name}}')" >
+                    <i class="layui-icon "  style="position: relative; top: -1px;" >&#xe642;</i>管理
+                  </button>
+
                 </div>
               </div>
             </div>
@@ -50,7 +54,14 @@ layui.use('console', layui.factory('console'));
 /*
   下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
 */
+function homeConsolePersonShortcutListUpdate(id,name){
 
+  //获取列表
+
+  //列表可直接编辑
+
+
+};
 function homeConsolePersonShortcutList(id,name)
 {
 
