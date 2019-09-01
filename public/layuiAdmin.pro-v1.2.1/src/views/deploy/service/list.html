@@ -277,85 +277,23 @@
 
 
                     <div class="layui-col-lg5">
-                        <label class="layui-form-label">IP：</label>
+                        <label class="layui-form-label">代码源：</label>
                         <div class="layui-input-block">
-                            <input type="text" name="server_ip" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.server_ip}}>
+                                <select name="quiz" lay-search lay-verify="">
+                                    <option value="">请选择问题</option>
+                                    <optgroup label="城市记忆">
+                                        <option value="你工作的第一个城市">你工作的第一个城市</option>
+                                        <optgroup label="城市记忆">
+                                            <option value="你工作的第一个城市">你工作的第一个城市</option>
+                                        </optgroup>
+                                    </optgroup>
+                                    <optgroup label="学生时代">
+                                        <option value="你的工号">你的工号</option>
+                                        <option value="你最喜欢的老师">你最喜欢的老师</option>
+                                    </optgroup>
+                                </select>
                         </div>
                     </div>
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">端口：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="ssh2_port" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.ssh2_port}}>
-                        </div>
-                    </div>
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">账号：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="ssh2_user" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.ssh2_user}}>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">主机密码：</label>
-                        <div class="layui-input-block">
-                            <input type="password" class="layui-input"name="ssh2_password"  value={{d.ssh2_password}}>
-                        </div>
-                    </div>
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">系统：</label>
-                        <div class="layui-input-block">
-                            <select name="os" lay-verify="">
-                                <option value="Linux"{{# if(d.os == 'Linux'){ }}selected{{# } }}>Linux</option>
-                                <option value="Windows" {{# if(d.os == 'Windows'){ }}selected{{# } }}>Windows</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">系统版本：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="os_versions" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.os_versions}}>
-                        </div>
-                    </div>
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">WEB环境：</label>
-                        <div class="layui-input-block">
-
-                            <select name="operation" lay-verify="">
-                                <option value="bt"{{# if(d.os == 'bt'){ }}selected{{# } }}>bt</option>
-                                <option value="lnmp" {{# if(d.os == 'lnmp'){ }}selected{{# } }}>lnmp</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">主机期限：</label>
-                        <div class="layui-input-block">
-                            <input type="text" class="layui-input"name="period" id="deploy-host-period" value={{d.period}}>
-                        </div>
-                    </div>
-
-
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">验证方式：</label>
-                        <div class="layui-input-block">
-                            <select name="ssh2_auth" lay-verify="">
-                                <option value="password"{{# if(d.ssh2_auth == 'password'){ }}selected{{# } }}>password</option>
-                                <option value="pubkey" {{# if(d.ssh2_auth == 'pubkey'){ }}selected{{# } }}>pubkey</option>
-                            </select>
-                        </div>
-                    </div>
-                    {{# if(d.id !==''){}}
-                    <div class="layui-col-lg5">
-                        <label class="layui-form-label">选择分组：</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="group" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.os_versions}}>
-                        </div>
-                    </div>
-                    {{#}}}
 
 
 

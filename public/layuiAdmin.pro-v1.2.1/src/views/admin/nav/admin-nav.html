@@ -1,0 +1,86 @@
+<title>系统管理</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统管理</cite></a>
+        <a><cite>导航菜单管理</cite></a>
+        <a><cite>后台菜单管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">分组列表</div>
+                <div class="layui-card-header"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-tips="添加一个分组" lay-offset="5" data-type="add"><i class="layui-icon"></i> 添加</button></div>
+
+                <div class="layui-card-body">
+                    <div id="sdsdsdsdsd" class="demo-tree demo-tree-box" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    layui.use(['admin', 'table','laytpl','laydate','tree', 'util'], function(){
+        var admin = layui.admin
+            ,form = layui.form
+            ,table = layui.table
+            ,laytpl = layui.laytpl
+            ,laydate = layui.laydate
+            ,tree = layui.tree
+            ,$ = layui.$;
+        //模拟数据2
+        data1 = [{
+            title: '江西'
+            ,id: 1
+            ,children: [{
+                title: '南昌'
+                ,id: 1000
+                ,children: [{
+                    title: '青山湖区'
+                    ,id: 10001
+                },{
+                    title: '高新区'
+                    ,id: 10002
+                }]
+            },{
+                title: '九江'
+                ,id: 1001
+            },{
+                title: '赣州'
+                ,id: 1002
+            }]
+        }];
+        //开启节点操作图标
+        tree.render({
+            elem: '#sdsdsdsdsd'
+            ,data: data1
+            ,edit: ['add', 'update', 'del'] //操作节点的图标
+            ,click: function(obj){
+                //点击
+                layer.msg(JSON.stringify(obj.data));
+            }
+            ,operate: function(obj){
+            console.log(obj);
+            var type = obj.type; //得到操作类型：add、edit、del
+            var data = obj.data; //得到当前节点的数据
+            var elem = obj.elem; //得到当前节点元素
+
+            //Ajax 操作
+            var id = data.id; //得到节点索引
+            if(type === 'add'){ //增加节点
+                //返回 key 值
+                return 123;
+            } else if(type === 'update'){ //修改节点
+                console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
+            } else if(type === 'del'){ //删除节点
+
+            };
+        }
+        });
+
+    });
+</script>
