@@ -32,54 +32,46 @@
             ,laydate = layui.laydate
             ,tree = layui.tree
             ,$ = layui.$;
-        //模拟数据2
-        data1 = [{
-            title: '江西'
-            ,id: 1
-            ,children: [{
-                title: '南昌'
-                ,id: 1000
-                ,children: [{
-                    title: '青山湖区'
-                    ,id: 10001
-                },{
-                    title: '高新区'
-                    ,id: 10002
-                }]
-            },{
-                title: '九江'
-                ,id: 1001
-            },{
-                title: '赣州'
-                ,id: 1002
-            }]
-        }];
-        //开启节点操作图标
-        tree.render({
-            elem: '#sdsdsdsdsd'
-            ,data: data1
-            ,edit: ['add', 'update', 'del'] //操作节点的图标
-            ,click: function(obj){
-                //点击
-                layer.msg(JSON.stringify(obj.data));
+
+
+
+        admin.req({
+            url: '/admin/menu/tree-menu-info.json' //实际使用请改成服务端真实接口
+            ,type:'get'
+            ,done: function(res){
+                //登入成功的提示与跳转
+                //开启节点操作图标
+                tree.render({
+                    elem: '#sdsdsdsdsd'
+                    ,data: res.data
+                    ,accordion:true
+                    ,showCheckbox:true
+                    ,edit: ['add', 'update', 'del'] //操作节点的图标
+                    ,click: function(obj){
+                        //点击
+                        layer.msg(obj.data.id);
+
+                        // layer.msg(JSON.stringify(obj.data));
+                    }
+                    ,operate: function(obj){
+                        console.log(obj);
+                        var type = obj.type; //得到操作类型：add、edit、del
+                        var data = obj.data; //得到当前节点的数据
+                        var elem = obj.elem; //得到当前节点元素
+
+                        //Ajax 操作
+                        var id = data.id; //得到节点索引
+                        if(type === 'add'){ //增加节点
+                            //返回 key 值
+                            return 123;
+                        } else if(type === 'update'){ //修改节点
+                            console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
+                        } else if(type === 'del'){ //删除节点
+
+                        };
+                    }
+                });
             }
-            ,operate: function(obj){
-            console.log(obj);
-            var type = obj.type; //得到操作类型：add、edit、del
-            var data = obj.data; //得到当前节点的数据
-            var elem = obj.elem; //得到当前节点元素
-
-            //Ajax 操作
-            var id = data.id; //得到节点索引
-            if(type === 'add'){ //增加节点
-                //返回 key 值
-                return 123;
-            } else if(type === 'update'){ //修改节点
-                console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
-            } else if(type === 'del'){ //删除节点
-
-            };
-        }
         });
 
     });
