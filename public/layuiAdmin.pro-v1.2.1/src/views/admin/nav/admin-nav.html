@@ -12,11 +12,9 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-header">分组列表</div>
-                <div class="layui-card-header"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-tips="添加一个分组" lay-offset="5" data-type="add"><i class="layui-icon"></i> 添加</button></div>
-
+                <div class="layui-card-header">管理后台菜单</div>
                 <div class="layui-card-body">
-                    <div id="sdsdsdsdsd" class="demo-tree demo-tree-box" ></div>
+                    <div id="ree-menu-info-tree" class="demo-tree demo-tree-box" ></div>
                 </div>
             </div>
         </div>
@@ -33,7 +31,59 @@
             ,tree = layui.tree
             ,$ = layui.$;
 
+        // 初始化 编辑 添加 分组
+        function setTpl(data){
+            laytpl($('#admin-nav-info').html()).render(data, function(html){
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['620px', '740px'],
+                    content: html
+                });
+                form.render();//渲染动态表单
+            });
+        }
 
+        //点击添加
+        form.on('submit(admin-nav-info-add)', function(data){
+            admin.req({
+                url: '/admin/menu/admin-menu.json' //实际使用请改成服务端真实接口
+                ,type:'post'
+                ,data: data.field
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        admin.events.refresh();
+                        return false;
+                    });
+                }
+            });
+            return false;
+        });
+        function del(id)
+        {
+            admin.req({
+                url: '/admin/menu/admin-menu/'+id+'.json' //实际使用请改成服务端真实接口
+                ,type:'delete'
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        admin.events.refresh();
+                        return false;
+                    });
+                }
+            });
+
+
+        }
 
         admin.req({
             url: '/admin/menu/tree-menu-info.json' //实际使用请改成服务端真实接口
@@ -42,10 +92,11 @@
                 //登入成功的提示与跳转
                 //开启节点操作图标
                 tree.render({
-                    elem: '#sdsdsdsdsd'
+                    elem: '#ree-menu-info-tree'
                     ,data: res.data
                     ,accordion:true
                     ,showCheckbox:true
+                    ,id:'ree-menu-info-tree'
                     ,edit: ['add', 'update', 'del'] //操作节点的图标
                     ,click: function(obj){
                         //点击
@@ -58,15 +109,33 @@
                         var type = obj.type; //得到操作类型：add、edit、del
                         var data = obj.data; //得到当前节点的数据
                         var elem = obj.elem; //得到当前节点元素
-
                         //Ajax 操作
                         var id = data.id; //得到节点索引
+
                         if(type === 'add'){ //增加节点
+                            var data = {
+                                'parent_title':data.title,
+                                'name':'',
+                                'parent_id':id,
+                                'title':'',
+                                'icon':'',
+                                'spread':'1',
+                                'jump':'',
+                                'sort':0,
+                                'status':2,
+                            };
+                            console.log(obj);
+
+                            setTpl(data);
                             //返回 key 值
                             return 123;
                         } else if(type === 'update'){ //修改节点
                             console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
                         } else if(type === 'del'){ //删除节点
+                            layer.confirm('真的删除么?', function(id){
+                                del(data.id);
+                                admin.events.refresh();
+                            });
 
                         };
                     }
@@ -75,4 +144,84 @@
         });
 
     });
+</script>
+<script id="admin-nav-info" type="text/html">
+
+    <div class="layui-card">
+        <div class="layui-card-header">编辑菜单</div>
+        <div class="layui-card-body">
+            <form class="layui-form"  lay-filter="component-form-element">
+                {{# if(d.parent_id !=='00000000-0000-0000-0000-000000000000'){ }}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">父亲菜单：</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="parent_title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.parent_title}}  disabled>
+                                <input type="hidden" name="parent_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.parent_id}}  disabled>
+                            </div>
+                    </div>
+
+                {{# }else{ }}
+                <input type="hidden" name="parent_id" lay-verify="required" value='00000000-0000-0000-0000-000000000000'  disabled>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="icon" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.icon}}>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">layui-icon开头的图标信息</div>
+                </div>
+                {{# }    }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" lay-verify="required" placeholder="菜单显示的名称" autocomplete="off" class="layui-input" value={{d.title}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">路径：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="required" placeholder="与视图的文件夹名称和路由路径对应" autocomplete="off" class="layui-input" value={{d.title}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">默认展开：</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="spread" lay-skin="switch" lay-text="展开|隐藏"   {{# if(d.spread == '1' ){ }}checked{{# } }} >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">跳转：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="jump" lay-verify="" placeholder="jump 设定的路由跳转" autocomplete="off" class="layui-input" value={{d.jump}}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">跳转：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" lay-verify="" placeholder="排序数字越大越靠前" autocomplete="off" class="layui-input" value={{d.sort}}>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="等待审核" {{# if(d.status == '1'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="2" title="正常" {{# if(d.status == '2' || d.status == ''){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="3" title="禁用" {{# if(d.status == '3'){ }}checked{{# } }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {{#  if(d.title ==''){ }}
+                        <button class="layui-btn" lay-submit lay-filter="admin-nav-info-add">确认添加</button>
+                        {{# }else{ }}
+                        <button class="layui-btn" lay-submit lay-filter="admin-nav-info-edit">确认修改</button>
+                        {{# } }}
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </script>
