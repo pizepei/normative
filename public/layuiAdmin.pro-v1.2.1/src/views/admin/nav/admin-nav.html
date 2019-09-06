@@ -128,27 +128,22 @@
                     elem: '#ree-menu-info-tree'
                     ,data: res.data
                     ,accordion:true
+                    ,onlyIconControl:true
                     // ,showCheckbox:true
                     ,id:'ree-menu-info-tree'
                     ,edit: ['add', 'del'] //操作节点的图标
                     ,click: function(obj){
-                        //点击
+                        //点击进行编辑
                         update(obj.data.id);
-                        layer.msg(obj.data.id);
-
-                        // layer.msg(JSON.stringify(obj.data));
                     }
                     ,operate: function(obj){
-                        console.log(obj);
                         var type = obj.type; //得到操作类型：add、edit、del
                         var data = obj.data; //得到当前节点的数据
                         var elem = obj.elem; //得到当前节点元素
                         //Ajax 操作
                         var id = data.id; //得到节点索引
-                        layer.msg(id);
-
                         if(type === 'add'){ //增加节点
-                            var data = {
+                            var Data = {
                                 'parent_title':data.title,
                                 'name':'',
                                 'parent_id':id,
@@ -159,18 +154,20 @@
                                 'sort':0,
                                 'status':2,
                             };
-                            console.log(obj);
-                            setTpl(data);
+                            console.log(Data);
+                            setTpl(Data);
                             //返回 key 值
                             return 0;
                         } else if(type === 'update'){ //修改节点(只是修改名称)
                             layer.msg(id);
                             console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
                         } else if(type === 'del'){ //删除节点
-                            layer.confirm('真的删除么?', function(id){
-                                del(data.id);
-                                admin.events.refresh();
-                            });
+                            if (id!==0){
+                                layer.confirm('真的删除么?', function(id){
+                                    del(data.id);
+                                });
+                            }
+
 
                         };
                     }
@@ -186,12 +183,12 @@
         <div class="layui-card-header">编辑菜单</div>
         <div class="layui-card-body">
             <form class="layui-form"  lay-filter="component-form-element">
-                {{# if(d.parent_id !=='00000000-0000-0000-0000-000000000000' && d.name =='' && d.title ==''){ }}
+                {{# if(d.parent_id !=='00000000-0000-0000-0000-000000000000' && d.name =='' && d.parent_title !==''){ }}
                     <div class="layui-form-item">
                         <label class="layui-form-label">父亲菜单：</label>
                             <div class="layui-input-block">
-                                <input type="text" name="parent_title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.parent_title}}  disabled>
-                                <input type="hidden" name="parent_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.parent_id}}  disabled>
+                                <input type="text" name="parent_title" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value='{{d.parent_title}}'  disabled>
+                                <input type="hidden" name="parent_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value='{{d.parent_id}}'  disabled>
                             </div>
                     </div>
 
@@ -234,9 +231,9 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">跳转：</label>
+                    <label class="layui-form-label">排序：</label>
                     <div class="layui-input-block">
-                        <input type="number" min="0" max="100" step="1"     name="sort" lay-verify="" placeholder="排序数字越大越靠前" autocomplete="off" class="layui-input" value={{d.sort}}>
+                        <input type="number" min="0" max="100" step="1"     name="sort" lay-verify="required" placeholder="排序数字越大越靠前" autocomplete="off" class="layui-input" value={{d.sort}}>
                     </div>
                 </div>
 
