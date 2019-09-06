@@ -43,7 +43,26 @@
                 form.render();//渲染动态表单
             });
         }
-
+        //点击添加
+        form.on('submit(admin-nav-info-edit)', function(data){
+            admin.req({
+                url: '/admin/menu/admin-menu/'+data.field.id+'.json' //实际使用请改成服务端真实接口
+                ,type:'put'
+                ,data: data.field
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        admin.events.refresh();
+                        return false;
+                    });
+                }
+            });
+            return false;
+        });
         //点击添加
         form.on('submit(admin-nav-info-add)', function(data){
             admin.req({
@@ -64,6 +83,7 @@
             });
             return false;
         });
+        //删除
         function del(id)
         {
             admin.req({
@@ -81,10 +101,23 @@
                     });
                 }
             });
-
+        }
+        //修改
+        function update(id)
+        {
+            //请求获取菜单详情
+            //渲染到模板
+            admin.req({
+                url: '/admin/menu/admin-menu/'+id+'.json' //实际使用请改成服务端真实接口
+                ,type:'get'
+                ,done: function(res){
+                    setTpl(res.data)
+                    console.log(res);
+                    //登入成功的提示与跳转
+                }
+            });
 
         }
-
         admin.req({
             url: '/admin/menu/tree-menu-info.json' //实际使用请改成服务端真实接口
             ,type:'get'
@@ -95,11 +128,12 @@
                     elem: '#ree-menu-info-tree'
                     ,data: res.data
                     ,accordion:true
-                    ,showCheckbox:true
+                    // ,showCheckbox:true
                     ,id:'ree-menu-info-tree'
-                    ,edit: ['add', 'update', 'del'] //操作节点的图标
+                    ,edit: ['add', 'del'] //操作节点的图标
                     ,click: function(obj){
                         //点击
+                        update(obj.data.id);
                         layer.msg(obj.data.id);
 
                         // layer.msg(JSON.stringify(obj.data));
@@ -111,6 +145,7 @@
                         var elem = obj.elem; //得到当前节点元素
                         //Ajax 操作
                         var id = data.id; //得到节点索引
+                        layer.msg(id);
 
                         if(type === 'add'){ //增加节点
                             var data = {
@@ -125,11 +160,11 @@
                                 'status':2,
                             };
                             console.log(obj);
-
                             setTpl(data);
                             //返回 key 值
-                            return 123;
-                        } else if(type === 'update'){ //修改节点
+                            return 0;
+                        } else if(type === 'update'){ //修改节点(只是修改名称)
+                            layer.msg(id);
                             console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
                         } else if(type === 'del'){ //删除节点
                             layer.confirm('真的删除么?', function(id){
@@ -151,7 +186,7 @@
         <div class="layui-card-header">编辑菜单</div>
         <div class="layui-card-body">
             <form class="layui-form"  lay-filter="component-form-element">
-                {{# if(d.parent_id !=='00000000-0000-0000-0000-000000000000'){ }}
+                {{# if(d.parent_id !=='00000000-0000-0000-0000-000000000000' && d.name =='' && d.title ==''){ }}
                     <div class="layui-form-item">
                         <label class="layui-form-label">父亲菜单：</label>
                             <div class="layui-input-block">
@@ -161,6 +196,9 @@
                     </div>
 
                 {{# }else{ }}
+                    {{# if(d.id !==''){  }}
+                        <input type="hidden" name="id" lay-verify="required" value='{{d.id}}'  disabled>
+                    {{#  }  }}
                 <input type="hidden" name="parent_id" lay-verify="required" value='00000000-0000-0000-0000-000000000000'  disabled>
 
                 <div class="layui-form-item">
@@ -180,7 +218,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">路径：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" placeholder="与视图的文件夹名称和路由路径对应" autocomplete="off" class="layui-input" value={{d.title}}>
+                        <input type="text" name="name" lay-verify="required" placeholder="与视图的文件夹名称和路由路径对应" autocomplete="off" class="layui-input" value={{d.name}}>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -198,7 +236,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">跳转：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="sort" lay-verify="" placeholder="排序数字越大越靠前" autocomplete="off" class="layui-input" value={{d.sort}}>
+                        <input type="number" min="0" max="100" step="1"     name="sort" lay-verify="" placeholder="排序数字越大越靠前" autocomplete="off" class="layui-input" value={{d.sort}}>
                     </div>
                 </div>
 
@@ -212,7 +250,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        {{#  if(d.title ==''){ }}
+                        {{#  if(d.title =='' && d.name =='' ){ }}
                         <button class="layui-btn" lay-submit lay-filter="admin-nav-info-add">确认添加</button>
                         {{# }else{ }}
                         <button class="layui-btn" lay-submit lay-filter="admin-nav-info-edit">确认修改</button>
