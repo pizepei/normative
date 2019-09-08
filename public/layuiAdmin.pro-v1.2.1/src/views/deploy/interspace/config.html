@@ -1,0 +1,258 @@
+<title>空间配置</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>项目部署</cite></a>
+        <a><cite>空间管理</cite></a>
+        <a><cite>空间配置</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">分组列表</div>
+                <div class="layui-card-header"><button type="button" class="layui-btn layui-btn-sm layui-btn-normal" lay-tips="添加一个分组" lay-offset="5" data-type="add"><i class="layui-icon"></i> 添加</button></div>
+
+                <div class="layui-card-body">
+
+                    <table class="layui-hide" id="deploy-group-list-table-resetPage"  lay-filter="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //群组列表
+    layui.data.done = function(d){
+        layui.use(['form'], function(){
+            var form = layui.form;
+            form.render(null, 'component-form-group');//渲染该模板下的动态表单
+        });
+    };
+
+    layui.use(['admin', 'table','laytpl'], function(){
+        var admin = layui.admin
+            ,form = layui.form
+            ,table = layui.table
+            ,laytpl = layui.laytpl
+            ,$ = layui.$;
+        getGroups();
+        //点击添加
+        form.on('submit(component-form-element-add)', function(data){
+            admin.req({
+                url: '/deploy/server/group-list.json' //实际使用请改成服务端真实接口
+                ,type:'post'
+                ,data: data.field
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        layer.closeAll('page');
+                        getGroups();
+
+                    });
+                }
+            });
+            return false;
+        });
+        //点击添加编辑
+        form.on('submit(component-form-element-edit)', function(data){
+            admin.req({
+                url: '/deploy/server/group-list.json' //实际使用请改成服务端真实接口
+                ,type:'put'
+                ,data: data.field
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        layer.closeAll('page');
+                        getGroups();
+                    });
+                }
+            });
+            return false;
+        });
+
+        // 添加操作
+        $('.layui-card-header .layui-btn').on('click', function(){
+            setTpl({
+                'id':'',
+                'name':'',
+                'serve_group':'',
+                'status':'',
+                'explain':'',
+            });
+        });
+        // 初始化 编辑 添加 分组
+        function setTpl(data){
+            laytpl($('#deploy-group-info').html()).render(data, function(html){
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['620px', '740px'],
+                    content: html
+                });
+                form.render();//渲染动态表单
+            });
+        }
+        // 获取分组列表
+        function getGroups()
+        {
+            table.render({
+                elem: '#deploy-group-list-table-resetPage'
+                ,url: '/deploy/server/group-list.json'
+                ,type:'get'
+                ,response: {
+                    statusCode: 200 //规定成功的状态码，默认：0
+                }
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                }
+                // ,cellMinWidth: 90 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                ,cols: [[
+                    ,{field:'name', title: '分组', sort: true, fixed: 'left'}
+                    ,{field:'explain', title: '说明'}
+                    ,{field:'status',  title: '状态',templet: function(d){
+                            if (d.status == 1) return '停用';
+                            if (d.status == 2) return '正常';
+                            if (d.status == 3) return '维护';
+                            if (d.status == 4) return '等待';
+                            if (d.status == 5) return '异常';
+                        }}
+                    ,{field:'serve_group',  title: '环境',templet: function(d){
+                            if (d.serve_group == 'develop') return '开发';
+                            if (d.serve_group == 'production') return '生产';
+                            if (d.serve_group == 'developTest') return '开发测试';
+                            if (d.serve_group == 'productionTest') return '生产测试';
+                        }}
+                    ,{  title: '操作' , align:'center', toolbar: '#deploy-group-list-table-toolbar'}
+                ]]
+            });
+            table.reload('deploy-group-list-table-resetPage')
+        }
+        // 编辑 更新
+        function edit(data)
+        {
+            setTpl(data);
+        }
+
+        function del(data)
+        {
+            admin.req({
+                url: '/deploy/server/group-list/'+data.id+'.json' //实际使用请改成服务端真实接口
+                ,type:'delete'
+                ,done: function(res){
+                    //登入成功的提示与跳转
+                    layer.msg(res.msg, {
+                        offset: '15px'
+                        ,icon: 1
+                        ,time: 1000
+                    }, function(){
+                        layer.closeAll('page');
+                        getGroups();
+                    });
+                }
+            });
+        }
+        table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if(layEvent === 'del'){ //删除
+                layer.confirm('真的删除行么', function(index){
+                    del(data);
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+
+                    // server/group-list/
+
+                    //向服务端发送删除指令
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                edit(data);
+                //同步更新缓存对应的值
+                // obj.update({
+                //     username: '123'
+                //     ,title: 'xxx'
+                // });
+            } else {
+
+            }
+        });
+
+    });
+</script>
+<script type="text/html" id="deploy-group-list-table-toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script id="deploy-group-info" type="text/html">
+
+    <div class="layui-card">
+        <div class="layui-card-header">添加分组</div>
+        <div class="layui-card-body">
+            <form class="layui-form"  lay-filter="component-form-element">
+                <div class="layui-row layui-col-space10 layui-form-item">
+                    <div class="layui-col-lg8">
+                        <label class="layui-form-label">分组名称：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.name}}>
+                        </div>
+                        {{# if(d.id !==''){ }}
+                        <input type="hidden" name="id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value={{d.id}}>
+                        {{# } }}
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">环境类型：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="serve_group" value="develop" title="开发" {{# if(d.serve_group == 'develop' || d.serve_group == ''){ }}checked{{# } }}>
+                        <input type="radio" name="serve_group" value="developTest" title="开发测试" {{# if(d.serve_group == 'developTest' ){ }}checked{{# } }} >
+                        <input type="radio" name="serve_group" value="production" title="生产"   {{# if(d.serve_group == 'production' ){ }}checked{{# } }} >
+                        <input type="radio" name="serve_group" value="productionTest" title="生产测试"  {{# if(d.serve_group == 'productionTest' ){ }}checked{{# } }} >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="停用" {{# if(d.status == '1'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="2" title="正常" {{# if(d.status == '2'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="3" title="维护" {{# if(d.status == '3'){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="4" title="等待" {{# if(d.status == '4' || d.status == '' ){ }}checked{{# } }}>
+                        <input type="radio" name="status" value="5" title="异常" {{# if(d.status == '5'){ }}checked{{# } }}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注信息：</label>
+                    <div class="layui-input-block">
+                        <textarea name="explain" placeholder="" lay-verify="required"  class="layui-textarea">{{d.explain}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {{#  if(d.id ==''){ }}
+                        <button class="layui-btn" lay-submit lay-filter="component-form-element-add">确认添加</button>
+                        {{# }else{ }}
+                        <button class="layui-btn" lay-submit lay-filter="component-form-element-edit">确认修改</button>
+                        {{# } }}
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</script>
