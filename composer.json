@@ -22,7 +22,8 @@
         "ext-zip": "*",
         "pizepei/helper": "dev-master",
         "pizepei/wechat-client": "dev-master",
-        "pizepei/basics": "dev-master"
+        "pizepei/basics": "dev-master",
+        "alibabacloud/client": "dev-master"
     },
     "repositories": {
         "0": {
