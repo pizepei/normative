@@ -219,143 +219,49 @@
      *请求获取请求参数信息
      */
     function getRequestParam(elem ){
-        layui.use(['element','table','laytpl','jquery','laytpl'], function(){
+        layui.use(['element','table','laytpl','jquery'], function(){
             var element = layui.element,
-                laytpl = layui.laytpl, $ = layui.jquery, laytpl = layui.laytpl,
-                table = layui.table;
-            //这里获取到数据执行显示
-            table.render({
-                elem: '#request-table-get'
-                ,url:'/{{MODULE_PREFIX}}/document/request-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'get'}
-                ,parseData: function(res){ //res 即为原始返回的数据
-                        return {
-                        // "code": res.status, //解析接口状态
-                        // "msg": res.message, //解析提示文本
-                        // "count": res.total, //解析数据长度
-                        "data": res.data.item //解析数据列表
-                    };
-                }
-                // ,toolbar: '#toolbarDemo-get'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">GET请求参数</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                    ,{field: 'type', title: '数据类型', width:'10%'}
-                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-                ]
-                ]
-                ,page: false
+                laytpl = layui.laytpl, $ = layui.jquery, table = layui.table;
+
+            var response = {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                ,statusCode: 200 //规定成功的状态码，默认：0
+                ,msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                ,countName: 'count' //规定数据总数的字段名称，默认：count
+                ,dataName: 'data' //规定数据列表的字段名称，默认：data
+            };
+            var eachData = {
+                "get":"GET请求参数",
+                "raw":"RAW请求参数",
+                "path":"PATH请求参数",
+                "json":"返回参数JSON",
+                "xml":"返回参数XML",
+            };
+            layui.each(eachData, function(index, item){
+
+                //这里获取到数据执行显示
+                table.render({
+                    elem: '#request-table-get'
+                    ,url:'/{{MODULE_PREFIX}}/document/request-param.json'
+                    ,where:{father:elem.context.rel,index:elem.context.name,type:index}
+                    ,response: response
+                    // ,toolbar: '#toolbarDemo-get'
+                    ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
+                    ,cols: [
+                        [ //标题栏
+                            {align: 'center', title: '<span class="layui-badge layui-bg-green">item</span>',width:'100%', colspan: 4}
+                        ],
+                        [
+                            {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
+                            ,{field: 'type', title: '数据类型', width:'10%'}
+                            ,{field: 'fieldRestrain', title: '约束', width:'25%'}
+                            ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
+                        ]
+                    ]
+                    ,page: false
+                });
+
             });
-
-            //这里获取到数据执行显示
-            table.render({
-                elem: '#request-table-post'
-                ,url:'/{{MODULE_PREFIX}}/document/request-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'post'}
-                // ,toolbar: '#toolbarDemo-post'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">P0ST请求参数</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                    ,{field: 'type', title: '数据类型', width:'10%'}
-                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-
-                ]]
-                ,page: false
-            });
-
-            //这里获取到数据执行显示
-            table.render({
-                elem: '#request-table-raw'
-                ,url:'/{{MODULE_PREFIX}}/document/request-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'raw'}
-                // ,toolbar: '#toolbarDemo-raw'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'raw'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">RAW请求参数</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                    ,{field: 'type', title: '数据类型', width:'10%'}
-                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-
-                ]]
-                ,page: false
-            });
-
-            //这里获取到数据执行显示
-            table.render({
-                elem: '#request-table-path'
-                ,url:'/{{MODULE_PREFIX}}/document/request-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'path'}
-                // ,toolbar: '#toolbarDemo-path'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">PATH请求参数</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                    ,{field: 'type', title: '数据类型', width:'10%'}
-                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-
-                ]]
-                ,page: false
-            });
-
-
-            table.render({
-                elem: '#return-table-json'
-                ,url:'/{{MODULE_PREFIX}}/document/return-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'json'}
-                // ,toolbar: '#toolbarDemo-path'
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数JSON</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                    {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                    ,{field: 'type', title: '数据类型', width:'10%'}
-                    ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                    ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-                ]]
-                ,page: false
-            });
-
-
-
-            table.render({
-                elem: '#return-table-xml'
-                ,url:'/{{MODULE_PREFIX}}/document/return-param.json'
-                ,where:{father:elem.context.rel,index:elem.context.name,type:'xml'}
-                ,title: elem.context.rel+'-'+elem.context.name+'-'+'get'
-                ,cols: [
-                    [ //标题栏
-                        {align: 'center', title: '<span class="layui-badge layui-bg-green">返回参数XML</span>',width:'100%', colspan: 4}
-                    ],
-                    [
-                        {field: 'field', title: '字段', width:'32%',style:'color:#009688;'}
-                        ,{field: 'type', title: '数据类型', width:'10%'}
-                        ,{field: 'fieldRestrain', title: '约束', width:'25%'}
-                        ,{field: 'fieldExplain', title: '字段说明', width:'33%'}
-                    ]]
-                ,page: false
-            });
-
-
 
         });
     }
@@ -470,14 +376,10 @@
 
                 {{#  }}}
 
-
             </div>
         </div>
 
     </div>
-
-
-
 
 </script>
 
