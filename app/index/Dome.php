@@ -462,7 +462,7 @@ class Dome extends Controller
         //    ->cache(['Account','info'])
         //    ->replaceField('fetch',['type','status']);
         if(empty($Account)){
-            return $this->error($Request->post('phone'),'用户或密码错误');
+            return $this->error('用户或密码错误');
         }
         $AccountService = new AccountService();
 
@@ -524,7 +524,7 @@ class Dome extends Controller
             ->where(['phone'=>$Request->post('phone')])
             ->replaceField('fetch',['type','status']);
         if(empty($Account)){
-            $this->error($Request->post(),'用户不存在');
+            $this->error('用户不存在');
         }
         $AccountService = new AccountService();
         return $AccountService->changePassword(\Config::ACCOUNT,$Request->post(),$Account,$this);
