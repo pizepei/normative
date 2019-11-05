@@ -22,7 +22,7 @@ class UserAuth extends BasicsAuthority
         /**
          * 判断是否登录（如果无效状态会直接异常处理）
          */
-        $this->WhetherTheLogin();
+        $this->is_login();
         /**
          * 获取当前用户的信息（权限）$jurisdictionData
          */
