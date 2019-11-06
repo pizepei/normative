@@ -26,27 +26,27 @@
         "alibabacloud/client": "dev-master"
     },
     "repositories": {
-        "0": {
+        "pizepei/config-ng": {
             "type": "git",
             "url": "git@github.com:pizepei/config-gm.git"
         },
-        "1": {
+        "pizepei/model": {
             "type": "git",
             "url": "git@github.com:pizepei/model.git"
         },
-        "2": {
+        "pizepei/staging": {
             "type": "git",
             "url": "git@github.com:pizepei/staging.git"
         },
-        "3": {
+        "pizepei/terminal-info": {
             "type": "git",
             "url": "git@github.com:pizepei/TerminalInfo.git"
         },
-        "4": {
+        "pizepei/wechat": {
             "type": "git",
             "url": "git@github.com:pizepei/wechat.git"
         },
-        "5": {
+        "pizepei/deploy": {
             "type": "git",
             "url": "git@github.com:pizepei/deploy.git"
         },
