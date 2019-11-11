@@ -26,34 +26,7 @@
         "alibabacloud/client": "dev-master"
     },
     "repositories": {
-        "pizepei/config-ng": {
-            "type": "git",
-            "url": "git@github.com:pizepei/config-gm.git"
-        },
-        "pizepei/model": {
-            "type": "git",
-            "url": "git@github.com:pizepei/model.git"
-        },
-        "pizepei/staging": {
-            "type": "git",
-            "url": "git@github.com:pizepei/staging.git"
-        },
-        "pizepei/terminal-info": {
-            "type": "git",
-            "url": "git@github.com:pizepei/TerminalInfo.git"
-        },
-        "pizepei/wechat": {
-            "type": "git",
-            "url": "git@github.com:pizepei/wechat.git"
-        },
-        "pizepei/deploy": {
-            "type": "git",
-            "url": "git@github.com:pizepei/deploy.git"
-        },
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        }
+
     },
     "autoload": {
         "psr-4": {
