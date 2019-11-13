@@ -9,4 +9,4 @@
 
 require('../vendor/autoload.php');
 
-(new pizepei\staging\App(false, 'app','ORIGINAL','','','CLI'))->start();
+(new pizepei\staging\App(true, 'app','ORIGINAL','','','CLI'))->start();
