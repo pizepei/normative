@@ -6,6 +6,7 @@ namespace Container\app;
 use authority\app\controller\DeployAuth;
 use authority\app\controller\MicroserviceAuth;
 use authority\app\controller\UserAuth;
+use pizepei\staging\BasicsAuthority;
 
 /**
  * Class Helper
@@ -26,5 +27,6 @@ class AuthorityContainer
         'DeployAuth'=>DeployAuth::class,//部署权限控制器
         'UserAuth'=>UserAuth::class,//用户权限控制器
         'MicroserviceAuth'=>MicroserviceAuth::class,//微服务资源路由
+        'Resource'=>BasicsAuthority::class,
     ];
 }
