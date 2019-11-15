@@ -30,21 +30,16 @@ namespace app\index;
  *
  */
 
-use app\Helper;
 use model\basics\account\AccountModel;
 use model\TerminalInfoModel;
 use model\TestModel;
-use pizepei\func\Func;
 use pizepei\model\cache\Cache;
-use pizepei\model\db\TableAlterLogModel;
 use pizepei\model\redis\Redis;
 use pizepei\service\jwt\JsonWebToken;
 use pizepei\service\sms\Sms;
 use pizepei\staging\Controller;
 use pizepei\staging\Request;
-use pizepei\staging\Route;
 use pizepei\terminalInfo\TerminalInfo;
-use service\basics\account\AccountService;
 
 class Dome extends Controller
 {
