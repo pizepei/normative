@@ -30,9 +30,9 @@ class Resource
      * @return array
      * @throws \ReflectionException
      */
-    public static function initJurisdictionList($data,string $appPath)
+    public static function initJurisdictionList($data)
     {
-        $Resource = 'authority\\'.__APP__.'\\Resource';
+        $Resource = 'authority\\app\\Resource';
 
         $reflect = new \ReflectionClass($Resource);
         $ConstData = $reflect->getConstants();
