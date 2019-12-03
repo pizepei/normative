@@ -26,6 +26,10 @@
         "alibabacloud/client": "dev-master"
     },
     "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
 
     },
     "autoload": {
