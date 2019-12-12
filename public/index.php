@@ -8,6 +8,6 @@
 
 require('../vendor/autoload.php');
 
-(new pizepei\staging\App(false, 'app','ORIGINAL','','','WEB'))->start();
+(new \pizepei\staging\App(true, 'app','ORIGINAL','','','WEB'))->start();
 
 
