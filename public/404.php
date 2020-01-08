@@ -13,4 +13,3 @@ echo '<title>404 页面不存在</title>
     </div>
   </div>
 </div>';
-var_dump('404',$_SERVER);
