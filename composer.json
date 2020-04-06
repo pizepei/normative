@@ -21,15 +21,30 @@
         "ext-json": "*",
         "pizepei/helper": "dev-master",
         "pizepei/wechat-client": "dev-master",
-        "pizepei/basics": "dev-master",
-        "alibabacloud/client": "dev-master"
+        "normative/cms-package": "dev-master",
+        "normphp/servicing-products": "dev-master",
+        "pizepei/basics": "dev-master"
     },
+
     "repositories": {
         "packagist": {
             "type": "composer",
             "url": "https://mirrors.aliyun.com/composer/"
+        },
+        "normative/cms-package": {
+            "type": "git",
+            "url": "git@120.79.13.131:cms/cms-package.git"
+        },
+        "normphp/servicing-products": {
+            "type": "git",
+            "url": "git@120.79.13.131:yield-test/servicing-products.git"
         }
-
+    },
+    "config": {
+        "process-timeout": 1800,
+        "gitlab-oauth": {
+            "120.79.13.131": "3Cp6NGDtbn_HzCy-QRnw"
+        }
     },
     "autoload": {
         "psr-4": {

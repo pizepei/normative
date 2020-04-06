@@ -56,4 +56,19 @@ class UserAuth extends BasicsAuthority
         //var_dump($this->authExtend);
         return  ['authExtend'=>$this->authExtend,'Payload'=>$this->Payload];
     }
+
+    /**
+     * 判断是否是超级管理员不是直接抛异常
+     * @throws \Exception
+     */
+    public function superAdmin()
+    {
+        /**
+         * 判断是否登录（如果无效状态会直接异常处理）
+         */
+        $this->is_login();
+        if ($this->isSuperAdmin()){
+            error('无权限');
+        }
+    }
 }
