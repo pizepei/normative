@@ -67,7 +67,7 @@ class UserAuth extends BasicsAuthority
          * 判断是否登录（如果无效状态会直接异常处理）
          */
         $this->is_login();
-        if ($this->isSuperAdmin()){
+        if (!$this->isSuperAdmin()){
             error('无权限');
         }
     }
