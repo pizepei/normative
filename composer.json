@@ -23,14 +23,10 @@
         "pizepei/wechat-client": "dev-master",
         "normative/cms-package": "dev-master",
         "normphp/servicing-products": "dev-master",
+        "market/manage": "dev-master",
         "pizepei/basics": "dev-master"
     },
-
     "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://mirrors.aliyun.com/composer/"
-        },
         "normative/cms-package": {
             "type": "git",
             "url": "git@120.79.13.131:cms/cms-package.git"
@@ -38,6 +34,10 @@
         "normphp/servicing-products": {
             "type": "git",
             "url": "git@120.79.13.131:yield-test/servicing-products.git"
+        },
+        "market/manage": {
+            "type": "git",
+            "url": "git@120.79.13.131:market/manage.git"
         }
     },
     "config": {
