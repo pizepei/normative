@@ -41,8 +41,18 @@ normative致力于在框架层次强制规范开发人员的业务实现来确�
 * 团队开发业务功能时可尽可能的以composer包形式开发方便代码维护和跨项目复用。
     * composer包可使用本地git源详情这样项目代码就不公开[https://getcomposer.org/doc/04-schema.md#repositories]
     * 本地源需要认证可创建auth.json文件[https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#authentication]当然团队成员在自己工作电脑上已经有SSH Keys 就不需要这个文件了
-    * 如需要使用官方包管理又苦难速度感人可[命令行]使用代理<br>
+### 使用内部源
+        composer包可使用本地git源详情这样项目代码就不公开[https://getcomposer.org/doc/04-schema.md#repositories]
+        如出现无法加载私有gitlab项目可在composer.json 中增加gitlab-oauth配置其他仓库可参考配置
+        本地源需要认证可创建auth.json文件[https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#authentication]当然团队成员在自己工作电脑上已经有SSH Keys 就不需要这个文件了
+        "config": {
+            "process-timeout": 1800,
+            "gitlab-oauth": {
+                "192.168.1.100": "3Cp6NGxxxxHzssssCw"
+            }
+        }
 ### composer 代理加速
+    如需要使用官方包管理又苦难速度感人可[命令行]使用代理
     export https_proxy='127.0.0.1:10808'
     export http_proxy='127.0.0.1:10808'
     composer update -vvv    查看是否使用代理
