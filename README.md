@@ -35,10 +35,17 @@ normative致力于在框架层次强制规范开发人员的业务实现来确�
              clone对应分支使用 git clone -b [分支]  git@github.com:pizepei/normative.git 
 ### 单元测试：
     composer require --dev phpunit/phpunit:8
+### 模板引擎：
+    composer require "twig/twig:~1.0"
 ### 开发规范
 * 团队开发业务功能时可尽可能的以composer包形式开发方便代码维护和跨项目复用。
     * composer包可使用本地git源详情这样项目代码就不公开[https://getcomposer.org/doc/04-schema.md#repositories]
     * 本地源需要认证可创建auth.json文件[https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#authentication]当然团队成员在自己工作电脑上已经有SSH Keys 就不需要这个文件了
+    * 如需要使用官方包管理又苦难速度感人可[命令行]使用代理<br>
+### composer 代理加速
+    export https_proxy='127.0.0.1:10808'
+    export http_proxy='127.0.0.1:10808'
+    composer update -vvv    查看是否使用代理
 ###资源分享
 #### 软件
 * 官方免费Xftp和Xshell [https://www.netsarang.com/en/free-for-home-school/]（这个是官方免费的只需要填写姓名和邮箱就可以收到一封带有下载地址的官方邮件）
